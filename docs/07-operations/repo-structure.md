@@ -23,6 +23,7 @@ NextKey/
     evaluate.py
     export_model.py
     run_demo.py
+    check_scaffold.py
   src/
     nextkey/
       data/
@@ -79,11 +80,11 @@ Use versioned names:
 Planned commands:
 
 ```bash
-python scripts/build_dataset.py --config configs/data/synthetic_v1.yaml
-python scripts/train.py --config configs/model/teacher_candidate.yaml
-python scripts/evaluate.py --config configs/eval/dev_human.yaml
-python scripts/export_model.py --checkpoint models/checkpoints/student
-python scripts/run_demo.py
+python3 scripts/build_dataset.py --config configs/data/synthetic_v1.yaml
+python3 scripts/train.py --config configs/model/teacher_candidate.yaml
+python3 scripts/evaluate.py --config configs/eval/dev_human.yaml
+python3 scripts/export_model.py --checkpoint models/checkpoints/student
+python3 scripts/run_demo.py
 ```
 
 ## Documentation Update Rule

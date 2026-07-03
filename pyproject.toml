@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nextkey"
+version = "0.1.0"
+description = "Vietnamese compact writing restoration research prototype"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.5.0",
+]
+
+[project.scripts]
+nextkey-build-dataset = "nextkey.cli:build_dataset_main"
+nextkey-train = "nextkey.cli:train_main"
+nextkey-evaluate = "nextkey.cli:evaluate_main"
+nextkey-export-model = "nextkey.cli:export_model_main"
+nextkey-demo = "nextkey.cli:demo_main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

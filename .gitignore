@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environments
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+# Data and artifacts
+data/raw/*
+data/interim/*
+data/processed/*
+data/user_logs/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!data/samples/**
+
+models/checkpoints/*
+models/exported/*
+!models/checkpoints/.gitkeep
+!models/exported/.gitkeep
+
+experiments/runs/*
+experiments/reports/*
+!experiments/runs/.gitkeep
+!experiments/reports/.gitkeep
+
+# Notebook runtime artifacts
+.ipynb_checkpoints/

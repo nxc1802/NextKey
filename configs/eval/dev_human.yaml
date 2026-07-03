@@ -1,0 +1,20 @@
+name: dev-human-eval
+description: Evaluation config for human-refined development split.
+dataset:
+  path: data/processed/dev.human.jsonl
+  split: dev_human
+model:
+  checkpoint: models/checkpoints/teacher-candidate
+output:
+  report_path: experiments/reports/dev-human-eval.json
+metrics:
+  - exact_match
+  - cer
+  - wer
+  - diacritic_accuracy
+  - segmentation_f1
+  - punctuation_f1
+  - capitalization_accuracy
+  - typo_correction_accuracy
+  - overcorrection_rate
+  - top3_hit_rate

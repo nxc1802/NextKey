@@ -1,0 +1,21 @@
+name: teacher-candidate-open-gate
+description: Placeholder config for the open model-selection gate.
+model:
+  role: teacher
+  candidate: unset
+  status: open
+training:
+  train_path: data/processed/train.synthetic.jsonl
+  dev_path: data/processed/dev.synthetic.jsonl
+  output_dir: models/checkpoints/teacher-candidate
+  seed: 42
+  max_steps: 0
+selection_gate:
+  required_metrics:
+    - exact_match
+    - cer
+    - wer
+    - diacritic_accuracy
+    - typo_correction_accuracy
+    - overcorrection_rate
+    - top3_hit_rate

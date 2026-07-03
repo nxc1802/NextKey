@@ -1,0 +1,24 @@
+name: synthetic-v1
+description: Initial synthetic dataset build placeholder.
+input:
+  clean_sources_dir: data/raw/clean_sources
+output:
+  train_path: data/processed/train.synthetic.jsonl
+  dev_path: data/processed/dev.synthetic.jsonl
+generation:
+  target_pairs: 100000
+  difficulties:
+    easy: 0.35
+    medium: 0.45
+    hard: 0.20
+  noise_tags:
+    - no_diacritic
+    - space_merge
+    - abbr
+    - punct_drop
+    - lowercase
+    - neighbor_sub
+    - telex_residue
+qa:
+  require_compact_differs_from_standard: true
+  max_input_chars: 384

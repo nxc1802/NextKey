@@ -11,6 +11,11 @@ demo requirements, and risk management.
 docs/
   00-project/
     overview.md
+    research-contract.md
+    scope-matrix.md
+    acceptance-criteria.md
+    use-cases.md
+    proposal.md
     task-breakdown.md
     roadmap.md
   01-data/
@@ -38,15 +43,20 @@ docs/
 ## Recommended Reading Order
 
 1. [`00-project/overview.md`](./00-project/overview.md)
-2. [`00-project/task-breakdown.md`](./00-project/task-breakdown.md)
-3. [`00-project/roadmap.md`](./00-project/roadmap.md)
-4. [`01-data/dataset-build-plan.md`](./01-data/dataset-build-plan.md)
-5. [`03-evaluation/evaluation-plan.md`](./03-evaluation/evaluation-plan.md)
-6. [`02-model/model-selection.md`](./02-model/model-selection.md)
-7. [`04-system/system-architecture.md`](./04-system/system-architecture.md)
-8. [`04-system/api-and-demo.md`](./04-system/api-and-demo.md)
-9. [`05-edge/edge-plan.md`](./05-edge/edge-plan.md)
-10. [`06-personalization-privacy/personalization-and-privacy.md`](./06-personalization-privacy/personalization-and-privacy.md)
+2. [`00-project/research-contract.md`](./00-project/research-contract.md)
+3. [`00-project/scope-matrix.md`](./00-project/scope-matrix.md)
+4. [`00-project/acceptance-criteria.md`](./00-project/acceptance-criteria.md)
+5. [`00-project/use-cases.md`](./00-project/use-cases.md)
+6. [`00-project/proposal.md`](./00-project/proposal.md)
+7. [`00-project/task-breakdown.md`](./00-project/task-breakdown.md)
+8. [`00-project/roadmap.md`](./00-project/roadmap.md)
+9. [`01-data/dataset-build-plan.md`](./01-data/dataset-build-plan.md)
+10. [`03-evaluation/evaluation-plan.md`](./03-evaluation/evaluation-plan.md)
+11. [`02-model/model-selection.md`](./02-model/model-selection.md)
+12. [`04-system/system-architecture.md`](./04-system/system-architecture.md)
+13. [`04-system/api-and-demo.md`](./04-system/api-and-demo.md)
+14. [`05-edge/edge-plan.md`](./05-edge/edge-plan.md)
+15. [`06-personalization-privacy/personalization-and-privacy.md`](./06-personalization-privacy/personalization-and-privacy.md)
 
 ## Documentation Rules
 

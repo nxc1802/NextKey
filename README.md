@@ -12,14 +12,48 @@ that report into an implementation-oriented documentation system.
 
 This repository is currently in the planning and documentation stage.
 
-There is no source code, dataset, model checkpoint, or demo implementation yet.
-The next engineering step is to scaffold the project structure described in
-[`docs/07-operations/repo-structure.md`](./docs/07-operations/repo-structure.md).
+The repository now has the Task 0 foundation scaffold: Python package layout,
+configs, command wrappers, artifact folders, and smoke tests. Dataset builders,
+model training, evaluation metrics, and demo endpoints are still placeholders
+that will be implemented in later tasks.
+
+## Setup
+
+Use Python 3.10 or newer.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -e ".[dev]"
+```
+
+## Smoke Commands
+
+These commands verify that the project scaffold is wired correctly.
+
+```bash
+python3 scripts/build_dataset.py --config configs/data/synthetic_v1.yaml
+python3 scripts/train.py --config configs/model/teacher_candidate.yaml
+python3 scripts/evaluate.py --config configs/eval/dev_human.yaml
+python3 scripts/export_model.py --checkpoint models/checkpoints/student
+python3 scripts/run_demo.py
+python3 scripts/check_scaffold.py
+pytest
+```
+
+The commands currently emit structured scaffold status. They do not build real
+datasets, train models, or launch a real demo yet.
+
+`pytest` is part of the optional dev dependencies. `scripts/check_scaffold.py`
+uses only the Python standard library and can run before dev dependencies are
+installed.
 
 ## Documentation Entry Points
 
 - [`docs/README.md`](./docs/README.md): documentation index and reading order
 - [`docs/00-project/overview.md`](./docs/00-project/overview.md): project scope
+- [`docs/00-project/research-contract.md`](./docs/00-project/research-contract.md): locked problem statement and research questions
+- [`docs/00-project/proposal.md`](./docs/00-project/proposal.md): short project proposal
 - [`docs/00-project/task-breakdown.md`](./docs/00-project/task-breakdown.md): task and phase breakdown
 - [`docs/01-data/dataset-build-plan.md`](./docs/01-data/dataset-build-plan.md): dataset build plan
 - [`docs/02-model/model-selection.md`](./docs/02-model/model-selection.md): open model-selection gate
