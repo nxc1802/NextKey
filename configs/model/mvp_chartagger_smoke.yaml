@@ -1,0 +1,25 @@
+name: mvp-chartagger-smoke
+description: Context-aware BiGRU character tagger for MVP diacritic and spacing restoration.
+data:
+  train_path: data/processed/mvp/train.jsonl
+  dev_path: data/processed/mvp/dev.jsonl
+model:
+  output_path: models/checkpoints/mvp-chartagger-smoke.pt
+  vocab_path: models/checkpoints/mvp-chartagger-smoke-vocab.json
+  embedding_dim: 64
+  hidden_dim: 128
+  num_layers: 1
+  dropout: 0.0
+training:
+  seed: 42
+  max_train_samples: 20000
+  max_eval_samples: 5000
+  max_len: 180
+  batch_size: 64
+  epochs: 2
+  learning_rate: 0.001
+  log_every: 100
+evaluation:
+  predictions_path: experiments/runs/mvp-chartagger-smoke/dev.predictions.jsonl
+  report_path: experiments/reports/mvp-chartagger-smoke.json
+  report_md_path: experiments/reports/mvp-chartagger-smoke.md

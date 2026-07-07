@@ -16,6 +16,9 @@ dev = [
   "pytest>=8.0",
   "ruff>=0.5.0",
 ]
+neural = [
+  "torch>=2.12,<2.13",
+]
 
 [project.scripts]
 nextkey-build-dataset = "nextkey.cli:build_dataset_main"

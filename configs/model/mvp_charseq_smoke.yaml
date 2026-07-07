@@ -1,0 +1,27 @@
+name: mvp-charseq-smoke
+description: Small context-aware char-level seq2seq smoke baseline for MVP.
+data:
+  train_path: data/processed/mvp/train.jsonl
+  dev_path: data/processed/mvp/dev.jsonl
+model:
+  output_path: models/checkpoints/mvp-charseq-smoke.pt
+  vocab_path: models/checkpoints/mvp-charseq-smoke-vocab.json
+  embedding_dim: 64
+  hidden_dim: 128
+  num_layers: 1
+  dropout: 0.0
+training:
+  seed: 42
+  max_train_samples: 2000
+  max_eval_samples: 200
+  max_input_len: 100
+  max_target_len: 140
+  batch_size: 16
+  epochs: 1
+  learning_rate: 0.001
+  teacher_forcing_ratio: 0.7
+  log_every: 50
+evaluation:
+  predictions_path: experiments/runs/mvp-charseq-smoke/dev.predictions.jsonl
+  report_path: experiments/reports/mvp-charseq-smoke.json
+  report_md_path: experiments/reports/mvp-charseq-smoke.md

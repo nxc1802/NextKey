@@ -1,0 +1,26 @@
+name: mvp-feasibility
+description: Feasibility profile for provided processed CSV data.
+input:
+  processed_dir: data/processed
+  pattern: "*_dataset.csv"
+columns:
+  input: Input_X
+  target: Target_Y
+normalization:
+  remove_brace_markers: true
+  keep_brace_content: true
+  strip_html_rows_for_training: false
+output:
+  report_json: experiments/reports/mvp-feasibility.json
+  report_md: experiments/reports/mvp-feasibility.md
+  sample_jsonl: data/samples/mvp-feasibility-sample.jsonl
+  split_dir: data/processed/mvp
+sampling:
+  max_samples: 50
+split:
+  train_ratio: 0.8
+  dev_ratio: 0.1
+  test_ratio: 0.1
+filtering:
+  require_alignment_match: true
+  exclude_html_like_rows: true

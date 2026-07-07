@@ -1,0 +1,14 @@
+name: mvp-lexicon-baseline
+description: Lexicon dynamic-programming baseline for diacritic and spacing MVP.
+data:
+  train_path: data/processed/mvp/train.jsonl
+  dev_path: data/processed/mvp/dev.jsonl
+  test_path: data/processed/mvp/test.jsonl
+model:
+  output_path: models/checkpoints/mvp-lexicon-baseline.json
+  min_count: 1
+evaluation:
+  predictions_dir: experiments/runs/mvp-lexicon-baseline
+  report_path: experiments/reports/mvp-lexicon-baseline.json
+  report_md_path: experiments/reports/mvp-lexicon-baseline.md
+  quick_max_samples_per_category: 1250

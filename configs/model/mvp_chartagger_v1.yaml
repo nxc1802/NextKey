@@ -1,0 +1,26 @@
+name: mvp-chartagger-v1
+description: Larger context-aware BiGRU character tagger for MVP.
+data:
+  train_path: data/processed/mvp/train.jsonl
+  dev_path: data/processed/mvp/dev.jsonl
+model:
+  output_path: models/checkpoints/mvp-chartagger-v1.pt
+  vocab_path: models/checkpoints/mvp-chartagger-v1-vocab.json
+  embedding_dim: 96
+  hidden_dim: 192
+  num_layers: 1
+  dropout: 0.0
+training:
+  seed: 42
+  max_train_samples: 100000
+  max_eval_samples: 10000
+  max_len: 180
+  batch_size: 128
+  epochs: 3
+  max_steps: 1000
+  learning_rate: 0.001
+  log_every: 250
+evaluation:
+  predictions_path: experiments/runs/mvp-chartagger-v1/dev.predictions.jsonl
+  report_path: experiments/reports/mvp-chartagger-v1.json
+  report_md_path: experiments/reports/mvp-chartagger-v1.md
