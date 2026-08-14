@@ -1,7 +1,8 @@
 # Model Selection
 
-Model choice is an open task. This project must not lock the final model before
-the dataset contract and evaluation harness exist.
+JDWR v1 uses the Two-Head BiGRU CharTagger as its development default. This is
+not a claim that it is the final best NextKey model: pretrained models remain
+future teacher-quality baselines once evaluated on the same leakage-safe split.
 
 ## Candidate Roles
 

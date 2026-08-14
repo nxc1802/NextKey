@@ -1,8 +1,10 @@
-name: mvp-chartagger-v1
-description: Larger context-aware BiGRU character tagger for MVP.
+name: jdwr-v1-two-head
+description: Two-head BiGRU for joint diacritic and whitespace restoration.
 data:
-  train_path: data/processed/mvp/train.jsonl
-  dev_path: data/processed/mvp/dev.jsonl
+  train_path: data/processed/jdwr_v1/train
+  dev_path: data/processed/jdwr_v1/dev
+  test_path: data/processed/jdwr_v1/test/in_domain
+  external_test_path: data/processed/jdwr_v1/test/external
 model:
   output_path: models/checkpoints/mvp-chartagger-v1.pt
   vocab_path: models/checkpoints/mvp-chartagger-v1-vocab.json
@@ -20,6 +22,9 @@ training:
   max_steps: 1000
   learning_rate: 0.001
   log_every: 250
+  lambda_boundary: 1.0
+  domain_balanced: true
+  device: auto
 evaluation:
   predictions_path: experiments/runs/mvp-chartagger-v1/dev.predictions.jsonl
   report_path: experiments/reports/mvp-chartagger-v1.json

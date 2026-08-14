@@ -13,6 +13,15 @@ seriously until the schema, noise taxonomy, and evaluation splits are stable.
 | User logs | Personalization data | Opt-in demo feedback |
 | Preference pairs | DPO-lite or reranker learning | Chosen/rejected candidates from feedback |
 
+## JDWR v1 Split Contract
+
+The provided news dataset is exported to `data/processed/jdwr_v1/`. Seven
+domains are split 80/10/10; `the_thao` is an external frozen holdout. The split
+unit is `compact_key(target)`, not a CSV row. A group is assigned by a stable
+hash, so duplicate content cannot cross train, dev, or test. Any in-domain row
+whose group also appears in the external holdout is excluded from in-domain
+data. `manifest.json` records counts and zero-overlap checks.
+
 ## Planned Data Paths
 
 ```text

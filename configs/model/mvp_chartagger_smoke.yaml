@@ -1,8 +1,10 @@
-name: mvp-chartagger-smoke
-description: Context-aware BiGRU character tagger for MVP diacritic and spacing restoration.
+name: jdwr-v1-two-head-smoke
+description: Smoke configuration for the JDWR v1 two-head BiGRU.
 data:
-  train_path: data/processed/mvp/train.jsonl
-  dev_path: data/processed/mvp/dev.jsonl
+  train_path: data/processed/jdwr_v1/train
+  dev_path: data/processed/jdwr_v1/dev
+  test_path: data/processed/jdwr_v1/test/in_domain
+  external_test_path: data/processed/jdwr_v1/test/external
 model:
   output_path: models/checkpoints/mvp-chartagger-smoke.pt
   vocab_path: models/checkpoints/mvp-chartagger-smoke-vocab.json
@@ -19,6 +21,9 @@ training:
   epochs: 2
   learning_rate: 0.001
   log_every: 100
+  lambda_boundary: 1.0
+  domain_balanced: true
+  device: auto
 evaluation:
   predictions_path: experiments/runs/mvp-chartagger-smoke/dev.predictions.jsonl
   report_path: experiments/reports/mvp-chartagger-smoke.json

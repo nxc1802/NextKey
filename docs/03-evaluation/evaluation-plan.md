@@ -34,6 +34,10 @@ alone is not enough.
 | noise slices | compare no-diacritic, space-merge, abbreviation, typo, mixed |
 | `personalization_eval` | user-specific adaptation |
 
+For JDWR v1, report the grouped in-domain test and the frozen `the_thao`
+external test separately. Include Corpus CER/WER, Boundary Precision/Recall/F1,
+and the external-minus-in-domain CER gap.
+
 ## Ablation Plan
 
 | Ablation | Question |

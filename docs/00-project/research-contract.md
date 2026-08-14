@@ -1,7 +1,15 @@
 # Research Contract
 
-This document locks the research shape of NextKey while keeping model choice
-open until the model-selection gate.
+This document locks the research shape of NextKey. JDWR v1 fixes the first
+experimental milestone while later full-restoration work remains open.
+
+## JDWR v1 Decision
+
+JDWR v1 is limited to joint Vietnamese diacritic and whitespace restoration.
+Its development default is a Two-Head CharTagger (BiGRU encoder, character
+head, boundary head). The seven in-domain news categories are split by grouped
+content key; `the_thao` is a frozen external-domain test set. It must not be
+used for vocabulary building, model selection, early stopping, or training.
 
 ## Final Problem Statement
 

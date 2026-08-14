@@ -110,6 +110,13 @@ def spacing_f1(prediction: str, target: str) -> float:
     return 2 * precision * recall / (precision + recall)
 
 
+def boundary_counts(prediction: str, target: str) -> tuple[int, int, int]:
+    """Return corpus-additive true-positive, predicted and gold boundary counts."""
+    predicted = spacing_boundaries(prediction)
+    gold = spacing_boundaries(target)
+    return len(predicted & gold), len(predicted), len(gold)
+
+
 def diacritic_accuracy(prediction: str, target: str) -> float:
     """Compare non-space characters when their accent-stripped forms align."""
     pred_chars = prediction.replace(" ", "")
@@ -131,6 +138,13 @@ class MetricTotals:
     token_f1_sum: float = 0.0
     spacing_f1_sum: float = 0.0
     diacritic_accuracy_sum: float = 0.0
+    char_distance: int = 0
+    char_total: int = 0
+    word_distance: int = 0
+    word_total: int = 0
+    boundary_true_positive: int = 0
+    boundary_predicted: int = 0
+    boundary_gold: int = 0
 
     def update(self, prediction: str, target: str) -> None:
         self.count += 1
@@ -140,6 +154,14 @@ class MetricTotals:
         self.token_f1_sum += token_f1(prediction, target)
         self.spacing_f1_sum += spacing_f1(prediction, target)
         self.diacritic_accuracy_sum += diacritic_accuracy(prediction, target)
+        self.char_distance += levenshtein(prediction, target)
+        self.char_total += len(target)
+        self.word_distance += levenshtein_tokens(prediction.split(), target.split())
+        self.word_total += len(target.split())
+        true_positive, predicted, gold = boundary_counts(prediction, target)
+        self.boundary_true_positive += true_positive
+        self.boundary_predicted += predicted
+        self.boundary_gold += gold
 
     def as_dict(self) -> dict[str, float | int]:
         if self.count == 0:
@@ -151,7 +173,16 @@ class MetricTotals:
                 "token_f1": 0.0,
                 "spacing_f1": 0.0,
                 "diacritic_accuracy": 0.0,
+                "corpus_cer": 0.0,
+                "corpus_wer": 0.0,
+                "boundary_precision": 0.0,
+                "boundary_recall": 0.0,
+                "boundary_f1": 0.0,
             }
+        boundary_precision = self.boundary_true_positive / self.boundary_predicted if self.boundary_predicted else 0.0
+        boundary_recall = self.boundary_true_positive / self.boundary_gold if self.boundary_gold else 0.0
+        boundary_f1 = (2 * boundary_precision * boundary_recall / (boundary_precision + boundary_recall)
+                       if boundary_precision + boundary_recall else 0.0)
         return {
             "count": self.count,
             "exact_match": round(self.exact / self.count, 6),
@@ -160,4 +191,9 @@ class MetricTotals:
             "token_f1": round(self.token_f1_sum / self.count, 6),
             "spacing_f1": round(self.spacing_f1_sum / self.count, 6),
             "diacritic_accuracy": round(self.diacritic_accuracy_sum / self.count, 6),
+            "corpus_cer": round(self.char_distance / self.char_total, 6) if self.char_total else 0.0,
+            "corpus_wer": round(self.word_distance / self.word_total, 6) if self.word_total else 0.0,
+            "boundary_precision": round(boundary_precision, 6),
+            "boundary_recall": round(boundary_recall, 6),
+            "boundary_f1": round(boundary_f1, 6),
         }
