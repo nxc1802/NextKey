@@ -32,6 +32,7 @@ docs/
     evaluation-plan.md
     mvp-lexicon-baseline-report.md
     mvp-chartagger-baseline-report.md
+    mvp-chartagger-full-kaggle-report.md
   04-system/
     system-architecture.md
     api-and-demo.md
@@ -60,11 +61,12 @@ docs/
 12. [`03-evaluation/evaluation-plan.md`](./03-evaluation/evaluation-plan.md)
 13. [`03-evaluation/mvp-lexicon-baseline-report.md`](./03-evaluation/mvp-lexicon-baseline-report.md)
 14. [`03-evaluation/mvp-chartagger-baseline-report.md`](./03-evaluation/mvp-chartagger-baseline-report.md)
-15. [`02-model/model-selection.md`](./02-model/model-selection.md)
-16. [`04-system/system-architecture.md`](./04-system/system-architecture.md)
-17. [`04-system/api-and-demo.md`](./04-system/api-and-demo.md)
-18. [`05-edge/edge-plan.md`](./05-edge/edge-plan.md)
-19. [`06-personalization-privacy/personalization-and-privacy.md`](./06-personalization-privacy/personalization-and-privacy.md)
+15. [`03-evaluation/mvp-chartagger-full-kaggle-report.md`](./03-evaluation/mvp-chartagger-full-kaggle-report.md)
+16. [`02-model/model-selection.md`](./02-model/model-selection.md)
+17. [`04-system/system-architecture.md`](./04-system/system-architecture.md)
+18. [`04-system/api-and-demo.md`](./04-system/api-and-demo.md)
+19. [`05-edge/edge-plan.md`](./05-edge/edge-plan.md)
+20. [`06-personalization-privacy/personalization-and-privacy.md`](./06-personalization-privacy/personalization-and-privacy.md)
 
 ## Documentation Rules
 
