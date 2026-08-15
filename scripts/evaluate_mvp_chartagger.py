@@ -12,11 +12,24 @@ from nextkey.evaluation.mvp_metrics import MetricTotals
 from nextkey.models.mvp_chartagger import CharTaggerFactory, batch_examples, load_aligned_examples, load_vocab, require_torch
 
 
-def evaluate_path(model, path: Path, vocab, device, max_samples: int, max_len: int, batch_size: int):
+def device_for(torch, requested: str | None):
+    if requested and requested != "auto":
+        return torch.device(requested)
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
+
+
+def evaluate_path(model, path: Path, vocab, device, max_samples: int, max_len: int, batch_size: int,
+                  length_bucket_size: int = 0, pad_to_multiple_of: int = 1):
     torch, _ = require_torch(); examples = load_aligned_examples(path, max_samples, max_len); totals = MetricTotals(); rows = []
     model.eval()
     with torch.no_grad():
-        for source, targets, boundaries, lengths, chunk in batch_examples(examples, vocab, batch_size):
+        for source, targets, boundaries, lengths, chunk in batch_examples(
+                examples, vocab, batch_size, length_bucket_size=length_bucket_size,
+                pad_to_multiple_of=pad_to_multiple_of):
             char_logits, boundary_logits = model(source.to(device), lengths)
             chars = char_logits.argmax(-1).cpu(); spaces = (boundary_logits.sigmoid() >= .5).long().cpu()
             for index, length in enumerate(lengths.tolist()):
@@ -36,13 +49,16 @@ def main() -> None:
     model = CharTaggerFactory.build(len(vocab.char_itos), len(vocab.target_itos), int(model_config["embedding_dim"]),
                                     int(model_config["hidden_dim"]), int(model_config["num_layers"]), float(model_config["dropout"]))
     model.load_state_dict(checkpoint["state_dict"])
+    device = device_for(torch, training.get("device")); model.to(device)
     paths = {"in_domain": Path(data["test_path"] if "test_path" in data else data["dev_path"])}
     if data.get("external_test_path"):
         paths["external"] = Path(data["external_test_path"])
     report, all_rows = {"model_path": model_config["output_path"], "metrics": {}}, []
     for name, path in paths.items():
-        metrics, rows = evaluate_path(model, path, vocab, torch.device("cpu"), int(training["max_eval_samples"]),
-                                      int(training["max_len"]), int(training["batch_size"]))
+        metrics, rows = evaluate_path(model, path, vocab, device, int(training["max_eval_samples"]),
+                                      int(training["max_len"]), int(training["batch_size"]),
+                                      int(training.get("length_bucket_size", 0)),
+                                      int(training.get("pad_to_multiple_of", 1)))
         report["metrics"][name] = metrics; all_rows.extend({"split": name, **row} for row in rows)
     if "external" in report["metrics"]:
         report["domain_generalization_gap"] = {"cer": round(report["metrics"]["external"]["corpus_cer"] - report["metrics"]["in_domain"]["corpus_cer"], 6),

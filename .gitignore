@@ -24,6 +24,7 @@ venv/
 data/raw/*
 data/interim/*
 data/processed/*
+data/processed.zip
 data/user_logs/*
 !data/raw/.gitkeep
 !data/interim/.gitkeep

@@ -149,16 +149,27 @@ class MetricTotals:
     def update(self, prediction: str, target: str) -> None:
         self.count += 1
         self.exact += int(prediction == target)
-        self.cer_sum += cer(prediction, target)
-        self.wer_sum += wer(prediction, target)
+        char_distance = levenshtein(prediction, target)
+        target_length = len(target)
+        self.cer_sum += char_distance / target_length if target_length else (0.0 if not prediction else 1.0)
+        prediction_tokens = prediction.split()
+        target_tokens = target.split()
+        word_distance = levenshtein_tokens(prediction_tokens, target_tokens)
+        target_token_count = len(target_tokens)
+        self.wer_sum += (word_distance / target_token_count if target_token_count
+                         else (0.0 if not prediction_tokens else 1.0))
         self.token_f1_sum += token_f1(prediction, target)
-        self.spacing_f1_sum += spacing_f1(prediction, target)
-        self.diacritic_accuracy_sum += diacritic_accuracy(prediction, target)
-        self.char_distance += levenshtein(prediction, target)
-        self.char_total += len(target)
-        self.word_distance += levenshtein_tokens(prediction.split(), target.split())
-        self.word_total += len(target.split())
         true_positive, predicted, gold = boundary_counts(prediction, target)
+        if not predicted and not gold:
+            self.spacing_f1_sum += 1.0
+        elif predicted and gold and true_positive:
+            precision, recall = true_positive / predicted, true_positive / gold
+            self.spacing_f1_sum += 2 * precision * recall / (precision + recall)
+        self.diacritic_accuracy_sum += diacritic_accuracy(prediction, target)
+        self.char_distance += char_distance
+        self.char_total += target_length
+        self.word_distance += word_distance
+        self.word_total += target_token_count
         self.boundary_true_positive += true_positive
         self.boundary_predicted += predicted
         self.boundary_gold += gold

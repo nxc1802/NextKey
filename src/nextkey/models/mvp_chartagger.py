@@ -175,9 +175,12 @@ class CharTaggerFactory:
         return TwoHeadCharTagger()
 
 
-def pad_batch(sequences: list[list[int]], pad_id: int):
+def pad_batch(sequences: list[list[int]], pad_id: int, pad_to_multiple_of: int = 1):
     torch, _ = require_torch()
-    batch = torch.full((len(sequences), max(map(len, sequences))), pad_id, dtype=torch.long)
+    max_length = max(map(len, sequences))
+    if pad_to_multiple_of > 1:
+        max_length = -(-max_length // pad_to_multiple_of) * pad_to_multiple_of
+    batch = torch.full((len(sequences), max_length), pad_id, dtype=torch.long)
     for row, sequence in enumerate(sequences):
         batch[row, :len(sequence)] = torch.tensor(sequence, dtype=torch.long)
     return batch
@@ -205,8 +208,16 @@ def _ordered_examples(examples: list[JdwrExample], domain_balanced: bool) -> lis
 
 
 def batch_examples(examples: list[JdwrExample], vocab: TaggerVocab, batch_size: int,
-                   domain_balanced: bool = False):
+                   domain_balanced: bool = False, length_bucket_size: int = 0,
+                   pad_to_multiple_of: int = 1):
     ordered = _ordered_examples(examples, domain_balanced)
+    if length_bucket_size:
+        if length_bucket_size < batch_size:
+            raise ValueError("length_bucket_size must be at least batch_size")
+        # Sorting only bounded windows preserves the randomized/domain-balanced
+        # ordering between windows while avoiding excessive padding for long rows.
+        ordered = [example for start in range(0, len(ordered), length_bucket_size)
+                   for example in sorted(ordered[start:start + length_bucket_size], key=lambda item: len(item.source))]
     for start in range(0, len(ordered), batch_size):
         chunk = ordered[start:start + batch_size]
         if not chunk:
@@ -214,9 +225,9 @@ def batch_examples(examples: list[JdwrExample], vocab: TaggerVocab, batch_size: 
         source_ids = [vocab.encode_chars(example.source) for example in chunk]
         target_ids = [vocab.encode_target(example.char_target) for example in chunk]
         lengths = [len(value) for value in source_ids]
-        source = pad_batch(source_ids, vocab.pad_char_id)
-        targets = pad_batch(target_ids, vocab.pad_target_id)
-        boundaries = pad_batch([example.boundary_target for example in chunk], -100)
+        source = pad_batch(source_ids, vocab.pad_char_id, pad_to_multiple_of)
+        targets = pad_batch(target_ids, vocab.pad_target_id, pad_to_multiple_of)
+        boundaries = pad_batch([example.boundary_target for example in chunk], -100, pad_to_multiple_of)
         torch, _ = require_torch()
         yield source, targets, boundaries, torch.tensor(lengths, dtype=torch.long), chunk
 

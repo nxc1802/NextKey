@@ -61,7 +61,9 @@ def main() -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True); save_vocab(vocab_path, vocab)
     for epoch in range(1, int(training["epochs"]) + 1):
         model.train(); loss_sum = 0.0; batches = 0
-        for source, targets, boundaries, lengths, _ in batch_examples(train_examples, vocab, batch_size, bool(training.get("domain_balanced", True))):
+        for source, targets, boundaries, lengths, _ in batch_examples(
+                train_examples, vocab, batch_size, bool(training.get("domain_balanced", True)),
+                int(training.get("length_bucket_size", 0)), int(training.get("pad_to_multiple_of", 1))):
             source, targets, boundaries = source.to(device), targets.to(device), boundaries.to(device)
             optimizer.zero_grad(); char_logits, boundary_logits = model(source, lengths)
             loss_char = char_loss(char_logits.reshape(-1, char_logits.shape[-1]), targets.reshape(-1))
