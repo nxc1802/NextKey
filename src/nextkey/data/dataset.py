@@ -43,11 +43,115 @@ def iter_jsonl(path: Path) -> Iterable[dict[str, Any]]:
                 yield json.loads(line)
 
 
+def find_dataset_root() -> Path | None:
+    """Dynamically search for jdwr_v1 dataset directory locally or in Kaggle inputs."""
+    # 1. Local path
+    local_path = Path("data/processed/jdwr_v1")
+    if local_path.is_dir() and ((local_path / "manifest.json").exists() or any(local_path.glob("*/*.jsonl"))):
+        return local_path
+
+    # 2. Kaggle environment search
+    kaggle_input = Path("/kaggle/input")
+    if kaggle_input.is_dir():
+        # Specific known user dataset paths
+        for specific in [
+            Path("/kaggle/input/datasets/cuongnguyen1802/nextkey-dataset/processed/jdwr_v1"),
+            Path("/kaggle/input/datasets/cuongnguyen1802/nextkey-dataset/jdwr_v1"),
+            Path("/kaggle/input/nextkey-dataset/processed/jdwr_v1"),
+            Path("/kaggle/input/nextkey-dataset/jdwr_v1"),
+        ]:
+            if specific.is_dir():
+                _try_symlink_local(specific)
+                return specific
+
+        # Search for manifest.json under jdwr_v1
+        manifests = sorted(kaggle_input.glob("**/jdwr_v1/manifest.json"))
+        if manifests:
+            target = manifests[0].parent
+            _try_symlink_local(target)
+            return target
+
+        # Search for train directory containing jsonl
+        train_dirs = sorted(kaggle_input.glob("**/jdwr_v1/train"))
+        if train_dirs:
+            target = train_dirs[0].parent
+            _try_symlink_local(target)
+            return target
+
+        # Generic search for any jdwr_v1 directory
+        jdwr_dirs = sorted(kaggle_input.glob("**/jdwr_v1"))
+        if jdwr_dirs:
+            target = jdwr_dirs[0]
+            _try_symlink_local(target)
+            return target
+
+    return None
+
+
+def _try_symlink_local(source: Path) -> None:
+    """Attempt to create a local symlink data/processed/jdwr_v1 -> source."""
+    try:
+        local_target = Path("data/processed/jdwr_v1")
+        if not local_target.exists() and not local_target.is_symlink():
+            local_target.parent.mkdir(parents=True, exist_ok=True)
+            local_target.symlink_to(source.resolve(), target_is_directory=True)
+    except OSError:
+        pass
+
+
 def _resolve_paths(path_or_paths: Path | str | Iterable[Path | str]) -> list[Path]:
-    if isinstance(path_or_paths, (str, Path)):
-        path = Path(path_or_paths)
-        return sorted(path.glob("*.jsonl")) if path.is_dir() else [path]
-    return [Path(p) for p in path_or_paths]
+    if isinstance(path_or_paths, (list, tuple, set)):
+        paths: list[Path] = []
+        for p in path_or_paths:
+            paths.extend(_resolve_paths(p))
+        return paths
+
+    raw_path = Path(path_or_paths)
+
+    # 1. Directly exists as dir
+    if raw_path.is_dir():
+        files = sorted(raw_path.glob("*.jsonl"))
+        if files:
+            return files
+        return [raw_path]
+
+    # 2. Directly exists as file
+    if raw_path.is_file():
+        return [raw_path]
+
+    # 3. Dynamic search across local and Kaggle environments
+    root = find_dataset_root()
+    if root is not None:
+        path_str = str(raw_path)
+        # Check standard subpaths
+        for subkey in ["test/in_domain", "test/external", "train", "dev", "test"]:
+            if subkey in path_str:
+                resolved = root / subkey
+                if resolved.is_dir():
+                    files = sorted(resolved.glob("*.jsonl"))
+                    if files:
+                        return files
+                elif resolved.is_file():
+                    return [resolved]
+
+        # Check by name
+        resolved = root / raw_path.name
+        if resolved.is_dir():
+            files = sorted(resolved.glob("*.jsonl"))
+            if files:
+                return files
+        elif resolved.is_file():
+            return [resolved]
+
+    # 4. If path doesn't exist, raise informative FileNotFoundError
+    if not raw_path.exists():
+        raise FileNotFoundError(
+            f"Could not find data path: '{path_or_paths}'.\n"
+            f"Checked local 'data/processed/jdwr_v1' and '/kaggle/input/**/jdwr_v1'.\n"
+            "Please ensure the dataset is attached in Kaggle (e.g. 'nextkey-dataset')."
+        )
+
+    return [raw_path]
 
 
 def load_examples(
