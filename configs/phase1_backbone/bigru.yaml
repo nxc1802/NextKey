@@ -1,0 +1,19 @@
+# Phase 1 — Backbone Selection: BiGRU (P1-GRU-250K)
+# Bidirectional GRU, 1 layer, ~250K params
+
+model:
+  name: "bigru"
+  embed_dim: 64
+  hidden_dim: 128
+  num_layers: 1
+  dropout: 0.1
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001

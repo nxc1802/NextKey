@@ -31,15 +31,9 @@ data/user_logs/*
 !data/processed/.gitkeep
 !data/samples/**
 
-models/checkpoints/*
-models/exported/*
-!models/checkpoints/.gitkeep
-!models/exported/.gitkeep
-
-experiments/runs/*
-experiments/reports/*
-!experiments/runs/.gitkeep
-!experiments/reports/.gitkeep
+# Generated artifacts & zip files
+artifacts/
+*.zip
 
 # Notebook runtime artifacts
 .ipynb_checkpoints/

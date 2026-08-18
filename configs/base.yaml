@@ -1,0 +1,34 @@
+project_name: "NextKey-Vietnamese-Restoration"
+seed: 42
+
+data:
+  train_path: "data/processed/jdwr_v1/train"
+  dev_path: "data/processed/jdwr_v1/dev"
+  test_in_domain_path: "data/processed/jdwr_v1/test/in_domain"
+  test_external_path: "data/processed/jdwr_v1/test/external"
+  max_seq_len: 180
+
+training:
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  clip_grad_norm: 1.0
+  early_stopping_patience: 5
+  lambda_boundary: 1.0
+  domain_balanced: true
+  log_every: 50
+
+modes:
+  smoke:
+    max_train_samples: 1000
+    max_eval_samples: 250
+    batch_size: 32
+    epochs: 2
+    device: "cpu"
+    log_wandb: false
+  research:
+    max_train_samples: null
+    max_eval_samples: null
+    batch_size: 128
+    epochs: 40
+    device: "cuda"
+    log_wandb: true

@@ -1,0 +1,17 @@
+# Phase 2 — Width Sweep: L (P2-L) ~450K params
+model:
+  name: "bigru"
+  embed_dim: 96
+  hidden_dim: 192
+  num_layers: 1
+  dropout: 0.1
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001

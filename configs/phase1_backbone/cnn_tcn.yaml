@@ -1,0 +1,19 @@
+# Phase 1 — Backbone Selection: Dilated TCN (P1-TCN-250K)
+# Dilated 1D Conv Network, 4 residual layers, ~250K params
+
+model:
+  name: "cnn_tcn"
+  embed_dim: 64
+  num_channels: [128, 128, 128, 128]
+  kernel_size: 3
+  dropout: 0.1
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001

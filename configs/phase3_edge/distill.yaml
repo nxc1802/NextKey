@@ -1,0 +1,25 @@
+# Phase 3 — Edge Optimization: Student baseline (P3-S0)
+# Student model trained with hard labels only (alpha=0, no teacher)
+# In full pipeline, alpha > 0 and teacher_checkpoint is provided
+
+model:
+  name: "bigru"
+  embed_dim: 48
+  hidden_dim: 96
+  num_layers: 1
+  dropout: 0.1
+
+distillation:
+  alpha: 0.0
+  temperature: 2.0
+  teacher_checkpoint: null
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001

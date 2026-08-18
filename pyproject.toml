@@ -5,10 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "nextkey"
 version = "0.1.0"
-description = "Vietnamese compact writing restoration research prototype"
+description = "Vietnamese compact writing restoration research & engineering framework"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+  "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
@@ -17,15 +18,8 @@ dev = [
   "ruff>=0.5.0",
 ]
 neural = [
-  "torch>=2.12,<2.13",
+  "torch>=2.0",
 ]
-
-[project.scripts]
-nextkey-build-dataset = "nextkey.cli:build_dataset_main"
-nextkey-train = "nextkey.cli:train_main"
-nextkey-evaluate = "nextkey.cli:evaluate_main"
-nextkey-export-model = "nextkey.cli:export_model_main"
-nextkey-demo = "nextkey.cli:demo_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

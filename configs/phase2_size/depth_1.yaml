@@ -1,0 +1,17 @@
+# Phase 2 — Depth Sweep: D1 (1 Layer) ~220K params
+model:
+  name: "bigru"
+  embed_dim: 64
+  hidden_dim: 128
+  num_layers: 1
+  dropout: 0.1
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001

@@ -1,0 +1,21 @@
+# Phase 1 — Backbone Selection: Tiny Transformer (P1-TF-250K)
+# Multi-head Self-Attention, 2 layers, 4 heads, ~250K params
+
+model:
+  name: "tiny_transformer"
+  embed_dim: 64
+  num_heads: 4
+  dim_feedforward: 128
+  num_layers: 2
+  dropout: 0.1
+  max_seq_len: 256
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001

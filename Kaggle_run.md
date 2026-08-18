@@ -1,13 +1,131 @@
-# Run official training on Kaggle
+# NextKey — Kaggle Research & Training Guide
 
-Enable a Kaggle **GPU** accelerator and attach a dataset that contains a
-`processed/jdwr_v1/manifest.json` file. The runner automatically searches
-`data/processed` first, then every attached Kaggle input, and copies the first
-matching `processed/` directory when necessary. No dataset path or training
-parameters need to be supplied.
+Hướng dẫn chạy huấn luyện và benchmark các phase trên **Kaggle GPU (T4 / P100 / A100)** hoặc **Local (MPS / CUDA / CPU)**.
+
+---
+
+## 1. Yêu cầu trước khi chạy (Setup)
+
+1. **Bật GPU Accelerator**: Trong Notebook Settings trên Kaggle, chọn **GPU T4 x2** hoặc **GPU P100**.
+2. **Attach Dataset**: Thêm Kaggle Dataset chứa thư mục `jdwr_v1` (hoặc `data/processed/jdwr_v1` có `manifest.json`).
+3. **Cài đặt / Pull Code**:
 
 ```bash
+# Clone hoặc pull mã nguồn NextKey mới nhất
 !if [ ! -d /kaggle/working/NextKey/.git ]; then git clone https://github.com/nxc1802/NextKey.git /kaggle/working/NextKey; fi
-!git -C /kaggle/working/NextKey pull --ff-only origin main
-!cd /kaggle/working/NextKey && python scripts/run_kaggle_training.py
+!git -C /kaggle/working/NextKey pull origin main
+%cd /kaggle/working/NextKey
+!pip install -q pyyaml
 ```
+
+---
+
+## 2. Các lệnh CLI chính cho Phase 1 & Phase 2
+
+### A. Phase 1 — Backbone Selection (5 họ kiến trúc)
+
+Chạy so sánh 5 họ mô hình: `BiGRU`, `BiLSTM`, `CNN-TCN`, `CNN-BiGRU`, `Tiny Transformer` (ngân sách ~250K tham số).
+
+```bash
+# 1. Chạy TOÀN BỘ 5 mô hình Phase 1 + Tạo bảng so sánh Pareto (Smoke test ~30s)
+!python scripts/run_phase1_backbone.py --all --mode smoke --device cuda
+
+# 2. Chạy TOÀN BỘ 5 mô hình Phase 1 trên 100% dữ liệu (Research Mode)
+!python scripts/run_phase1_backbone.py --all --mode research --device cuda
+
+# 3. Chạy đơn lẻ từng mô hình cụ thể:
+!python scripts/run_phase1_backbone.py --config configs/phase1_backbone/bigru.yaml --mode research --device cuda
+!python scripts/run_phase1_backbone.py --config configs/phase1_backbone/bilstm.yaml --mode research --device cuda
+!python scripts/run_phase1_backbone.py --config configs/phase1_backbone/cnn_tcn.yaml --mode research --device cuda
+!python scripts/run_phase1_backbone.py --config configs/phase1_backbone/cnn_bigru.yaml --mode research --device cuda
+!python scripts/run_phase1_backbone.py --config configs/phase1_backbone/tiny_transformer.yaml --mode research --device cuda
+```
+
+*Kết quả so sánh Pareto được tự động xuất ra:* `artifacts/phase1/pareto_backbone_report.md` và `.json`.
+
+---
+
+### B. Phase 2 — Size & Topology Search (10 biến thể kích thước)
+
+Đánh giá ảnh hưởng của bề rộng (Width), độ sâu (Depth), và cấu trúc hình học (Topology).
+
+```bash
+# 1. Chạy TOÀN BỘ 10 cấu hình Phase 2 + Tạo báo cáo Size Ablation (Smoke test)
+!python scripts/run_phase2_size.py --all --mode smoke --device cuda
+
+# 2. Chạy TOÀN BỘ 10 cấu hình Phase 2 trên 100% dữ liệu (Research Mode)
+!python scripts/run_phase2_size.py --all --mode research --device cuda
+
+# 3. Chạy theo từng nhóm Sweep riêng biệt:
+# • Width Sweep (XS ~50K, S ~120K, M ~220K, L ~450K):
+!python scripts/run_phase2_size.py --sweep width --mode research --device cuda
+
+# • Depth Sweep (D1 ~220K, D2 ~420K, D3 ~620K):
+!python scripts/run_phase2_size.py --sweep depth --mode research --device cuda
+
+# • Topology Sweep (~300K compute budget: Wide/Shallow vs Mid/Mid vs Narrow/Deep):
+!python scripts/run_phase2_size.py --sweep topo --mode research --device cuda
+```
+
+*Kết quả phân tích kích thước được tự động xuất ra:* `artifacts/phase2/size_ablation_results.md` và `.json`.
+
+---
+
+### C. Chạy qua Kaggle Runner Tự Động (`run_kaggle_training.py`)
+
+Kaggle runner tự động tìm dataset, kiểm tra GPU, chạy các phase và nén toàn bộ artifacts vào `nextkey-results.zip`:
+
+```bash
+# Chạy toàn bộ Phase 1 (5 backbones) và đóng gói zip
+!python scripts/run_kaggle_training.py --phase 1 --all --mode research
+
+# Chạy toàn bộ Phase 2 (10 sizes) và đóng gói zip
+!python scripts/run_kaggle_training.py --phase 2 --all --mode research
+
+# Chạy nhanh toàn bộ Phase 1 + 2 + 3 (Smoke mode check)
+!python scripts/run_kaggle_training.py --phase all --mode smoke
+```
+
+---
+
+## 3. Lệnh đóng gói file Zip kết quả (Zip Artifacts)
+
+Nếu bạn chạy các script huấn luyện riêng lẻ (như `run_phase1_backbone.py` hoặc `run_phase2_size.py`), hãy chạy lệnh sau ở cell cuối cùng để gom toàn bộ kết quả vào 1 file `.zip` tải về:
+
+```bash
+# Đóng gói toàn bộ thư mục artifacts thành file zip trong /kaggle/working/
+!zip -r /kaggle/working/nextkey-results.zip artifacts/
+```
+
+*Hoặc sử dụng Python nếu môi trường không có lệnh `zip`:*
+```bash
+!python -c "import shutil; shutil.make_archive('/kaggle/working/nextkey-results', 'zip', 'artifacts')"
+```
+
+---
+
+## 4. Chạy trên máy Local (Apple Silicon MPS / CPU)
+
+Chỉ cần thay cờ `--device cuda` thành `--device mps` (cho Mac) hoặc `--device cpu`:
+
+```bash
+# Local Phase 1 (Tất cả 5 model)
+python scripts/run_phase1_backbone.py --all --mode smoke --device mps
+
+# Local Phase 2 (Tất cả 10 size)
+python scripts/run_phase2_size.py --all --mode smoke --device mps
+```
+
+---
+
+## 5. Bảng tham số CLI
+
+| Tham số | Giá trị | Mặc định | Mô tả |
+|---|---|---|---|
+| `--all` | cờ | `False` | Chạy toàn bộ danh sách model / size của phase |
+| `--sweep` | `width`, `depth`, `topo`, `all` | `None` | Chạy một nhóm sweep cụ thể trong Phase 2 |
+| `--config` | `<file.yaml>` | `None` | Đường dẫn file config tùy chỉnh |
+| `--mode` | `smoke`, `research` | `smoke` (Local) / `research` (Kaggle) | 1K mẫu kiểm thử nhanh hoặc 100% dữ liệu |
+| `--device` | `cuda`, `mps`, `cpu` | Auto | Thiết bị tính toán |
+| `--output-dir` | `<dir>` | `artifacts/<phase>` | Thư mục lưu checkpoint & báo cáo |
+| `--zip-output` | `<file.zip>` | `/kaggle/working/nextkey-results.zip` | Đường dẫn file zip xuất kết quả trên Kaggle |

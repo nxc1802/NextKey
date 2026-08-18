@@ -1,0 +1,22 @@
+# Phase 1 — Backbone Selection: CNN + BiGRU Hybrid (P1-HYB-250K)
+# 2 Conv1D layers + 1 BiGRU layer, ~250K params
+
+model:
+  name: "cnn_bigru"
+  embed_dim: 64
+  conv_channels: 64
+  conv_kernel_size: 3
+  num_conv_layers: 2
+  hidden_dim: 96
+  num_layers: 1
+  dropout: 0.1
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001
