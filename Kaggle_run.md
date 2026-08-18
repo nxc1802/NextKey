@@ -93,11 +93,11 @@ Kaggle runner tự động tìm dataset, kiểm tra GPU, chạy các phase và n
 Nếu bạn chạy các script huấn luyện riêng lẻ (như `run_phase1_backbone.py` hoặc `run_phase2_size.py`), hãy chạy lệnh sau ở cell cuối cùng để gom toàn bộ kết quả vào 1 file `.zip` tải về:
 
 ```bash
-# Đóng gói toàn bộ thư mục artifacts thành file zip trong /kaggle/working/
-!zip -r /kaggle/working/nextkey-results.zip artifacts/
+# Đóng gói im lặng (không in log từng file) toàn bộ thư mục artifacts thành file zip
+!zip -r -q /kaggle/working/nextkey-results.zip artifacts/
 ```
 
-*Hoặc sử dụng Python nếu môi trường không có lệnh `zip`:*
+*Hoặc sử dụng Python (hoàn toàn không sinh log):*
 ```bash
 !python -c "import shutil; shutil.make_archive('/kaggle/working/nextkey-results', 'zip', 'artifacts')"
 ```
