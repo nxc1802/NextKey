@@ -1,0 +1,43 @@
+{
+  "model_path": "artifacts/phase1/bigru/best_model.pt",
+  "vocab_path": "artifacts/phase1/bigru/vocab.json",
+  "history_path": "artifacts/phase1/bigru/training_history.json",
+  "device": "mps",
+  "train_examples": 1000,
+  "val_examples": 250,
+  "total_steps": 64,
+  "best_val_corpus_cer": 0.255577,
+  "parameters": 178730,
+  "evaluation": {
+    "metrics": {
+      "in_domain": {
+        "count": 250,
+        "exact_match": 0.0,
+        "cer": 0.250021,
+        "wer": 0.873188,
+        "diacritic_accuracy": 0.571571,
+        "corpus_cer": 0.255613,
+        "corpus_wer": 0.892052,
+        "boundary_precision": 0.898566,
+        "boundary_recall": 0.7753,
+        "boundary_f1": 0.832394
+      },
+      "external": {
+        "count": 250,
+        "exact_match": 0.0,
+        "cer": 0.284104,
+        "wer": 0.945379,
+        "diacritic_accuracy": 0.405934,
+        "corpus_cer": 0.274774,
+        "corpus_wer": 0.928155,
+        "boundary_precision": 0.844112,
+        "boundary_recall": 0.765571,
+        "boundary_f1": 0.802926
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.019161,
+      "bf1_gap": 0.029468
+    }
+  }
+}

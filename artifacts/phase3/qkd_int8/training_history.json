@@ -1,0 +1,19 @@
+[
+  {
+    "epoch": 1,
+    "step": 1072,
+    "train_loss": 1.421534,
+    "val": {
+      "count": 68550,
+      "exact_match": 0.004055,
+      "cer": 0.121687,
+      "wer": 0.484741,
+      "diacritic_accuracy": 0.868483,
+      "corpus_cer": 0.118938,
+      "corpus_wer": 0.476784,
+      "boundary_precision": 0.963524,
+      "boundary_recall": 0.952482,
+      "boundary_f1": 0.957971
+    }
+  }
+]

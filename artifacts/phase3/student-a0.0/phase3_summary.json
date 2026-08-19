@@ -1,0 +1,44 @@
+{
+  "model_path": "artifacts/phase3/student-a0.0/best_model.pt",
+  "vocab_path": "artifacts/phase3/student-a0.0/vocab.json",
+  "history_path": "artifacts/phase3/student-a0.0/training_history.json",
+  "device": "mps",
+  "train_examples": 1000,
+  "val_examples": 250,
+  "total_steps": 64,
+  "best_val_corpus_cer": 0.29185,
+  "parameters": 106426,
+  "model_size_mb": 0.41,
+  "evaluation": {
+    "metrics": {
+      "in_domain": {
+        "count": 250,
+        "exact_match": 0.0,
+        "cer": 0.285873,
+        "wer": 0.906223,
+        "diacritic_accuracy": 0.532232,
+        "corpus_cer": 0.290573,
+        "corpus_wer": 0.927139,
+        "boundary_precision": 0.842583,
+        "boundary_recall": 0.731259,
+        "boundary_f1": 0.782984
+      },
+      "external": {
+        "count": 250,
+        "exact_match": 0.0,
+        "cer": 0.305547,
+        "wer": 0.965546,
+        "diacritic_accuracy": 0.371749,
+        "corpus_cer": 0.299171,
+        "corpus_wer": 0.954048,
+        "boundary_precision": 0.802081,
+        "boundary_recall": 0.736339,
+        "boundary_f1": 0.767806
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.008598,
+      "bf1_gap": 0.015178
+    }
+  }
+}

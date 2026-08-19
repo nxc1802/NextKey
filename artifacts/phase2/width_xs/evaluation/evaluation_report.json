@@ -1,0 +1,37 @@
+{
+  "label": "Phase 2 - Width-XS (32/64, 1L)",
+  "model_name": "bigru",
+  "parameters": 53972,
+  "model_size_kb": 216.2,
+  "metrics": {
+    "in_domain": {
+      "count": 5000,
+      "exact_match": 0.0432,
+      "cer": 0.070347,
+      "wer": 0.286122,
+      "diacritic_accuracy": 0.921601,
+      "corpus_cer": 0.068324,
+      "corpus_wer": 0.281672,
+      "boundary_precision": 0.982158,
+      "boundary_recall": 0.9763,
+      "boundary_f1": 0.97922
+    },
+    "external": {
+      "count": 5000,
+      "exact_match": 0.0364,
+      "cer": 0.097657,
+      "wer": 0.404931,
+      "diacritic_accuracy": 0.904266,
+      "corpus_cer": 0.092383,
+      "corpus_wer": 0.389229,
+      "boundary_precision": 0.960894,
+      "boundary_recall": 0.948759,
+      "boundary_f1": 0.954788
+    }
+  },
+  "domain_gap": {
+    "cer_gap": 0.024059,
+    "wer_gap": 0.107557,
+    "bf1_gap": 0.024432
+  }
+}

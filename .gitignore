@@ -32,8 +32,8 @@ data/user_logs/*
 !data/samples/**
 
 # Generated artifacts & zip files
-artifacts/
 *.zip
+artifacts/**/*.jsonl
 
 # Notebook runtime artifacts
 .ipynb_checkpoints/

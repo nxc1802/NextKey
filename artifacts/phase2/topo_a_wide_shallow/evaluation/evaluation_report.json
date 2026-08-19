@@ -1,0 +1,37 @@
+{
+  "label": "Phase 2 - Topo-A Wide/Shallow (96/160, 1L)",
+  "model_name": "bigru",
+  "parameters": 289044,
+  "model_size_kb": 1134.5,
+  "metrics": {
+    "in_domain": {
+      "count": 5000,
+      "exact_match": 0.1176,
+      "cer": 0.045501,
+      "wer": 0.186611,
+      "diacritic_accuracy": 0.94952,
+      "corpus_cer": 0.043469,
+      "corpus_wer": 0.181674,
+      "boundary_precision": 0.987856,
+      "boundary_recall": 0.984667,
+      "boundary_f1": 0.986259
+    },
+    "external": {
+      "count": 5000,
+      "exact_match": 0.0562,
+      "cer": 0.076232,
+      "wer": 0.321725,
+      "diacritic_accuracy": 0.926967,
+      "corpus_cer": 0.070563,
+      "corpus_wer": 0.304024,
+      "boundary_precision": 0.967499,
+      "boundary_recall": 0.959521,
+      "boundary_f1": 0.963493
+    }
+  },
+  "domain_gap": {
+    "cer_gap": 0.027094,
+    "wer_gap": 0.12235,
+    "bf1_gap": 0.022766
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "label": "Phase 1 - BiGRU Baseline (64/128, 1L)",
+  "model_name": "bigru",
+  "parameters": 181556,
+  "model_size_kb": 714.6,
+  "metrics": {
+    "in_domain": {
+      "count": 5000,
+      "exact_match": 0.1068,
+      "cer": 0.049559,
+      "wer": 0.204028,
+      "diacritic_accuracy": 0.944862,
+      "corpus_cer": 0.047798,
+      "corpus_wer": 0.199709,
+      "boundary_precision": 0.986876,
+      "boundary_recall": 0.983599,
+      "boundary_f1": 0.985235
+    },
+    "external": {
+      "count": 5000,
+      "exact_match": 0.0492,
+      "cer": 0.080791,
+      "wer": 0.340758,
+      "diacritic_accuracy": 0.922736,
+      "corpus_cer": 0.075451,
+      "corpus_wer": 0.322827,
+      "boundary_precision": 0.964077,
+      "boundary_recall": 0.956835,
+      "boundary_f1": 0.960442
+    }
+  },
+  "domain_gap": {
+    "cer_gap": 0.027653,
+    "wer_gap": 0.123118,
+    "bf1_gap": 0.024793
+  }
+}

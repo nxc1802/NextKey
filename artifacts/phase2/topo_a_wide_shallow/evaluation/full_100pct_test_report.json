@@ -1,0 +1,135 @@
+{
+  "label": "Topo-A Wide/Shallow (96/160, 1L)",
+  "model_name": "bigru",
+  "parameters": 289044,
+  "model_size_kb": 1134.5,
+  "in_domain": {
+    "count": 71348,
+    "exact_match": 0.102652,
+    "cer": 0.04727,
+    "wer": 0.194762,
+    "diacritic_accuracy": 0.947095,
+    "corpus_cer": 0.044406,
+    "corpus_wer": 0.185457,
+    "boundary_precision": 0.988285,
+    "boundary_recall": 0.985851,
+    "boundary_f1": 0.987067
+  },
+  "external": {
+    "count": 159172,
+    "exact_match": 0.063554,
+    "cer": 0.0774,
+    "wer": 0.347485,
+    "diacritic_accuracy": 0.930082,
+    "corpus_cer": 0.073685,
+    "corpus_wer": 0.32232,
+    "boundary_precision": 0.956088,
+    "boundary_recall": 0.954583,
+    "boundary_f1": 0.955335
+  },
+  "in_domain_by_category": {
+    "chinh_tri_xa_hoi": {
+      "count": 11338,
+      "exact_match": 0.11069,
+      "cer": 0.043825,
+      "wer": 0.18303,
+      "diacritic_accuracy": 0.951383,
+      "corpus_cer": 0.04148,
+      "corpus_wer": 0.174725,
+      "boundary_precision": 0.990128,
+      "boundary_recall": 0.986387,
+      "boundary_f1": 0.988254
+    },
+    "doi_song": {
+      "count": 12281,
+      "exact_match": 0.084847,
+      "cer": 0.06288,
+      "wer": 0.248343,
+      "diacritic_accuracy": 0.927548,
+      "corpus_cer": 0.059356,
+      "corpus_wer": 0.238657,
+      "boundary_precision": 0.988003,
+      "boundary_recall": 0.984502,
+      "boundary_f1": 0.986249
+    },
+    "kinh_doanh": {
+      "count": 7263,
+      "exact_match": 0.120336,
+      "cer": 0.031328,
+      "wer": 0.13559,
+      "diacritic_accuracy": 0.966777,
+      "corpus_cer": 0.029725,
+      "corpus_wer": 0.129462,
+      "boundary_precision": 0.989882,
+      "boundary_recall": 0.987541,
+      "boundary_f1": 0.98871
+    },
+    "phap_luat": {
+      "count": 9353,
+      "exact_match": 0.087779,
+      "cer": 0.044887,
+      "wer": 0.183413,
+      "diacritic_accuracy": 0.948374,
+      "corpus_cer": 0.04248,
+      "corpus_wer": 0.176025,
+      "boundary_precision": 0.991016,
+      "boundary_recall": 0.98762,
+      "boundary_f1": 0.989315
+    },
+    "suc_khoe": {
+      "count": 8812,
+      "exact_match": 0.074671,
+      "cer": 0.058478,
+      "wer": 0.235448,
+      "diacritic_accuracy": 0.933433,
+      "corpus_cer": 0.055438,
+      "corpus_wer": 0.22691,
+      "boundary_precision": 0.987088,
+      "boundary_recall": 0.983733,
+      "boundary_f1": 0.985408
+    },
+    "the_gioi": {
+      "count": 9161,
+      "exact_match": 0.129462,
+      "cer": 0.035891,
+      "wer": 0.157041,
+      "diacritic_accuracy": 0.962903,
+      "corpus_cer": 0.035331,
+      "corpus_wer": 0.15441,
+      "boundary_precision": 0.983227,
+      "boundary_recall": 0.984545,
+      "boundary_f1": 0.983886
+    },
+    "van_hoa": {
+      "count": 13140,
+      "exact_match": 0.113242,
+      "cer": 0.046578,
+      "wer": 0.194606,
+      "diacritic_accuracy": 0.948014,
+      "corpus_cer": 0.046026,
+      "corpus_wer": 0.192331,
+      "boundary_precision": 0.98786,
+      "boundary_recall": 0.986218,
+      "boundary_f1": 0.987038
+    }
+  },
+  "external_by_category": {
+    "the_thao": {
+      "count": 159172,
+      "exact_match": 0.063554,
+      "cer": 0.0774,
+      "wer": 0.347485,
+      "diacritic_accuracy": 0.930082,
+      "corpus_cer": 0.073685,
+      "corpus_wer": 0.32232,
+      "boundary_precision": 0.956088,
+      "boundary_recall": 0.954583,
+      "boundary_f1": 0.955335
+    }
+  },
+  "domain_gap": {
+    "cer_gap": 0.029279,
+    "wer_gap": 0.136863,
+    "bf1_gap": 0.031732
+  }
+}

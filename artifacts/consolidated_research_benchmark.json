@@ -1,0 +1,150 @@
+[
+  {
+    "label": "Phase 1 - BiGRU Baseline (64/128, 1L)",
+    "model_name": "bigru",
+    "parameters": 181556,
+    "model_size_kb": 714.6,
+    "metrics": {
+      "in_domain": {
+        "count": 5000,
+        "exact_match": 0.1068,
+        "cer": 0.049559,
+        "wer": 0.204028,
+        "diacritic_accuracy": 0.944862,
+        "corpus_cer": 0.047798,
+        "corpus_wer": 0.199709,
+        "boundary_precision": 0.986876,
+        "boundary_recall": 0.983599,
+        "boundary_f1": 0.985235
+      },
+      "external": {
+        "count": 5000,
+        "exact_match": 0.0492,
+        "cer": 0.080791,
+        "wer": 0.340758,
+        "diacritic_accuracy": 0.922736,
+        "corpus_cer": 0.075451,
+        "corpus_wer": 0.322827,
+        "boundary_precision": 0.964077,
+        "boundary_recall": 0.956835,
+        "boundary_f1": 0.960442
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.027653,
+      "wer_gap": 0.123118,
+      "bf1_gap": 0.024793
+    }
+  },
+  {
+    "label": "Phase 2 - Width-XS (32/64, 1L)",
+    "model_name": "bigru",
+    "parameters": 53972,
+    "model_size_kb": 216.2,
+    "metrics": {
+      "in_domain": {
+        "count": 5000,
+        "exact_match": 0.0432,
+        "cer": 0.070347,
+        "wer": 0.286122,
+        "diacritic_accuracy": 0.921601,
+        "corpus_cer": 0.068324,
+        "corpus_wer": 0.281672,
+        "boundary_precision": 0.982158,
+        "boundary_recall": 0.9763,
+        "boundary_f1": 0.97922
+      },
+      "external": {
+        "count": 5000,
+        "exact_match": 0.0364,
+        "cer": 0.097657,
+        "wer": 0.404931,
+        "diacritic_accuracy": 0.904266,
+        "corpus_cer": 0.092383,
+        "corpus_wer": 0.389229,
+        "boundary_precision": 0.960894,
+        "boundary_recall": 0.948759,
+        "boundary_f1": 0.954788
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.024059,
+      "wer_gap": 0.107557,
+      "bf1_gap": 0.024432
+    }
+  },
+  {
+    "label": "Phase 2 - Depth-1 (64/128, 1L)",
+    "model_name": "bigru",
+    "parameters": 181556,
+    "model_size_kb": 714.6,
+    "metrics": {
+      "in_domain": {
+        "count": 5000,
+        "exact_match": 0.1068,
+        "cer": 0.049559,
+        "wer": 0.204028,
+        "diacritic_accuracy": 0.944862,
+        "corpus_cer": 0.047798,
+        "corpus_wer": 0.199709,
+        "boundary_precision": 0.986876,
+        "boundary_recall": 0.983599,
+        "boundary_f1": 0.985235
+      },
+      "external": {
+        "count": 5000,
+        "exact_match": 0.0492,
+        "cer": 0.080791,
+        "wer": 0.340758,
+        "diacritic_accuracy": 0.922736,
+        "corpus_cer": 0.075451,
+        "corpus_wer": 0.322827,
+        "boundary_precision": 0.964077,
+        "boundary_recall": 0.956835,
+        "boundary_f1": 0.960442
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.027653,
+      "wer_gap": 0.123118,
+      "bf1_gap": 0.024793
+    }
+  },
+  {
+    "label": "Phase 2 - Topo-A Wide/Shallow (96/160, 1L)",
+    "model_name": "bigru",
+    "parameters": 289044,
+    "model_size_kb": 1134.5,
+    "metrics": {
+      "in_domain": {
+        "count": 5000,
+        "exact_match": 0.1176,
+        "cer": 0.045501,
+        "wer": 0.186611,
+        "diacritic_accuracy": 0.94952,
+        "corpus_cer": 0.043469,
+        "corpus_wer": 0.181674,
+        "boundary_precision": 0.987856,
+        "boundary_recall": 0.984667,
+        "boundary_f1": 0.986259
+      },
+      "external": {
+        "count": 5000,
+        "exact_match": 0.0562,
+        "cer": 0.076232,
+        "wer": 0.321725,
+        "diacritic_accuracy": 0.926967,
+        "corpus_cer": 0.070563,
+        "corpus_wer": 0.304024,
+        "boundary_precision": 0.967499,
+        "boundary_recall": 0.959521,
+        "boundary_f1": 0.963493
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.027094,
+      "wer_gap": 0.12235,
+      "bf1_gap": 0.022766
+    }
+  }
+]

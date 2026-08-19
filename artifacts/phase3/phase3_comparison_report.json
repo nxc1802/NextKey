@@ -1,0 +1,137 @@
+{
+  "timestamp": "2026-08-20 00:37:51",
+  "mode": "research",
+  "device": "mps",
+  "teacher": {
+    "name": "Topo-A Wide/Shallow",
+    "params": 289044
+  },
+  "student": {
+    "name": "Width-XS",
+    "params": 53972
+  },
+  "traditional_kd": {
+    "strategy": "traditional_kd",
+    "fp32": {
+      "size_kb": 217.7,
+      "latency_ms": 0.7,
+      "in_domain_cer": 0.119002,
+      "external_cer": 0.140998,
+      "in_domain_bf1": 0.959387,
+      "evaluation": {
+        "metrics": {
+          "in_domain": {
+            "count": 68372,
+            "exact_match": 0.005061,
+            "cer": 0.121323,
+            "wer": 0.484978,
+            "diacritic_accuracy": 0.868018,
+            "corpus_cer": 0.119002,
+            "corpus_wer": 0.478763,
+            "boundary_precision": 0.964923,
+            "boundary_recall": 0.953915,
+            "boundary_f1": 0.959387
+          },
+          "external": {
+            "count": 155491,
+            "exact_match": 0.008078,
+            "cer": 0.147088,
+            "wer": 0.607224,
+            "diacritic_accuracy": 0.864177,
+            "corpus_cer": 0.140998,
+            "corpus_wer": 0.572222,
+            "boundary_precision": 0.910049,
+            "boundary_recall": 0.927586,
+            "boundary_f1": 0.918734
+          }
+        },
+        "domain_gap": {
+          "cer_gap": 0.021996,
+          "bf1_gap": 0.040653
+        }
+      }
+    },
+    "ptq_int8": {
+      "size_kb": 57.8,
+      "in_domain_cer": 0.119167,
+      "external_cer": 0.141417,
+      "in_domain_bf1": 0.959382,
+      "evaluation": {
+        "metrics": {
+          "in_domain": {
+            "count": 68372,
+            "exact_match": 0.005017,
+            "cer": 0.121507,
+            "wer": 0.48576,
+            "diacritic_accuracy": 0.867778,
+            "corpus_cer": 0.119167,
+            "corpus_wer": 0.479468,
+            "boundary_precision": 0.964698,
+            "boundary_recall": 0.954123,
+            "boundary_f1": 0.959382
+          },
+          "external": {
+            "count": 155491,
+            "exact_match": 0.007769,
+            "cer": 0.147601,
+            "wer": 0.609495,
+            "diacritic_accuracy": 0.863668,
+            "corpus_cer": 0.141417,
+            "corpus_wer": 0.5739,
+            "boundary_precision": 0.909452,
+            "boundary_recall": 0.92772,
+            "boundary_f1": 0.918495
+          }
+        },
+        "domain_gap": {
+          "cer_gap": 0.02225,
+          "bf1_gap": 0.040887
+        }
+      }
+    },
+    "onnx_export": "ONNX Export skipped: No module named 'onnxscript'"
+  },
+  "qkd": {
+    "strategy": "qkd",
+    "qkd_int8": {
+      "size_kb": 57.8,
+      "latency_ms": 0.87,
+      "in_domain_cer": 0.119047,
+      "external_cer": 0.142327,
+      "in_domain_bf1": 0.957913,
+      "evaluation": {
+        "metrics": {
+          "in_domain": {
+            "count": 68372,
+            "exact_match": 0.004198,
+            "cer": 0.121482,
+            "wer": 0.483936,
+            "diacritic_accuracy": 0.868699,
+            "corpus_cer": 0.119047,
+            "corpus_wer": 0.476982,
+            "boundary_precision": 0.963372,
+            "boundary_recall": 0.952516,
+            "boundary_f1": 0.957913
+          },
+          "external": {
+            "count": 155491,
+            "exact_match": 0.008091,
+            "cer": 0.148667,
+            "wer": 0.608497,
+            "diacritic_accuracy": 0.863528,
+            "corpus_cer": 0.142327,
+            "corpus_wer": 0.573046,
+            "boundary_precision": 0.909203,
+            "boundary_recall": 0.923224,
+            "boundary_f1": 0.91616
+          }
+        },
+        "domain_gap": {
+          "cer_gap": 0.02328,
+          "bf1_gap": 0.041753
+        }
+      }
+    },
+    "onnx_export": "ONNX Export skipped: No module named 'onnxscript'"
+  }
+}

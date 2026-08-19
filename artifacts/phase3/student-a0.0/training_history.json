@@ -1,0 +1,36 @@
+[
+  {
+    "epoch": 1,
+    "step": 32,
+    "train_loss": 3.90137,
+    "val": {
+      "count": 250,
+      "exact_match": 0.0,
+      "cer": 0.429478,
+      "wer": 0.975697,
+      "diacritic_accuracy": 0.015436,
+      "corpus_cer": 0.43216,
+      "corpus_wer": 0.978583,
+      "boundary_precision": 0.745629,
+      "boundary_recall": 0.454296,
+      "boundary_f1": 0.564595
+    }
+  },
+  {
+    "epoch": 2,
+    "step": 64,
+    "train_loss": 1.774805,
+    "val": {
+      "count": 250,
+      "exact_match": 0.0,
+      "cer": 0.291342,
+      "wer": 0.933854,
+      "diacritic_accuracy": 0.553577,
+      "corpus_cer": 0.29185,
+      "corpus_wer": 0.934596,
+      "boundary_precision": 0.836139,
+      "boundary_recall": 0.733849,
+      "boundary_f1": 0.781662
+    }
+  }
+]

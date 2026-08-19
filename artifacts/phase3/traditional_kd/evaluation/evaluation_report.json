@@ -1,0 +1,32 @@
+{
+  "metrics": {
+    "in_domain": {
+      "count": 68372,
+      "exact_match": 0.005061,
+      "cer": 0.121323,
+      "wer": 0.484978,
+      "diacritic_accuracy": 0.868018,
+      "corpus_cer": 0.119002,
+      "corpus_wer": 0.478763,
+      "boundary_precision": 0.964923,
+      "boundary_recall": 0.953915,
+      "boundary_f1": 0.959387
+    },
+    "external": {
+      "count": 155491,
+      "exact_match": 0.008078,
+      "cer": 0.147088,
+      "wer": 0.607224,
+      "diacritic_accuracy": 0.864177,
+      "corpus_cer": 0.140998,
+      "corpus_wer": 0.572222,
+      "boundary_precision": 0.910049,
+      "boundary_recall": 0.927586,
+      "boundary_f1": 0.918734
+    }
+  },
+  "domain_gap": {
+    "cer_gap": 0.021996,
+    "bf1_gap": 0.040653
+  }
+}
