@@ -63,19 +63,37 @@ def parse_args():
 
 
 def load_teacher_model(teacher_ckpt_path: str | Path, device: torch.device) -> tuple[nn.Module, CharVocab]:
-    """Load pretrained Teacher model (Topo-A Wide/Shallow) and its vocabulary."""
+    """Load pretrained Teacher model (Topo-A Wide/Shallow) and its vocabulary with auto-discovery."""
     ckpt_path = Path(teacher_ckpt_path)
     if not ckpt_path.exists():
-        # Try finding in parent artifacts or kaggle directories
-        alt_paths = list(Path("artifacts").glob("**/topo_a_wide_shallow/best_model.pt"))
-        if alt_paths:
-            ckpt_path = alt_paths[0]
+        # Auto-discovery in common paths (Kaggle input, workspace artifacts, local)
+        search_dirs = [
+            Path("artifacts"),
+            Path("/kaggle/input"),
+            Path("/kaggle/working"),
+            Path("."),
+        ]
+        found = []
+        for d in search_dirs:
+            if d.exists():
+                found.extend(list(d.glob("**/topo_a_wide_shallow/best_model.pt")))
+        if found:
+            ckpt_path = found[0]
+            print(f"  [Auto-Discovery] Located Teacher Checkpoint at: {ckpt_path}")
         else:
-            raise FileNotFoundError(f"Teacher checkpoint not found at: {teacher_ckpt_path}")
+            raise FileNotFoundError(
+                f"Teacher checkpoint not found at '{teacher_ckpt_path}' or any search directory.\n"
+                f"Please ensure Phase 2 artifacts (topo_a_wide_shallow/best_model.pt) are present."
+            )
 
     vocab_path = ckpt_path.parent / "vocab.json"
     if not vocab_path.exists():
-        raise FileNotFoundError(f"Teacher vocab not found at: {vocab_path}")
+        # Check parent or siblings
+        alt_vocab = list(ckpt_path.parent.glob("**/vocab.json"))
+        if alt_vocab:
+            vocab_path = alt_vocab[0]
+        else:
+            raise FileNotFoundError(f"Teacher vocab not found at: {vocab_path}")
 
     vocab = CharVocab.load(vocab_path)
     # Teacher Topo-A config: embed 96, hidden 160, 1 layer
