@@ -71,7 +71,32 @@ Chạy so sánh 5 họ mô hình: `BiGRU`, `BiLSTM`, `CNN-TCN`, `CNN-BiGRU`, `Ti
 
 ---
 
-### C. Chạy qua Kaggle Runner Tự Động (`run_kaggle_training.py`)
+### C. Phase 3 — Edge Optimization & QKD Benchmark (Traditional KD vs. QKD)
+
+So sánh trực tiếp giữa 2 chiến lược nén mô hình cho Edge Device với Teacher `Topo-A Wide/Shallow` (289K params) và Student `Width-XS` (54K params):
+- **Option 1: Traditional KD** (Huấn luyện Student FP32 bằng KD $\to$ Lượng tử hóa sau PTQ INT8)
+- **Option 2: QKD** (Quantization-Aware Knowledge Distillation: Huấn luyện Student INT8 trực tiếp cùng Teacher)
+
+```bash
+# 1. Chạy so sánh CẢ 2 PHƯƠNG PHÁP (Traditional KD vs QKD) trên Kaggle GPU (Research Mode)
+!python scripts/run_phase3_edge.py --strategy all --mode research --device cuda
+
+# 2. Chạy nhanh kiểm tra luồng (Smoke Mode)
+!python scripts/run_phase3_edge.py --strategy all --mode smoke --device cuda
+
+# 3. Chạy đơn lẻ từng phương pháp cụ thể:
+# • Chạy chỉ QKD (Quantization-Aware Distillation INT8 trực tiếp):
+!python scripts/run_phase3_edge.py --strategy qkd --mode research --device cuda
+
+# • Chạy chỉ Traditional KD (FP32 KD -> PTQ INT8):
+!python scripts/run_phase3_edge.py --strategy traditional --mode research --device cuda
+```
+
+*Kết quả phân tích và so sánh được tự động xuất ra:* `artifacts/phase3/PHASE3_QKD_VS_TRADITIONAL.md`, `phase3_comparison_report.json`, model compact `.pt` (< 60 KB) và model ONNX.
+
+---
+
+### D. Chạy qua Kaggle Runner Tự Động (`run_kaggle_training.py`)
 
 Kaggle runner tự động tìm dataset, kiểm tra GPU, chạy các phase và nén toàn bộ artifacts vào `nextkey-results.zip`:
 
@@ -81,6 +106,9 @@ Kaggle runner tự động tìm dataset, kiểm tra GPU, chạy các phase và n
 
 # Chạy toàn bộ Phase 2 (10 sizes) và đóng gói zip
 !python scripts/run_kaggle_training.py --phase 2 --all --mode research
+
+# Chạy Phase 3 So sánh Traditional KD vs QKD và đóng gói zip
+!python scripts/run_kaggle_training.py --phase 3 --strategy all --mode research
 
 # Chạy nhanh toàn bộ Phase 1 + 2 + 3 (Smoke mode check)
 !python scripts/run_kaggle_training.py --phase all --mode smoke

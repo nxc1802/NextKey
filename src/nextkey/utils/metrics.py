@@ -32,10 +32,19 @@ def compact_key(text: str) -> str:
 # Edit distance
 # ---------------------------------------------------------------------------
 
+try:
+    import Levenshtein as _c_levenshtein
+except ImportError:
+    _c_levenshtein = None
+
+
 def levenshtein(a: str, b: str) -> int:
-    """Levenshtein distance with O(min(n, m)) memory."""
+    """Levenshtein distance with C acceleration if available."""
     if a == b:
         return 0
+    if _c_levenshtein is not None:
+        return _c_levenshtein.distance(a, b)
+
     if len(a) < len(b):
         a, b = b, a
     previous = list(range(len(b) + 1))
@@ -52,9 +61,31 @@ def levenshtein(a: str, b: str) -> int:
 
 
 def levenshtein_tokens(a: list[str], b: list[str]) -> int:
-    """Token-level Levenshtein distance."""
+    """Token-level Levenshtein distance with C acceleration if available."""
     if a == b:
         return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+
+    if _c_levenshtein is not None:
+        vocab: dict[str, str] = {}
+        idx = 1
+        seq_a = []
+        for t in a:
+            if t not in vocab:
+                vocab[t] = chr(idx)
+                idx += 1
+            seq_a.append(vocab[t])
+        seq_b = []
+        for t in b:
+            if t not in vocab:
+                vocab[t] = chr(idx)
+                idx += 1
+            seq_b.append(vocab[t])
+        return _c_levenshtein.distance("".join(seq_a), "".join(seq_b))
+
     if len(a) < len(b):
         a, b = b, a
     previous = list(range(len(b) + 1))

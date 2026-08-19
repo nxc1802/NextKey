@@ -164,6 +164,12 @@ def parse_args():
         help="Specific sweep to execute for Phase 2 (width, depth, topo, all).",
     )
     parser.add_argument(
+        "--strategy",
+        choices=["traditional", "qkd", "all"],
+        default=None,
+        help="Distillation strategy for Phase 3 (traditional, qkd, all). Default: all",
+    )
+    parser.add_argument(
         "--config",
         type=str,
         default=None,
@@ -266,12 +272,12 @@ def main():
     if args.phase in ("3", "all"):
         phase_output_dir = Path(args.output_dir) / "phase3"
         artifact_paths.append(root / phase_output_dir)
-        cfg = args.config if (args.config and args.phase == "3") else "configs/phase3_edge/distill.yaml"
+        strategy = args.strategy or "all"
         cmd = [
             sys.executable,
             "scripts/run_phase3_edge.py",
-            "--config",
-            cfg,
+            "--strategy",
+            strategy,
             "--mode",
             args.mode,
             "--device",

@@ -46,6 +46,7 @@ class ModelTrainer:
         cfg: dict[str, Any],
         output_dir: str | Path,
         device: torch.device | None = None,
+        teacher_model: Optional[nn.Module] = None,
     ):
         self.model = model
         self.vocab = vocab
@@ -55,6 +56,14 @@ class ModelTrainer:
 
         self.device = device or resolve_device(cfg.get("runtime", {}).get("device"))
         self.model.to(self.device)
+
+        # Teacher model for distillation
+        self.teacher_model = teacher_model
+        if self.teacher_model is not None:
+            self.teacher_model.to(self.device)
+            self.teacher_model.eval()
+            for p in self.teacher_model.parameters():
+                p.requires_grad = False
 
         # Training config
         training = cfg.get("training", {})
@@ -73,7 +82,7 @@ class ModelTrainer:
         self.temperature = float(distill_cfg.get("temperature", 2.0))
 
         # Loss
-        if self.alpha > 0:
+        if self.alpha > 0 and self.teacher_model is not None:
             self.criterion = DistillationLoss(
                 pad_target_id=vocab.pad_target_id,
                 lambda_boundary=self.lambda_boundary,
@@ -228,11 +237,18 @@ class ModelTrainer:
 
             outputs = self.model(source, lengths)
 
+            teacher_diacritic_logits = None
+            if self.teacher_model is not None and self.alpha > 0:
+                with torch.no_grad():
+                    teacher_out = self.teacher_model(source, lengths)
+                    teacher_diacritic_logits = teacher_out["diacritic_logits"]
+
             loss_dict = self.criterion(
                 outputs["diacritic_logits"],
                 outputs["boundary_logits"],
                 targets,
                 boundaries,
+                teacher_diacritic_logits=teacher_diacritic_logits,
             )
             loss = loss_dict["loss"]
             loss.backward()
@@ -246,8 +262,9 @@ class ModelTrainer:
 
             if self.global_step % self.log_every == 0:
                 avg = loss_sum / batches
+                kd_info = f", kd={loss_dict['loss_kd'].item():.4f}" if "loss_kd" in loss_dict and self.alpha > 0 else ""
                 print(f"    step {self.global_step:>5d} │ loss={avg:.4f} "
-                      f"(char={loss_dict['loss_char'].item():.4f}, "
+                      f"(char={loss_dict['loss_char'].item():.4f}{kd_info}, "
                       f"bnd={loss_dict['loss_boundary'].item():.4f})")
 
             if self.max_steps and self.global_step >= self.max_steps:

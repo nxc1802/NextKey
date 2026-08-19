@@ -56,9 +56,11 @@ class BaseCharTagger(nn.Module, ABC):
     ) -> dict[str, torch.Tensor]:
         ...
 
-    def count_parameters(self) -> int:
-        """Total number of trainable parameters."""
-        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+    def count_parameters(self, trainable_only: bool = False) -> int:
+        """Total number of parameters (or trainable only)."""
+        if trainable_only:
+            return sum(p.numel() for p in self.parameters() if p.requires_grad)
+        return sum(p.numel() for p in self.parameters())
 
     def summary(self) -> dict[str, Any]:
         """Model metadata for logging."""

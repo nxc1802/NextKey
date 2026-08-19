@@ -1,0 +1,31 @@
+# Phase 3: Traditional Knowledge Distillation (FP32 KD followed by PTQ INT8)
+
+teacher:
+  model_name: "bigru"
+  embed_dim: 96
+  hidden_dim: 160
+  num_layers: 1
+  checkpoint_path: "artifacts/phase2/topo_a_wide_shallow/best_model.pt"
+  vocab_path: "artifacts/phase2/topo_a_wide_shallow/vocab.json"
+
+model:
+  name: "bigru"
+  embed_dim: 32
+  hidden_dim: 64
+  num_layers: 1
+  dropout: 0.1
+
+distillation:
+  strategy: "traditional"  # "traditional" or "qkd"
+  alpha: 0.5
+  temperature: 2.0
+
+optimizer:
+  type: "AdamW"
+  lr: 0.001
+  weight_decay: 0.01
+
+scheduler:
+  type: "CosineAnnealingLR"
+  T_max: 40
+  eta_min: 0.00001
