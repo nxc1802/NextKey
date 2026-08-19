@@ -99,7 +99,8 @@ class ModelEvaluator:
 
         data_cfg = cfg.get("data", {})
         training_cfg = cfg.get("training", {})
-        max_samples = int(training_cfg.get("max_eval_samples", 5000))
+        raw_max = training_cfg.get("max_eval_samples")
+        max_samples = int(raw_max) if raw_max is not None else None
         max_len = int(data_cfg.get("max_seq_len", 256))
 
         splits: dict[str, str | Path] = {}

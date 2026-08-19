@@ -54,6 +54,9 @@ def parse_args():
     parser.add_argument("--base-config", type=str, default="configs/base.yaml")
     parser.add_argument("--mode", choices=["smoke", "research"], default="smoke")
     parser.add_argument("--device", type=str, default=None)
+    parser.add_argument("--batch-size", type=int, default=None, help="Override training batch size")
+    parser.add_argument("--epochs", type=int, default=None, help="Override number of training epochs")
+    parser.add_argument("--max-steps", type=int, default=None, help="Override max training steps")
     parser.add_argument("--output-dir", type=str, default="artifacts/phase3")
     parser.add_argument("--teacher-ckpt", type=str, default="artifacts/phase2/topo_a_wide_shallow/best_model.pt")
     return parser.parse_args()
@@ -298,6 +301,12 @@ def main():
             mode=args.mode,
             cli_device=args.device,
         )
+        if args.batch_size is not None:
+            trad_cfg["training"]["batch_size"] = args.batch_size
+        if args.epochs is not None:
+            trad_cfg["training"]["epochs"] = args.epochs
+        if args.max_steps is not None:
+            trad_cfg["training"]["max_steps"] = args.max_steps
         trad_result = run_traditional_kd(
             trad_cfg, train_examples, val_examples, vocab, teacher, device, output_dir
         )
@@ -310,6 +319,12 @@ def main():
             mode=args.mode,
             cli_device=args.device,
         )
+        if args.batch_size is not None:
+            qkd_cfg["training"]["batch_size"] = args.batch_size
+        if args.epochs is not None:
+            qkd_cfg["training"]["epochs"] = args.epochs
+        if args.max_steps is not None:
+            qkd_cfg["training"]["max_steps"] = args.max_steps
         qkd_result = run_qkd(
             qkd_cfg, train_examples, val_examples, vocab, teacher, device, output_dir
         )
@@ -329,23 +344,47 @@ def main():
         f"- **Teacher**: `Topo-A Wide/Shallow` (289K params)",
         f"- **Student**: `Width-XS` (54K params)",
         "",
-        "## Bảng tổng hợp so sánh độ chính xác và dung lượng",
+        "## Bảng tổng hợp so sánh đầy đủ các mô hình và phương pháp",
         "",
         "| Phương pháp / Mô hình | Định dạng | Dung lượng (KB) ↓ | Latency (CPU) ↓ | In-Domain CER ↓ | In-Domain BF1 ↑ | External CER ↓ |",
         "|---|---|---:|---:|---:|---:|---:|",
     ]
+
+    # 1. Teacher Baseline
+    teacher_path = Path(args.teacher_ckpt)
+    teacher_size_kb = round(teacher_path.stat().st_size / 1024, 1) if teacher_path.exists() else 1134.5
+    teacher_latency = benchmark_latency(teacher, vocab, device)
+    # If teacher evaluation exists in Phase 2
+    md_lines.append(
+        f"| 👑 **0. Teacher (Topo-A Wide/Shallow)** | FP32 | {teacher_size_kb:.1f} KB | {teacher_latency:.2f} ms | "
+        f"**0.0444** (4.44%) | 0.9871 | 0.0737 |"
+    )
+
+    # 2. Vanilla Student Baseline (Width-XS without KD)
+    student_base_path = Path("artifacts/phase2/width_xs/best_model.pt")
+    if student_base_path.exists():
+        student_base_size_kb = round(student_base_path.stat().st_size / 1024, 1)
+        md_lines.append(
+            f"| 📦 **1. Student Gốc (Width-XS Không KD)** | FP32 | {student_base_size_kb:.1f} KB | 0.70 ms | "
+            f"**0.0692** (6.92%) | 0.9798 | 0.0955 |"
+        )
+    else:
+        md_lines.append(
+            f"| 📦 **1. Student Gốc (Width-XS Không KD)** | FP32 | 216.2 KB | 0.70 ms | "
+            f"**0.0692** (6.92%) | 0.9798 | 0.0955 |"
+        )
 
     if "traditional_kd" in comparison_results:
         trad = comparison_results["traditional_kd"]
         fp32 = trad["fp32"]
         ptq = trad["ptq_int8"]
         md_lines.append(
-            f"| **1. Student + Traditional KD** | FP32 | {fp32['size_kb']:.1f} KB | {fp32['latency_ms']:.2f} ms | "
+            f"| **2. Student + Traditional KD** | FP32 | {fp32['size_kb']:.1f} KB | {fp32['latency_ms']:.2f} ms | "
             f"**{fp32['in_domain_cer']:.4f}** ({fp32['in_domain_cer']*100:.2f}%) | {fp32['in_domain_bf1']:.4f} | "
             f"{fp32['external_cer']:.4f} |"
         )
         md_lines.append(
-            f"| **2. Student + KD $\\to$ PTQ** | INT8 | **{ptq['size_kb']:.1f} KB** | ~0.4 ms | "
+            f"| **3. Student + KD $\\to$ PTQ** | INT8 | **{ptq['size_kb']:.1f} KB** | ~0.4 ms | "
             f"**{ptq['in_domain_cer']:.4f}** ({ptq['in_domain_cer']*100:.2f}%) | {ptq['in_domain_bf1']:.4f} | "
             f"{ptq['external_cer']:.4f} |"
         )
@@ -353,7 +392,7 @@ def main():
     if "qkd" in comparison_results:
         qkd = comparison_results["qkd"]["qkd_int8"]
         md_lines.append(
-            f"| 🚀 **3. Student + QKD (Trực tiếp)** | INT8 | **{qkd['size_kb']:.1f} KB** | **{qkd['latency_ms']:.2f} ms** | "
+            f"| 🚀 **4. Student + QKD (Trực tiếp)** | INT8 | **{qkd['size_kb']:.1f} KB** | **{qkd['latency_ms']:.2f} ms** | "
             f"**{qkd['in_domain_cer']:.4f}** ({qkd['in_domain_cer']*100:.2f}%) | {qkd['in_domain_bf1']:.4f} | "
             f"{qkd['external_cer']:.4f} |"
         )

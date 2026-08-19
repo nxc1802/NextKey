@@ -103,16 +103,31 @@ class QuantizedBiGRUCharTagger(BaseCharTagger):
         self.diacritic_head = nn.Linear(hidden_dim * 2, num_target_classes)
         self.boundary_head = nn.Linear(hidden_dim * 2, num_boundary_classes)
 
-    def _quantize_weights(self) -> None:
-        """Apply simulated quantization to weight tensors inplace before compute."""
-        pass
+        # Forward hooks for GRU weights to keep master FP32 weights intact while executing quantized
+        self._orig_gru_weights: dict[str, torch.Tensor] = {}
+        self.gru.register_forward_pre_hook(self._pre_gru_hook)
+        self.gru.register_forward_hook(self._post_gru_hook)
+
+    def _pre_gru_hook(self, module: nn.Module, inp: Any) -> None:
+        self._orig_gru_weights = {}
+        for name, param in module.named_parameters():
+            if "weight" in name:
+                self._orig_gru_weights[name] = param.data
+                param.data = fake_quantize(param.data, self.num_bits)
+
+    def _post_gru_hook(self, module: nn.Module, inp: Any, out: Any) -> None:
+        for name, orig in self._orig_gru_weights.items():
+            param = getattr(module, name, None)
+            if param is not None:
+                param.data = orig
+        self._orig_gru_weights = {}
 
     def forward(
         self,
         input_ids: torch.Tensor,
         lengths: Optional[torch.Tensor] = None,
     ) -> dict[str, torch.Tensor]:
-        # 1. Fake-quantize embedding table
+        # 1. Fake-quantize embedding table with STE
         q_emb_weight = fake_quantize(self.embedding.weight, self.num_bits)
         x = F.embedding(
             input_ids,
@@ -122,12 +137,7 @@ class QuantizedBiGRUCharTagger(BaseCharTagger):
         x = fake_quantize(x, self.num_bits)
         x = self.input_dropout(x)
 
-        # 2. Fake-quantize GRU weights during forward pass
-        # PyTorch GRU stores weights as weight_ih_l0, weight_hh_l0, etc.
-        for name, param in self.gru.named_parameters():
-            if "weight" in name:
-                param.data = fake_quantize(param.data, self.num_bits)
-
+        # 2. Forward through GRU (pre-hook applies quantized weights, post-hook restores master FP32)
         if lengths is not None:
             packed = nn.utils.rnn.pack_padded_sequence(
                 x, lengths.cpu(), batch_first=True, enforce_sorted=False,
@@ -142,7 +152,7 @@ class QuantizedBiGRUCharTagger(BaseCharTagger):
         gru_out = fake_quantize(gru_out, self.num_bits)
         gru_out = self.output_dropout(gru_out)
 
-        # 3. Fake-quantize Linear heads
+        # 3. Fake-quantize Linear heads with STE
         q_dia_w = fake_quantize(self.diacritic_head.weight, self.num_bits)
         diacritic_logits = F.linear(gru_out, q_dia_w, self.diacritic_head.bias)
 
