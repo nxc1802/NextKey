@@ -177,9 +177,9 @@ def parse_args():
     )
     parser.add_argument(
         "--mode",
-        choices=["smoke", "research"],
-        default="research",
-        help="Execution mode (research: 100%% dataset, multi-epoch; smoke: 1K samples quick check). Default: research",
+        choices=["smoke", "research", "kaggle"],
+        default="kaggle",
+        help="Execution mode (kaggle: 2x GPU parallel + full dataset; research: 1x GPU full dataset; smoke: 1K samples quick check). Default: kaggle",
     )
     parser.add_argument(
         "--device",

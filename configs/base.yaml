@@ -32,3 +32,11 @@ modes:
     epochs: 40
     device: "cuda"
     log_wandb: true
+  kaggle:
+    max_train_samples: null
+    max_eval_samples: null
+    batch_size: 256
+    epochs: 40
+    device: "cuda"
+    log_wandb: true
+    parallel_gpus: true

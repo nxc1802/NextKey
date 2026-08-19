@@ -78,13 +78,17 @@ So sánh trực tiếp giữa 2 chiến lược nén mô hình cho Edge Device v
 - **Option 2: QKD** (Quantization-Aware Knowledge Distillation: Huấn luyện Student INT8 trực tiếp cùng Teacher)
 
 ```bash
-# 1. Chạy so sánh CẢ 2 PHƯƠNG PHÁP (Traditional KD vs QKD) trên Kaggle GPU (Research Mode)
+# 1. Chạy SONG SONG CẢ 2 GPU T4 (Kaggle Dual-GPU Mode — Tăng tốc x2):
+#    GPU 0 chạy Traditional KD, GPU 1 chạy QKD đồng thời!
+!python scripts/run_phase3_edge.py --strategy all --mode kaggle
+
+# 2. Chạy tuần tự 1 GPU (Research Mode thông thường):
 !python scripts/run_phase3_edge.py --strategy all --mode research --device cuda
 
-# 2. Chạy nhanh kiểm tra luồng (Smoke Mode)
+# 3. Chạy nhanh kiểm tra luồng (Smoke Mode):
 !python scripts/run_phase3_edge.py --strategy all --mode smoke --device cuda
 
-# 3. Chạy đơn lẻ từng phương pháp cụ thể:
+# 4. Chạy đơn lẻ từng phương pháp cụ thể:
 # • Chạy chỉ QKD (Quantization-Aware Distillation INT8 trực tiếp):
 !python scripts/run_phase3_edge.py --strategy qkd --mode research --device cuda
 
@@ -98,17 +102,17 @@ So sánh trực tiếp giữa 2 chiến lược nén mô hình cho Edge Device v
 
 ### D. Chạy qua Kaggle Runner Tự Động (`run_kaggle_training.py`)
 
-Kaggle runner tự động tìm dataset, kiểm tra GPU, chạy các phase và nén toàn bộ artifacts vào `nextkey-results.zip`:
+Kaggle runner tự động tìm dataset, tận dụng cả 2 GPU T4 chạy song song, chạy các phase và nén toàn bộ artifacts vào `nextkey-results.zip`:
 
 ```bash
+# Chạy Phase 3 Tối ưu Edge (Chạy song song 2 GPU T4: GPU 0 -> Trad KD, GPU 1 -> QKD) và đóng gói zip
+!python scripts/run_kaggle_training.py --phase 3 --strategy all --mode kaggle
+
 # Chạy toàn bộ Phase 1 (5 backbones) và đóng gói zip
-!python scripts/run_kaggle_training.py --phase 1 --all --mode research
+!python scripts/run_kaggle_training.py --phase 1 --all --mode kaggle
 
 # Chạy toàn bộ Phase 2 (10 sizes) và đóng gói zip
-!python scripts/run_kaggle_training.py --phase 2 --all --mode research
-
-# Chạy Phase 3 So sánh Traditional KD vs QKD và đóng gói zip
-!python scripts/run_kaggle_training.py --phase 3 --strategy all --mode research
+!python scripts/run_kaggle_training.py --phase 2 --all --mode kaggle
 
 # Chạy nhanh toàn bộ Phase 1 + 2 + 3 (Smoke mode check)
 !python scripts/run_kaggle_training.py --phase all --mode smoke
