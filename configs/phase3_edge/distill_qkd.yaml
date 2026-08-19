@@ -19,14 +19,22 @@ distillation:
   strategy: "qkd"  # Quantization-Aware Knowledge Distillation
   num_bits: 8
   alpha: 0.5
-  temperature: 2.0
+  temperature: 3.0
+  temp_annealing: true    # Cosine Temperature Annealing (3.0 -> 1.5)
+  t_max: 3.0
+  t_min: 1.5
+  outlier_penalty: 0.0001 # Weight clipping outlier regularizer for INT8 dynamic range
+
+training:
+  early_stopping_patience: 8  # Extended patience for discrete QAT weight stabilization
 
 optimizer:
   type: "AdamW"
   lr: 0.001
-  weight_decay: 0.01
+  weight_decay: 0.0001
 
 scheduler:
   type: "CosineAnnealingLR"
   T_max: 40
   eta_min: 0.00001
+

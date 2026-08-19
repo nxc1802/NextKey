@@ -76,9 +76,9 @@ class DualHeadLoss(nn.Module):
 
 
 class DistillationLoss(nn.Module):
-    """Knowledge Distillation loss for CharTagger.
+    """Knowledge Distillation loss for CharTagger with Dynamic Temperature & Outlier Regularization.
 
-    L_total = (1 - α) * L_CE(hard) + α * T² * L_KL(soft)
+    L_total = (1 - α) * L_CE(hard) + α * T² * L_KL(soft) + λ_bnd * L_BCE + λ_outlier * L_outlier
 
     Applied independently to the diacritic head. Boundary head uses standard BCE.
     When α=0 or teacher logits are None, degrades to standard DualHeadLoss.
@@ -90,14 +90,38 @@ class DistillationLoss(nn.Module):
         lambda_boundary: float = 1.0,
         alpha: float = 0.5,
         temperature: float = 2.0,
+        outlier_penalty: float = 0.0,
     ):
         super().__init__()
         self.alpha = alpha
         self.temperature = temperature
+        self.outlier_penalty = outlier_penalty
         self.char_loss = nn.CrossEntropyLoss(ignore_index=pad_target_id)
         self.kl_loss = nn.KLDivLoss(reduction="batchmean")
         self.boundary_loss = nn.BCEWithLogitsLoss(reduction="none")
         self.lambda_boundary = lambda_boundary
+
+    def set_temperature(self, temp: float) -> None:
+        """Update distillation temperature dynamically (e.g. for cosine annealing)."""
+        self.temperature = max(float(temp), 0.1)
+
+    def get_temperature(self) -> float:
+        return self.temperature
+
+    def compute_outlier_penalty(self, model: nn.Module, threshold_sigma: float = 3.0) -> torch.Tensor:
+        """Penalize outlier weights beyond threshold_sigma std devs to preserve INT8 dynamic range."""
+        if self.outlier_penalty <= 0:
+            return torch.tensor(0.0, device=next(model.parameters()).device)
+
+        penalty = torch.tensor(0.0, device=next(model.parameters()).device)
+        for name, p in model.named_parameters():
+            if "weight" in name and p.requires_grad and p.numel() > 10:
+                std = p.std().detach().clamp_min(1e-5)
+                mean = p.mean().detach()
+                cutoff = threshold_sigma * std
+                outliers = torch.relu((p - mean).abs() - cutoff)
+                penalty = penalty + outliers.pow(2).sum()
+        return self.outlier_penalty * penalty
 
     def forward(
         self,
@@ -106,6 +130,7 @@ class DistillationLoss(nn.Module):
         targets: torch.Tensor,
         boundaries: torch.Tensor,
         teacher_diacritic_logits: Optional[torch.Tensor] = None,
+        model_for_regularization: Optional[nn.Module] = None,
     ) -> dict[str, torch.Tensor]:
         # Hard label CE loss
         loss_ce = self.char_loss(
@@ -141,9 +166,17 @@ class DistillationLoss(nn.Module):
 
         total = loss_diacritic + self.lambda_boundary * loss_boundary
 
+        # Outlier weight penalty
+        if model_for_regularization is not None and self.outlier_penalty > 0:
+            reg_loss = self.compute_outlier_penalty(model_for_regularization)
+            total = total + reg_loss
+        else:
+            reg_loss = torch.tensor(0.0, device=diacritic_logits.device)
+
         return {
             "loss": total,
             "loss_char": loss_ce.detach(),
             "loss_kd": loss_kd.detach(),
             "loss_boundary": loss_boundary.detach(),
+            "loss_reg": reg_loss.detach(),
         }

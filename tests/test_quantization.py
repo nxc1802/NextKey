@@ -96,3 +96,44 @@ def test_export_int8_compact_checkpoint():
         loaded = torch.load(out_path, map_location="cpu")
         assert "scales" in loaded
         assert "tensors" in loaded
+
+
+def test_distillation_loss_temp_annealing_and_outlier_penalty():
+    """Verify dynamic temperature annealing and outlier regularization."""
+    from nextkey.engine.loss import DistillationLoss
+
+    loss_fn = DistillationLoss(
+        pad_target_id=0,
+        alpha=0.5,
+        temperature=3.0,
+        outlier_penalty=0.01,
+    )
+    assert loss_fn.get_temperature() == 3.0
+
+    # Test dynamic temperature change
+    loss_fn.set_temperature(1.5)
+    assert loss_fn.get_temperature() == 1.5
+
+    # Test forward with outlier penalty
+    model = BiGRUCharTagger(vocab_size=30, num_target_classes=20, embed_dim=16, hidden_dim=32, num_layers=1)
+    # inject an outlier
+    with torch.no_grad():
+        model.diacritic_head.weight[0, 0] = 50.0
+
+    d_logits = torch.randn(2, 10, 20, requires_grad=True)
+    b_logits = torch.randn(2, 10, requires_grad=True)
+    targets = torch.randint(1, 19, (2, 10))
+    boundaries = torch.randint(0, 2, (2, 10))
+    t_logits = torch.randn(2, 10, 20)
+
+    res = loss_fn(
+        d_logits,
+        b_logits,
+        targets,
+        boundaries,
+        teacher_diacritic_logits=t_logits,
+        model_for_regularization=model,
+    )
+    assert "loss" in res
+    assert "loss_reg" in res
+    assert res["loss_reg"].item() > 0.0

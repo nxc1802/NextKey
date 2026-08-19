@@ -80,6 +80,10 @@ class ModelTrainer:
         distill_cfg = cfg.get("distillation", {})
         self.alpha = float(distill_cfg.get("alpha", 0.0))
         self.temperature = float(distill_cfg.get("temperature", 2.0))
+        self.temp_annealing = bool(distill_cfg.get("temp_annealing", False))
+        self.t_max = float(distill_cfg.get("t_max", 3.0))
+        self.t_min = float(distill_cfg.get("t_min", 1.5))
+        self.outlier_penalty = float(distill_cfg.get("outlier_penalty", 0.0))
 
         # Loss
         if self.alpha > 0 and self.teacher_model is not None:
@@ -87,7 +91,8 @@ class ModelTrainer:
                 pad_target_id=vocab.pad_target_id,
                 lambda_boundary=self.lambda_boundary,
                 alpha=self.alpha,
-                temperature=self.temperature,
+                temperature=self.t_max if self.temp_annealing else self.temperature,
+                outlier_penalty=self.outlier_penalty,
             )
         else:
             self.criterion = DualHeadLoss(
@@ -136,19 +141,34 @@ class ModelTrainer:
         Returns:
             dict with training summary (best metrics, paths, etc.)
         """
+        import math
+
         model_path = self.output_dir / "best_model.pt"
         vocab_path = self.output_dir / "vocab.json"
         self.vocab.save(vocab_path)
+
+        kd_mode_str = f"α={self.alpha}"
+        if self.temp_annealing:
+            kd_mode_str += f", T-Anneal({self.t_max}→{self.t_min})"
+        elif self.alpha > 0:
+            kd_mode_str += f", T={self.temperature}"
 
         print(f"╔══════════════════════════════════════════════════════╗")
         print(f"║  Training: {self.model.__class__.__name__:<41s} ║")
         print(f"║  Device: {str(self.device):<43s} ║")
         print(f"║  Params: {self.model.count_parameters():>10,d}{'':<32s} ║")
         print(f"║  Train: {len(train_examples):>6,d}  |  Val: {len(val_examples):>6,d}{'':<19s} ║")
-        print(f"║  Epochs: {self.epochs}  |  Batch: {self.batch_size}  |  α(KD): {self.alpha}{'':<12s} ║")
+        print(f"║  Epochs: {self.epochs}  |  Batch: {self.batch_size}  |  KD: {kd_mode_str:<16s} ║")
         print(f"╚══════════════════════════════════════════════════════╝")
 
         for epoch in range(1, self.epochs + 1):
+            # Dynamic Cosine Temperature Annealing
+            if self.temp_annealing and isinstance(self.criterion, DistillationLoss):
+                t_curr = self.t_min + 0.5 * (self.t_max - self.t_min) * (
+                    1.0 + math.cos(math.pi * (epoch - 1) / max(self.epochs - 1, 1))
+                )
+                self.criterion.set_temperature(t_curr)
+
             train_loss = self._train_epoch(train_examples, epoch)
             val_metrics = self._evaluate(val_examples)
 
@@ -243,13 +263,22 @@ class ModelTrainer:
                     teacher_out = self.teacher_model(source, lengths)
                     teacher_diacritic_logits = teacher_out["diacritic_logits"]
 
-            loss_dict = self.criterion(
-                outputs["diacritic_logits"],
-                outputs["boundary_logits"],
-                targets,
-                boundaries,
-                teacher_diacritic_logits=teacher_diacritic_logits,
-            )
+            if isinstance(self.criterion, DistillationLoss):
+                loss_dict = self.criterion(
+                    outputs["diacritic_logits"],
+                    outputs["boundary_logits"],
+                    targets,
+                    boundaries,
+                    teacher_diacritic_logits=teacher_diacritic_logits,
+                    model_for_regularization=self.model,
+                )
+            else:
+                loss_dict = self.criterion(
+                    outputs["diacritic_logits"],
+                    outputs["boundary_logits"],
+                    targets,
+                    boundaries,
+                )
             loss = loss_dict["loss"]
             loss.backward()
 
