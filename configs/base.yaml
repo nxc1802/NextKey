@@ -35,7 +35,7 @@ modes:
   kaggle:
     max_train_samples: null
     max_eval_samples: null
-    batch_size: 256
+    batch_size: 512
     epochs: 40
     device: "cuda"
     log_wandb: true
