@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-08-20 00:37:51",
-  "mode": "research",
-  "device": "mps",
+  "timestamp": "2026-08-20 08:24:45",
+  "mode": "kaggle",
+  "device": "cuda:0 + cuda:1 (Dual GPU Parallel)",
   "teacher": {
     "name": "Topo-A Wide/Shallow",
     "params": 289044
@@ -13,125 +13,125 @@
   "traditional_kd": {
     "strategy": "traditional_kd",
     "fp32": {
-      "size_kb": 217.7,
+      "size_kb": 216.7,
       "latency_ms": 0.7,
-      "in_domain_cer": 0.119002,
-      "external_cer": 0.140998,
-      "in_domain_bf1": 0.959387,
+      "in_domain_cer": 0.069145,
+      "external_cer": 0.095922,
+      "in_domain_bf1": 0.980043,
       "evaluation": {
         "metrics": {
           "in_domain": {
             "count": 68372,
-            "exact_match": 0.005061,
-            "cer": 0.121323,
-            "wer": 0.484978,
-            "diacritic_accuracy": 0.868018,
-            "corpus_cer": 0.119002,
-            "corpus_wer": 0.478763,
-            "boundary_precision": 0.964923,
-            "boundary_recall": 0.953915,
-            "boundary_f1": 0.959387
+            "exact_match": 0.033303,
+            "cer": 0.072199,
+            "wer": 0.293623,
+            "diacritic_accuracy": 0.919174,
+            "corpus_cer": 0.069145,
+            "corpus_wer": 0.284108,
+            "boundary_precision": 0.982073,
+            "boundary_recall": 0.978021,
+            "boundary_f1": 0.980043
           },
           "external": {
             "count": 155491,
-            "exact_match": 0.008078,
-            "cer": 0.147088,
-            "wer": 0.607224,
-            "diacritic_accuracy": 0.864177,
-            "corpus_cer": 0.140998,
-            "corpus_wer": 0.572222,
-            "boundary_precision": 0.910049,
-            "boundary_recall": 0.927586,
-            "boundary_f1": 0.918734
+            "exact_match": 0.029455,
+            "cer": 0.101054,
+            "wer": 0.441095,
+            "diacritic_accuracy": 0.906703,
+            "corpus_cer": 0.095922,
+            "corpus_wer": 0.408862,
+            "boundary_precision": 0.947635,
+            "boundary_recall": 0.944257,
+            "boundary_f1": 0.945943
           }
         },
         "domain_gap": {
-          "cer_gap": 0.021996,
-          "bf1_gap": 0.040653
+          "cer_gap": 0.026777,
+          "bf1_gap": 0.0341
         }
       }
     },
     "ptq_int8": {
       "size_kb": 57.8,
-      "in_domain_cer": 0.119167,
-      "external_cer": 0.141417,
-      "in_domain_bf1": 0.959382,
+      "in_domain_cer": 0.069416,
+      "external_cer": 0.096101,
+      "in_domain_bf1": 0.979933,
       "evaluation": {
         "metrics": {
           "in_domain": {
             "count": 68372,
-            "exact_match": 0.005017,
-            "cer": 0.121507,
-            "wer": 0.48576,
-            "diacritic_accuracy": 0.867778,
-            "corpus_cer": 0.119167,
-            "corpus_wer": 0.479468,
-            "boundary_precision": 0.964698,
-            "boundary_recall": 0.954123,
-            "boundary_f1": 0.959382
+            "exact_match": 0.033128,
+            "cer": 0.072498,
+            "wer": 0.294684,
+            "diacritic_accuracy": 0.918845,
+            "corpus_cer": 0.069416,
+            "corpus_wer": 0.285141,
+            "boundary_precision": 0.981976,
+            "boundary_recall": 0.977899,
+            "boundary_f1": 0.979933
           },
           "external": {
             "count": 155491,
-            "exact_match": 0.007769,
-            "cer": 0.147601,
-            "wer": 0.609495,
-            "diacritic_accuracy": 0.863668,
-            "corpus_cer": 0.141417,
-            "corpus_wer": 0.5739,
-            "boundary_precision": 0.909452,
-            "boundary_recall": 0.92772,
-            "boundary_f1": 0.918495
+            "exact_match": 0.029847,
+            "cer": 0.101231,
+            "wer": 0.442217,
+            "diacritic_accuracy": 0.906566,
+            "corpus_cer": 0.096101,
+            "corpus_wer": 0.409813,
+            "boundary_precision": 0.947448,
+            "boundary_recall": 0.943975,
+            "boundary_f1": 0.945708
           }
         },
         "domain_gap": {
-          "cer_gap": 0.02225,
-          "bf1_gap": 0.040887
+          "cer_gap": 0.026685,
+          "bf1_gap": 0.034225
         }
       }
     },
-    "onnx_export": "ONNX Export skipped: No module named 'onnxscript'"
+    "onnx_export": "artifacts/phase3/traditional_kd/student_distill.onnx"
   },
   "qkd": {
     "strategy": "qkd",
     "qkd_int8": {
       "size_kb": 57.8,
       "latency_ms": 0.87,
-      "in_domain_cer": 0.119047,
-      "external_cer": 0.142327,
-      "in_domain_bf1": 0.957913,
+      "in_domain_cer": 0.069863,
+      "external_cer": 0.096354,
+      "in_domain_bf1": 0.980052,
       "evaluation": {
         "metrics": {
           "in_domain": {
             "count": 68372,
-            "exact_match": 0.004198,
-            "cer": 0.121482,
-            "wer": 0.483936,
-            "diacritic_accuracy": 0.868699,
-            "corpus_cer": 0.119047,
-            "corpus_wer": 0.476982,
-            "boundary_precision": 0.963372,
-            "boundary_recall": 0.952516,
-            "boundary_f1": 0.957913
+            "exact_match": 0.032411,
+            "cer": 0.072935,
+            "wer": 0.296503,
+            "diacritic_accuracy": 0.918304,
+            "corpus_cer": 0.069863,
+            "corpus_wer": 0.287007,
+            "boundary_precision": 0.982246,
+            "boundary_recall": 0.977868,
+            "boundary_f1": 0.980052
           },
           "external": {
             "count": 155491,
-            "exact_match": 0.008091,
-            "cer": 0.148667,
-            "wer": 0.608497,
-            "diacritic_accuracy": 0.863528,
-            "corpus_cer": 0.142327,
-            "corpus_wer": 0.573046,
-            "boundary_precision": 0.909203,
-            "boundary_recall": 0.923224,
-            "boundary_f1": 0.91616
+            "exact_match": 0.029995,
+            "cer": 0.10076,
+            "wer": 0.440431,
+            "diacritic_accuracy": 0.906309,
+            "corpus_cer": 0.096354,
+            "corpus_wer": 0.411505,
+            "boundary_precision": 0.9487,
+            "boundary_recall": 0.944123,
+            "boundary_f1": 0.946406
           }
         },
         "domain_gap": {
-          "cer_gap": 0.02328,
-          "bf1_gap": 0.041753
+          "cer_gap": 0.026491,
+          "bf1_gap": 0.033646
         }
       }
     },
-    "onnx_export": "ONNX Export skipped: No module named 'onnxscript'"
+    "onnx_export": "artifacts/phase3/qkd_int8/student_qkd.onnx"
   }
 }

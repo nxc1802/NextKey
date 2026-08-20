@@ -2,31 +2,31 @@
   "metrics": {
     "in_domain": {
       "count": 68372,
-      "exact_match": 0.005061,
-      "cer": 0.121323,
-      "wer": 0.484978,
-      "diacritic_accuracy": 0.868018,
-      "corpus_cer": 0.119002,
-      "corpus_wer": 0.478763,
-      "boundary_precision": 0.964923,
-      "boundary_recall": 0.953915,
-      "boundary_f1": 0.959387
+      "exact_match": 0.033303,
+      "cer": 0.072199,
+      "wer": 0.293623,
+      "diacritic_accuracy": 0.919174,
+      "corpus_cer": 0.069145,
+      "corpus_wer": 0.284108,
+      "boundary_precision": 0.982073,
+      "boundary_recall": 0.978021,
+      "boundary_f1": 0.980043
     },
     "external": {
       "count": 155491,
-      "exact_match": 0.008078,
-      "cer": 0.147088,
-      "wer": 0.607224,
-      "diacritic_accuracy": 0.864177,
-      "corpus_cer": 0.140998,
-      "corpus_wer": 0.572222,
-      "boundary_precision": 0.910049,
-      "boundary_recall": 0.927586,
-      "boundary_f1": 0.918734
+      "exact_match": 0.029455,
+      "cer": 0.101054,
+      "wer": 0.441095,
+      "diacritic_accuracy": 0.906703,
+      "corpus_cer": 0.095922,
+      "corpus_wer": 0.408862,
+      "boundary_precision": 0.947635,
+      "boundary_recall": 0.944257,
+      "boundary_f1": 0.945943
     }
   },
   "domain_gap": {
-    "cer_gap": 0.021996,
-    "bf1_gap": 0.040653
+    "cer_gap": 0.026777,
+    "bf1_gap": 0.0341
   }
 }
