@@ -124,7 +124,8 @@ def run_command(cmd: list[str], root: Path) -> None:
 
 
 def package_artifacts(root: Path, output_zip: Path, artifact_dirs: list[Path]) -> Path:
-    """Zip all generated artifacts, checkpoints, and reports."""
+    """Zip all generated artifacts, checkpoints, and reports into a compact archive."""
+    print(f"\n[INFO] Packaging artifacts into: {output_zip} ...")
     output_zip.parent.mkdir(parents=True, exist_ok=True)
     count = 0
     with zipfile.ZipFile(output_zip, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -137,10 +138,14 @@ def package_artifacts(root: Path, output_zip: Path, artifact_dirs: list[Path]) -
             else:
                 for child in adir.rglob("*"):
                     if child.is_file():
+                        # Exclude huge raw string prediction dumps to keep zip fast and compact (< 10 MB)
+                        if child.suffix == ".jsonl":
+                            continue
                         archive.write(child, child.relative_to(root))
                         count += 1
 
-    print(f"\n✓ Packaged {count} artifact files into: {output_zip} ({output_zip.stat().st_size / (1024*1024):.2f} MB)")
+    zip_size_mb = output_zip.stat().st_size / (1024 * 1024)
+    print(f"✓ Packaged {count} artifact files into: {output_zip} ({zip_size_mb:.2f} MB)")
     return output_zip
 
 
