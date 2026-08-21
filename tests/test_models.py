@@ -46,3 +46,28 @@ def test_model_forward_passes(model_name: str):
 
     assert outputs["diacritic_logits"].shape == (batch_size, seq_len, num_targets)
     assert outputs["boundary_logits"].shape == (batch_size, seq_len)
+
+
+@pytest.mark.parametrize(
+    "config_name,expected_max_params",
+    [
+        ("width_xxxs", 25_000),
+        ("width_xxs", 40_000),
+        ("width_xs", 60_000),
+    ],
+)
+def test_phase2_size_configs(config_name: str, expected_max_params: int):
+    from nextkey.utils.config_parser import load_merged_config
+
+    cfg = load_merged_config("configs/base.yaml", f"configs/phase2_size/{config_name}.yaml")
+    model_cfg = dict(cfg["model"])
+    model_name = model_cfg.pop("name")
+
+    model = create_model(
+        model_name,
+        vocab_size=105,
+        num_target_classes=105,
+        **model_cfg,
+    )
+    assert model.count_parameters() < expected_max_params
+    assert model.count_parameters() > 0

@@ -45,22 +45,35 @@ Chạy so sánh 5 họ mô hình: `BiGRU`, `BiLSTM`, `CNN-TCN`, `CNN-BiGRU`, `Ti
 
 ---
 
-### B. Phase 2 — Size & Topology Search (10 biến thể kích thước)
+### B. Phase 2 — Size & Topology Search (12 biến thể kích thước)
 
 Đánh giá ảnh hưởng của bề rộng (Width), độ sâu (Depth), và cấu trúc hình học (Topology).
 
-```bash
-# 1. Chạy TOÀN BỘ 10 cấu hình Phase 2 + Tạo báo cáo Size Ablation (Smoke test)
-!python scripts/run_phase2_size.py --all --mode smoke --device cuda
+#### 🚀 Chạy song song 2 Ultra-Small Models trên 2 GPU Kaggle T4x2 (Mới):
+Hai model siêu nhỏ dưới 50K tham số: **Width-XXS (~34K params)** và **Width-XXXS (~18K params)**, chạy đồng thời trên `cuda:0` và `cuda:1`:
 
-# 2. Chạy TOÀN BỘ 10 cấu hình Phase 2 trên 100% dữ liệu (Research Mode)
+```bash
+# 1. Chạy SONG SONG CẢ 2 GPU T4 (Kaggle Dual-GPU Mode — Tăng tốc x2):
+#    GPU 0 chạy Width-XXS (~34K params), GPU 1 chạy Width-XXXS (~18K params) đồng thời!
+!python scripts/run_phase2_size.py --sweep ultra_small --mode kaggle
+
+# 2. Hoặc chạy qua Kaggle Runner tự động đóng gói Zip:
+!python scripts/run_kaggle_training.py --phase 2 --sweep ultra_small --mode kaggle
+
+# 3. Chạy kiểm tra nhanh 30s (Smoke Mode):
+!python scripts/run_phase2_size.py --sweep ultra_small --mode smoke
+```
+
+#### Các lệnh chạy Sweep khác:
+
+```bash
+# • Chạy TOÀN BỘ cấu hình Phase 2 trên 100% dữ liệu (Research Mode)
 !python scripts/run_phase2_size.py --all --mode research --device cuda
 
-# 3. Chạy theo từng nhóm Sweep riêng biệt:
-# • Width Sweep (XS ~50K, S ~120K, M ~220K, L ~450K):
+# • Width Sweep (XXXS ~18K, XXS ~34K, XS ~54K, S ~106K, M ~181K, L ~378K):
 !python scripts/run_phase2_size.py --sweep width --mode research --device cuda
 
-# • Depth Sweep (D1 ~220K, D2 ~420K, D3 ~620K):
+# • Depth Sweep (D1 ~181K, D2 ~475K, D3 ~771K):
 !python scripts/run_phase2_size.py --sweep depth --mode research --device cuda
 
 # • Topology Sweep (~300K compute budget: Wide/Shallow vs Mid/Mid vs Narrow/Deep):

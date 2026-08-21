@@ -164,9 +164,15 @@ def parse_args():
     )
     parser.add_argument(
         "--sweep",
-        choices=["width", "depth", "topo", "all"],
+        choices=["ultra_small", "width", "depth", "topo", "all"],
         default=None,
-        help="Specific sweep to execute for Phase 2 (width, depth, topo, all).",
+        help="Specific sweep to execute for Phase 2 (ultra_small, width, depth, topo, all).",
+    )
+    parser.add_argument(
+        "--configs",
+        nargs="+",
+        default=None,
+        help="List of specific size config YAMLs to execute in Phase 2.",
     )
     parser.add_argument(
         "--strategy",
@@ -266,12 +272,14 @@ def main():
         ]
         if args.all:
             cmd.append("--all")
+        elif args.configs and args.phase == "2":
+            cmd.extend(["--configs"] + args.configs)
         elif args.sweep:
             cmd.extend(["--sweep", args.sweep])
         elif args.config and args.phase == "2":
             cmd.extend(["--config", args.config])
         else:
-            cmd.extend(["--config", "configs/phase2_size/width_s.yaml"])
+            cmd.extend(["--sweep", "ultra_small"])
         run_command(cmd, root)
 
     if args.phase in ("3", "all"):
