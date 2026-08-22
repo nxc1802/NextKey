@@ -83,10 +83,12 @@ Mục tiêu của Phase 2 là tìm ra điểm tối ưu trên đường cong đ�
                        [Phase 2 Size Matrix]
      ┌──────────────────────────┬──────────────────────────┐
      │       Width Sweep        │       Depth Sweep        │
-     │  XS:  32/64   (54K)      │  D1:  64/128 x1 (181K)   │
-     │  S:   48/96   (106K)     │  D2:  64/128 x2 (475K)   │
-     │  M:   64/128  (181K)     │  D3:  64/128 x3 (771K)   │
-     │  L:   96/192  (378K)     │                          │
+     │  XXXS: 16/32  (18K)  🆕  │  D1:  64/128 x1 (181K)   │
+     │  XXS:  24/48  (34K)  🆕  │  D2:  64/128 x2 (475K)   │
+     │  XS:   32/64  (54K)      │  D3:  64/128 x3 (771K)   │
+     │  S:    48/96  (106K)     │                          │
+     │  M:    64/128 (181K)     │                          │
+     │  L:    96/192 (378K)     │                          │
      └──────────────────────────┴──────────────────────────┘
                                 │
                                 ▼
@@ -102,6 +104,8 @@ Mục tiêu của Phase 2 là tìm ra điểm tối ưu trên đường cong đ�
 
 | Phân nhóm | Cấu hình | Tham số | Kích thước Checkpoint | In-Domain CER ↓ | In-Domain WER ↓ | In-Domain BF1 ↑ | External CER ↓ | External WER ↓ | Đánh giá & Vai trò |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 🆕 **Width-XXXS (Nano)** | 16/32, 1L | **17.8K** | **69.6 KB** | 0.0952 | 0.3874 | 0.9727 | 0.1176 | 0.4898 | 🔬 **Ultra-Tiny model (< 70KB FP32, < 18KB INT8) lý tưởng cho KD** |
+| 🆕 **Width-XXS (Micro)** | 24/48, 1L | **33.6K** | **131.2 KB** | 0.0811 | 0.3318 | 0.9765 | 0.1060 | 0.4476 | 🔬 **Micro model (< 135KB FP32, < 35KB INT8) - Khoảng cách lớn với Teacher** |
 | **Width-XS** | 32/64, 1L | **54.0K** | **216 KB** | 0.0692 | 0.2850 | 0.9798 | 0.0955 | 0.4090 | 🎯 **Student Model lý tưởng cho Edge (< 250KB)** |
 | **Width-S** | 48/96, 1L | 106.4K | 420 KB | 0.0585 | 0.2410 | 0.9825 | 0.0862 | 0.3650 | Cân bằng kích thước/độ chính xác trung gian |
 | **Width-M (Depth-1)** | 64/128, 1L | 181.6K | 714 KB | 0.0493 | 0.2050 | 0.9856 | 0.0785 | 0.3408 | Baseline chuẩn của Phase 1 |
@@ -114,7 +118,8 @@ Mục tiêu của Phase 2 là tìm ra điểm tối ưu trên đường cong đ�
 
 ### 4.3 Những đúc kết quan trọng từ Phase 2 (Key Findings)
 1. **Ưu thế tuyệt đối của Wide-Shallow Topology**: Với bài toán character-level sequence tagging tiếng Việt, **1 layer với chiều ẩn rộng (160 hidden units)** vượt trội hơn hẳn cấu trúc nhiều layers sâu (2–3 layers). Nguyên nhân: Ngữ cảnh khôi phục dấu và tách từ tiếng Việt có tính phụ thuộc cục bộ cao (local n-gram context trong phạm vi 3–7 ký tự), một layer rộng đủ khả năng phân biệt mà không bị suy hao gradient.
-2. **Width-XS (54K params, 216 KB)** giữ được CER $6.92\%$ và BF1 $97.98\%$, là ứng viên hàng đầu cho môi trường bàn phím di động / embedded edge.
+2. **Khả năng học ranh giới từ (Boundary Head) siêu bền vững**: Ngay cả mô hình siêu nhỏ **Width-XXXS (17.8K params)** vẫn đạt Boundary F1 **97.27%** (In-domain) và **93.55%** (External), chứng minh việc phát hiện ranh giới từ cần rất ít dung lượng mạng.
+3. **Phân hóa rõ rệt ở Diacritic Head**: Khi giảm tham số từ 289K $\rightarrow$ 54K $\rightarrow$ 33.6K $\rightarrow$ 17.8K, Diacritic Accuracy giảm từ $94.7\% \rightarrow 91.9\% \rightarrow 90.6\% \rightarrow 89.0\%$, mở ra khoảng cách tri thức (Knowledge Gap) lý tưởng để chứng minh tính hiệu quả của Knowledge Distillation (Phase 3).
 
 ---
 

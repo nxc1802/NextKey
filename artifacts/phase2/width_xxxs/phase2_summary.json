@@ -1,0 +1,45 @@
+{
+  "model_path": "artifacts/phase2/width_xxxs/best_model.pt",
+  "vocab_path": "artifacts/phase2/width_xxxs/vocab.json",
+  "history_path": "artifacts/phase2/width_xxxs/training_history.json",
+  "device": "cuda:1",
+  "train_examples": 548530,
+  "val_examples": 68550,
+  "total_steps": 42880,
+  "best_val_corpus_cer": 0.095233,
+  "parameters": 17828,
+  "variant_tag": "width_xxxs",
+  "model_type": "bigru",
+  "evaluation": {
+    "metrics": {
+      "in_domain": {
+        "count": 68372,
+        "exact_match": 0.009229,
+        "cer": 0.098086,
+        "wer": 0.39557,
+        "diacritic_accuracy": 0.890176,
+        "corpus_cer": 0.095213,
+        "corpus_wer": 0.387371,
+        "boundary_precision": 0.976007,
+        "boundary_recall": 0.969356,
+        "boundary_f1": 0.97267
+      },
+      "external": {
+        "count": 155491,
+        "exact_match": 0.011145,
+        "cer": 0.123672,
+        "wer": 0.523056,
+        "diacritic_accuracy": 0.883993,
+        "corpus_cer": 0.117649,
+        "corpus_wer": 0.489796,
+        "boundary_precision": 0.935994,
+        "boundary_recall": 0.935014,
+        "boundary_f1": 0.935504
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.022436,
+      "bf1_gap": 0.037166
+    }
+  }
+}

@@ -91,13 +91,15 @@ class CharVocab:
             target_itos=target_itos,
         )
 
-    def save(self, path: Path) -> None:
+    def save(self, path: str | Path) -> None:
+        path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(self.to_json(), ensure_ascii=False, indent=2) + "\n",
                         encoding="utf-8")
 
     @classmethod
-    def load(cls, path: Path) -> "CharVocab":
+    def load(cls, path: str | Path) -> "CharVocab":
+        path = Path(path)
         return cls.from_json(json.loads(path.read_text(encoding="utf-8")))
 
 

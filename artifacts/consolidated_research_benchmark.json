@@ -37,6 +37,80 @@
     }
   },
   {
+    "label": "Phase 2 - Width-XXXS (16/32, 1L)",
+    "model_name": "bigru",
+    "parameters": 17828,
+    "model_size_kb": 69.6,
+    "metrics": {
+      "in_domain": {
+        "count": 68372,
+        "exact_match": 0.009229,
+        "cer": 0.098086,
+        "wer": 0.39557,
+        "diacritic_accuracy": 0.890176,
+        "corpus_cer": 0.095213,
+        "corpus_wer": 0.387371,
+        "boundary_precision": 0.976007,
+        "boundary_recall": 0.969356,
+        "boundary_f1": 0.97267
+      },
+      "external": {
+        "count": 155491,
+        "exact_match": 0.011145,
+        "cer": 0.123672,
+        "wer": 0.523056,
+        "diacritic_accuracy": 0.883993,
+        "corpus_cer": 0.117649,
+        "corpus_wer": 0.489796,
+        "boundary_precision": 0.935994,
+        "boundary_recall": 0.935014,
+        "boundary_f1": 0.935504
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.022436,
+      "wer_gap": 0.102425,
+      "bf1_gap": 0.037166
+    }
+  },
+  {
+    "label": "Phase 2 - Width-XXS (24/48, 1L)",
+    "model_name": "bigru",
+    "parameters": 33596,
+    "model_size_kb": 131.2,
+    "metrics": {
+      "in_domain": {
+        "count": 68372,
+        "exact_match": 0.018004,
+        "cer": 0.08425,
+        "wer": 0.341456,
+        "diacritic_accuracy": 0.905699,
+        "corpus_cer": 0.081084,
+        "corpus_wer": 0.331796,
+        "boundary_precision": 0.979294,
+        "boundary_recall": 0.973802,
+        "boundary_f1": 0.976541
+      },
+      "external": {
+        "count": 155491,
+        "exact_match": 0.021165,
+        "cer": 0.11107,
+        "wer": 0.480058,
+        "diacritic_accuracy": 0.896947,
+        "corpus_cer": 0.105959,
+        "corpus_wer": 0.447641,
+        "boundary_precision": 0.940586,
+        "boundary_recall": 0.940376,
+        "boundary_f1": 0.940481
+      }
+    },
+    "domain_gap": {
+      "cer_gap": 0.024875,
+      "wer_gap": 0.115845,
+      "bf1_gap": 0.03606
+    }
+  },
+  {
     "label": "Phase 2 - Width-XS (32/64, 1L)",
     "model_name": "bigru",
     "parameters": 53972,
