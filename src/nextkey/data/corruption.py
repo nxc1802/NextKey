@@ -228,6 +228,10 @@ class SyntheticCorruptor:
         if T < 2 or T > 300:
             return []
 
+        # Strict 1-to-1 character alignment validation (filter out rare Unicode anomalies)
+        if len(gold_base_chars) != len(gold_diac_chars) or len(gold_base_chars) != len(gold_boundaries):
+            return []
+
         samples: list[CorruptedSample] = []
 
         for v_idx in range(num_variants):
@@ -254,7 +258,8 @@ class SyntheticCorruptor:
             # A. Character substitutions / QWERTY neighbor typos
             for i in range(T):
                 ch_in, ch_tags = self.corrupt_character(gold_base_chars[i], gold_diac_chars[i])
-                source_chars[i] = ch_in
+                if len(ch_in) == 1:
+                    source_chars[i] = ch_in
                 tags.extend(ch_tags)
 
             # B. Character Swaps / Transpositions (swap adjacent letters within a word)
@@ -265,17 +270,18 @@ class SyntheticCorruptor:
                     tags.append("char_swap")
 
             final_source = "".join(source_chars)
-            samples.append(
-                CorruptedSample(
-                    source=final_source,
-                    base_target=gold_base_chars,
-                    diacritic_target=gold_diac_chars,
-                    boundary_target=list(gold_boundaries),
-                    noise_tags=sorted(set(tags)) if tags else ["mild_noise"],
-                    clean_text=norm_clean,
-                    domain=domain,
+            if len(final_source) == T:
+                samples.append(
+                    CorruptedSample(
+                        source=final_source,
+                        base_target=gold_base_chars,
+                        diacritic_target=gold_diac_chars,
+                        boundary_target=list(gold_boundaries),
+                        noise_tags=sorted(set(tags)) if tags else ["mild_noise"],
+                        clean_text=norm_clean,
+                        domain=domain,
+                    )
                 )
-            )
 
         return samples
 
@@ -295,10 +301,13 @@ def corrupt_dataset_from_sentences(
     corruptor = SyntheticCorruptor(typo_prob=typo_prob, seed=seed)
     all_samples: list[CorruptedSample] = []
     for s in sentences:
-        variants = corruptor.generate_variants(
-            clean_sentence=s,
-            num_variants=num_variants_per_sample,
-            domain=domain,
-        )
-        all_samples.extend(variants)
+        try:
+            variants = corruptor.generate_variants(
+                clean_sentence=s,
+                num_variants=num_variants_per_sample,
+                domain=domain,
+            )
+            all_samples.extend(variants)
+        except Exception:
+            continue
     return all_samples
