@@ -278,7 +278,8 @@ def train_single_model_worker(
             f"Diac: {val_metrics['diacritic_accuracy']*100:.1f}% | "
             f"BF1: {val_metrics['boundary_f1']*100:.1f}% | "
             f"CER: {val_metrics['corpus_cer']*100:.2f}% | "
-            f"Exact: {val_metrics['exact_match']*100:.2f}%"
+            f"Exact: {val_metrics['exact_match']*100:.2f}%",
+            flush=True,
         )
 
         record = {
