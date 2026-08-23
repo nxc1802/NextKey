@@ -113,11 +113,39 @@ So sánh trực tiếp giữa 2 chiến lược nén mô hình cho Edge Device v
 
 ---
 
-### D. Chạy qua Kaggle Runner Tự Động (`run_kaggle_training.py`)
+### D. Phase 4 — Full 3-Tasks Benchmark (Correction + Diacritics + Whitespace)
+
+So sánh đối đầu giữa 2 kiến trúc trên toàn bộ 1.64 triệu mẫu dữ liệu tổng hợp:
+- **Baseline Tri-Head BiGRU** (Parallel Heads)
+- **CascadeTriBiGRU SOTA** (Hierarchical Cross-Head Conditioning + Local Conv1D)
+
+```bash
+# 1. Chạy SONG SONG CẢ 2 GPU T4 (Kaggle Dual-GPU Mode — Tăng tốc x2):
+#    GPU 0 chạy Baseline Tri-Head BiGRU, GPU 1 chạy CascadeTriBiGRU SOTA đồng thời!
+!python scripts/run_phase4_tritask.py --all --mode kaggle
+
+# 2. Hoặc chạy qua Kaggle Runner tự động đóng gói Zip:
+!python scripts/run_kaggle_training.py --phase 4 --all --mode kaggle
+
+# 3. Chạy đơn lẻ chỉ mô hình SOTA (CascadeTriBiGRU):
+!python scripts/run_phase4_tritask.py --model cascade --mode research --device cuda
+
+# 4. Chạy kiểm tra nhanh 30s (Smoke Mode):
+!python scripts/run_phase4_tritask.py --all --mode smoke
+```
+
+*Kết quả phân tích và so sánh được tự động xuất ra:* `artifacts/phase4_tritask/PHASE4_TRITASK_BENCHMARK_REPORT.md` và `.json`.
+
+---
+
+### E. Chạy qua Kaggle Runner Tự Động (`run_kaggle_training.py`)
 
 Kaggle runner tự động tìm dataset, tận dụng cả 2 GPU T4 chạy song song, chạy các phase và nén toàn bộ artifacts vào `nextkey-results.zip`:
 
 ```bash
+# Chạy Phase 4 (3 Tasks) trên Dual-GPU T4x2 và đóng gói zip
+!python scripts/run_kaggle_training.py --phase 4 --all --mode kaggle
+
 # Chạy Phase 3 Tối ưu Edge (Chạy song song 2 GPU T4: GPU 0 -> Trad KD, GPU 1 -> QKD) và đóng gói zip
 !python scripts/run_kaggle_training.py --phase 3 --strategy all --mode kaggle
 
@@ -126,9 +154,6 @@ Kaggle runner tự động tìm dataset, tận dụng cả 2 GPU T4 chạy song 
 
 # Chạy toàn bộ Phase 2 (10 sizes) và đóng gói zip
 !python scripts/run_kaggle_training.py --phase 2 --all --mode kaggle
-
-# Chạy nhanh toàn bộ Phase 1 + 2 + 3 (Smoke mode check)
-!python scripts/run_kaggle_training.py --phase all --mode smoke
 ```
 
 ---

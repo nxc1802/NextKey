@@ -153,9 +153,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description="NextKey Kaggle Runner CLI")
     parser.add_argument(
         "--phase",
-        choices=["1", "2", "3", "all"],
-        default="1",
-        help="Research phase to execute (1: Backbone, 2: Size, 3: Edge/Distill, all: sequence). Default: 1",
+        choices=["1", "2", "3", "4", "all"],
+        default="4",
+        help="Research phase to execute (1: Backbone, 2: Size, 3: Edge, 4: Tri-Task 3-in-1, all: sequence). Default: 4",
     )
     parser.add_argument(
         "--all",
@@ -298,6 +298,22 @@ def main():
             "--output-dir",
             str(phase_output_dir),
         ]
+        run_command(cmd, root)
+
+    if args.phase in ("4", "all"):
+        phase_output_dir = Path(args.output_dir) / "phase4_tritask"
+        artifact_paths.append(root / phase_output_dir)
+        cmd = [
+            sys.executable,
+            "scripts/run_phase4_tritask.py",
+            "--all",
+            "--mode",
+            args.mode,
+            "--output-dir",
+            str(phase_output_dir),
+        ]
+        if args.device:
+            cmd.extend(["--device", actual_device])
         run_command(cmd, root)
 
     # 5. Package artifacts
