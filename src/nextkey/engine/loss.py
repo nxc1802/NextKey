@@ -75,6 +75,71 @@ class DualHeadLoss(nn.Module):
         }
 
 
+class TriHeadLoss(nn.Module):
+    """Combined loss for Tri-Head architecture:
+
+    L = λ_diac * CE(diacritic_logits, diac_targets)
+      + λ_corr * CE(correction_logits, corr_targets)
+      + λ_bnd  * BCE(boundary_logits, boundaries)
+    """
+
+    def __init__(
+        self,
+        pad_target_id: int = 0,
+        pad_corr_id: int = 0,
+        lambda_diacritic: float = 1.0,
+        lambda_correction: float = 1.0,
+        lambda_boundary: float = 1.0,
+    ):
+        super().__init__()
+        self.diac_loss = nn.CrossEntropyLoss(ignore_index=pad_target_id)
+        self.corr_loss = nn.CrossEntropyLoss(ignore_index=pad_corr_id)
+        self.boundary_loss = nn.BCEWithLogitsLoss(reduction="none")
+        self.lambda_diacritic = lambda_diacritic
+        self.lambda_correction = lambda_correction
+        self.lambda_boundary = lambda_boundary
+
+    def forward(
+        self,
+        correction_logits: torch.Tensor,
+        diacritic_logits: torch.Tensor,
+        boundary_logits: torch.Tensor,
+        corr_targets: torch.Tensor,
+        diac_targets: torch.Tensor,
+        boundaries: torch.Tensor,
+    ) -> dict[str, torch.Tensor]:
+        loss_corr = self.corr_loss(
+            correction_logits.reshape(-1, correction_logits.size(-1)),
+            corr_targets.reshape(-1),
+        )
+        loss_diac = self.diac_loss(
+            diacritic_logits.reshape(-1, diacritic_logits.size(-1)),
+            diac_targets.reshape(-1),
+        )
+
+        valid_mask = boundaries != -100
+        if valid_mask.any():
+            loss_boundary = self.boundary_loss(
+                boundary_logits[valid_mask],
+                boundaries[valid_mask].float(),
+            ).mean()
+        else:
+            loss_boundary = torch.tensor(0.0, device=diacritic_logits.device)
+
+        total = (
+            self.lambda_diacritic * loss_diac
+            + self.lambda_correction * loss_corr
+            + self.lambda_boundary * loss_boundary
+        )
+
+        return {
+            "loss": total,
+            "loss_corr": loss_corr.detach(),
+            "loss_diac": loss_diac.detach(),
+            "loss_boundary": loss_boundary.detach(),
+        }
+
+
 class DistillationLoss(nn.Module):
     """Knowledge Distillation loss for CharTagger with Dynamic Temperature & Outlier Regularization.
 

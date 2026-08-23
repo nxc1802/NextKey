@@ -32,6 +32,17 @@ class AlignedExample:
     domain: str
 
 
+@dataclass
+class TriTaskAlignedExample:
+    """A single aligned training/evaluation example for 3-task restoration."""
+    source: str              # noisy input (typos, no accents, no spaces)
+    base_target: str         # base unaccented corrected characters
+    diacritic_target: str    # accented target characters
+    boundary_target: list[int]  # space-before flags
+    domain: str = "general"
+    noise_tags: list[str] = None
+
+
 # ---------------------------------------------------------------------------
 # JSONL loading
 # ---------------------------------------------------------------------------
@@ -293,3 +304,60 @@ def iter_batches(
         )
 
         yield source, targets, boundaries, torch.tensor(lengths, dtype=torch.long), chunk
+
+
+TriBatchType = tuple[
+    torch.Tensor,  # source [B, T]
+    torch.Tensor,  # corr_targets [B, T]
+    torch.Tensor,  # diac_targets [B, T]
+    torch.Tensor,  # boundaries [B, T]
+    torch.Tensor,  # lengths [B]
+    list[Any],     # chunk
+]
+
+
+def iter_tri_batches(
+    examples: list[Any],
+    vocab: CharVocab,
+    batch_size: int,
+    domain_balanced: bool = False,
+    length_bucket_size: int = 0,
+    pad_to_multiple_of: int = 1,
+) -> Iterator[TriBatchType]:
+    """Yield (source, corr_targets, diac_targets, boundaries, lengths, chunk) batches.
+
+    Returns:
+        source: [B, T] LongTensor of noisy input character IDs
+        corr_targets: [B, T] LongTensor of base unaccented target character IDs
+        diac_targets: [B, T] LongTensor of accented diacritic target character IDs
+        boundaries: [B, T] LongTensor of boundary flags (padded with -100)
+        lengths: [B] LongTensor of original sequence lengths
+        chunk: list of examples in this batch
+    """
+    ordered = _order_examples(examples, domain_balanced)
+
+    if length_bucket_size and length_bucket_size >= batch_size:
+        ordered = [
+            ex for start in range(0, len(ordered), length_bucket_size)
+            for ex in sorted(ordered[start:start + length_bucket_size],
+                             key=lambda x: len(x.source))
+        ]
+
+    for start in range(0, len(ordered), batch_size):
+        chunk = ordered[start:start + batch_size]
+        if not chunk:
+            continue
+
+        source_ids = [vocab.encode_input(ex.source) for ex in chunk]
+        corr_ids = [vocab.encode_corr(ex.base_target) for ex in chunk]
+        diac_ids = [vocab.encode_target(ex.diacritic_target) for ex in chunk]
+        lengths = [len(s) for s in source_ids]
+
+        source = pad_sequences(source_ids, vocab.pad_char_id, pad_to_multiple_of)
+        corr_targets = pad_sequences(corr_ids, vocab.pad_corr_id, pad_to_multiple_of)
+        diac_targets = pad_sequences(diac_ids, vocab.pad_target_id, pad_to_multiple_of)
+        boundaries = pad_sequences(
+            [ex.boundary_target for ex in chunk], -100, pad_to_multiple_of
+        )
+
+        yield source, corr_targets, diac_targets, boundaries, torch.tensor(lengths, dtype=torch.long), chunk

@@ -1,0 +1,201 @@
+{
+  "model": "TriHeadBiGRUCharTagger",
+  "parameters": 271139,
+  "parameters_human": "271.1K",
+  "checkpoint_size_kb": 1072.2,
+  "test_metrics": {
+    "count": 2000,
+    "exact_match": 0.028,
+    "corpus_cer": 0.108236,
+    "corpus_wer": 0.348634,
+    "correction_accuracy": 0.952855,
+    "typo_recovery_rate": 0.614437,
+    "diacritic_accuracy": 0.883986,
+    "boundary_precision": 0.956272,
+    "boundary_recall": 0.944463,
+    "boundary_f1": 0.950331,
+    "typos_evaluated": 16638,
+    "typos_restored": 10223,
+    "eval_loss": 0.6394,
+    "eval_loss_corr": 0.16641,
+    "eval_loss_diac": 0.39692,
+    "eval_loss_bnd": 0.07607
+  },
+  "sample_predictions": [
+    {
+      "source_noisy": "tuynhienngaycanhungcaycuoitrongnuoccungchoccuoibangcaccaunoiratvovanhoaretientuongchicongoaiduongngoaicho",
+      "gold_clean": "tuy nhiên ngay cả những cây cười trong nước cũng chọc cười bằng các câu nói rất vô văn hóa rẻ tiền tưởng chỉ có ngoài đường ngoài chợ",
+      "restored": "tuy nhiên ngày cả những cây cưối trong nước cũng chọc cuời bằng các củu nói rất võ văn hóa rẻ tiến tượng chỉ có ngoại đường ngoài cho",
+      "pred_base": "tuynhienngaycanhungcaycuoitrongnuoccungchoccuoibangcaccaunoiratvovanhoaretientuongchicongoaiduongngoaicho",
+      "gold_base": "tuynhienngaycanhungcaycuoitrongnuoccungchoccuoibangcaccaunoiratvovanhoaretientuongchicongoaiduongngoaicho",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "trongvutruongcokhoang100nhanvienmucluongcuatuancaonhatla10trieudong",
+      "gold_clean": "trong vũ trường có khoảng 100 nhân viên mức lương của tuấn cao nhất là 10 triệu đồng",
+      "restored": "trong vũ trường có khoảng 100 nhân viên mức lượng của tuần cao nhất là 10 triệu đồng",
+      "pred_base": "trongvutruongcokhoang100nhanvienmucluongcuatuancaonhatla10trieudong",
+      "gold_base": "trongvutruongcokhoang100nhanvienmucluongcuatuancaonhatla10trieudong",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "yeutoditruyencungdongvaitroquantrongtrongbenhtieuduongloai2",
+      "gold_clean": "yếu tố di truyền cũng đóng vai trò quan trọng trong bệnh tiểu đường loại 2",
+      "restored": "yếu tố đi truyền cũng đóng vai trò quan trọng trong bệnh tiểu đường loại 2",
+      "pred_base": "yeutoditruyencungdongvaitroquantrongtrongbenhtieuduongloai2",
+      "gold_base": "yeutoditruyencungdongvaitroquantrongtrongbenhtieuduongloai2",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "gioichuxechobietgiatangdolecungconhungcondocagiaxangdautangcaoneulaygianhungaythuongthinhaxekholongchiunoi",
+      "gold_clean": "giới chủ xe cho biết giá tăng do lễ cũng có nhưng còn do cả giá xăng dầu tăng cao nếu lấy giá như ngày thường thì nhà xe khó lòng chịu nổi",
+      "restored": "giới chủ xe cho biết giá tăng đó lệ cũng có những con đo cá giá xăng dầu tăng cao nếu lấy giá như ng ày thường thì nhà xe khô lòng chịu nổi",
+      "pred_base": "gioichuxechobietgiatangdolecungconhungcondocagiaxangdautangcaoneulaygianhungaythuongthinhaxekholongchiunoi",
+      "gold_base": "gioichuxechobietgiatangdolecungconhungcondocagiaxangdautangcaoneulaygianhungaythuongthinhaxekholongchiunoi",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "ifhodahthihothikemduichopibentoktunggbuoi",
+      "gold_clean": "kế hoạch thi hộ thi kèm được phổ biến tới từng người",
+      "restored": "ic ho dâu thi hộ thi kèm được họp viên tôi từng người",
+      "pred_base": "ichodanthihothikemduochopbientoitungnguoi",
+      "gold_base": "kehoachthihothikemduocphobientoitungnguoi",
+      "noise_tags": [
+        "char_swap",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "uudiemnoibatnhatcuativilcdchinhlamanhinhratmonggonnhethamchicothetreotuongduoc",
+      "gold_clean": "ưu điểm nổi bật nhất của ti vi lcd chính là màn hình rất mỏng gọn nhẹ thậm chí có thể treo tường được",
+      "restored": "ưu điểm nói bất nhất của ti vi lcd chính là màn hình rất mong gồ n ghẹ thậm chí có thể treo tượng được",
+      "pred_base": "uudiemnoibatnhatcuativilcdchinhlamanhinhratmonggonghethamchicothetreotuongduoc",
+      "gold_base": "uudiemnoibatnhatcuativilcdchinhlamanhinhratmonggonnhethamchicothetreotuongduoc",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "neukhongphailathaidocoithuongmoiquydinhmoitheche",
+      "gold_clean": "nếu không phải là thái độ coi thường mọi quy định mọi thể chế",
+      "restored": "nếu không phải là thái đó coi thường mới quy định mới thể chế",
+      "pred_base": "neukhongphailathaidocoithuongmoiquydinhmoitheche",
+      "gold_base": "neukhongphailathaidocoithuongmoiquydinhmoitheche",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "luatgom5cj8obg70diusqhydinhvetochuchoatdonghtahhtranhanuocvathanhtranhandma",
+      "gold_clean": "luật gồm 5 chương 70 điều quy định về tổ chức hoạt động thanh tra nhà nước và thanh tra nhân dân",
+      "restored": "luật gồm 5 chương 70 điều quy định về tổ chức hoạt động thành tra nhà nước và thanh tra nhân dâm",
+      "pred_base": "luatgom5chuong70dieuquydinhvetochuchoatdongthanhtranhanuocvathanhtranhandam",
+      "gold_base": "luatgom5chuong70dieuquydinhvetochuchoatdongthanhtranhanuocvathanhtranhandan",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "th3odomuchicobngknuyenomichgox6apdoivoisinhgksncafgtukjgdhcdcothezetangtu102000dlhgelntoida240000dimgthany",
+      "gold_clean": "theo đó mức học bổng khuyến khích học tập đối với sinh viên các trường đh cđ có thể sẽ tăng từ 120 000 đồng lên tối đa 240 000 đồng tháng",
+      "restored": "theo đó mức học bóng khuyên ởhích hóa tập đối với sinh gian các t tương đh cđ có thể sẽ tăng từ 10 2 000 đồng lên tôi đa 240 000 đồng thành",
+      "pred_base": "theodomuchochongkhuyenkhichhoatapdoivoisinhgiancacttuongdhcdcothesetangtu102000donglentoida240000dongthanh",
+      "gold_base": "theodomuchocbongkhuyenkhichhoctapdoivoisinhviencactruongdhcdcothesetangtu120000donglentoida240000dongthang",
+      "noise_tags": [
+        "char_swap",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "conganxadungmatracbangsungdanhnguoi",
+      "gold_clean": "công an xã dùng ma trắc báng súng đánh người",
+      "restored": "công an xã dùng mà trắc bằng súng danh người",
+      "pred_base": "conganxadungmatracbangsungdanhnguoi",
+      "gold_base": "conganxadungmatracbangsungdanhnguoi",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "anhayquaquyetlasekhongdungthuchobatcuhanhdongxucxiemnaochonglaianhvanhungthanhvientronggiadinh",
+      "gold_clean": "anh ấy quả quyết là sẽ không dung thứ cho bất cứ hành động xúc xiểm nào chống lại anh và những thành viên trong gia đình",
+      "restored": "anh ấy qua quyết là sẽ không đùng thứ c ho bất cứ hành động xúc điểm nào chống lại anh và những thành viên trong gia đình",
+      "pred_base": "anhayquaquyetlasekhongdungthuchobatcuhanhdongxucdiemnaochonglaianhvanhungthanhvientronggiadinh",
+      "gold_base": "anhayquaquyetlasekhongdungthuchobatcuhanhdongxucxiemnaochonglaianhvanhungthanhvientronggiadinh",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "cacloaisonbongmuahongtuojtjivhho0voohs8hetmaudavalakchomoitrjogmonghon",
+      "gold_clean": "các loại son bóng màu hồng tươi thích hợp với hầu hết màu da và làm cho môi trông mọng hơn",
+      "restored": "các loại sơn bóng mua hồng tươn thích hợp với hầu hết màu đã và làm cho mới trong mong hơn",
+      "pred_base": "cacloaisonbongmuahongtuonthichhopvoihauhetmaudavalamchomoitrongmonghon",
+      "gold_base": "cacloaisonbongmauhongtuoithichhopvoihauhetmaudavalamchomoitrongmonghon",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "mgau725vkwnddanangcovanbanguiewjgtrnephiongtienthonggindaichungloixinloiongdaisijhbam1938trutairo55ahkoi0howuangthahngowkhabhpiebchjei",
+      "gold_clean": "ngày 27 5 vksnd đà nẵng có văn bản gửi đăng trên phương tiện thông tin đại chúng lời xin lỗi ông đại sinh năm 1938 trú tại tổ 55a khối phố quang thành hòa khánh liên chiểu",
+      "restored": "ngày 72 5 vkand đà nẵng có văn bàn gửiđang trên phíơng tiền thông gin đại chúng lời xin lời ông đài sinh năm 19 38 trú tài rõ trả khời phó quang thann goa khánp hiến chiếu",
+      "pred_base": "ngay725vkanddanangcovanbanguidangtrenphuongtienthonggindaichungloixinloiongdaisinhnam1938trutairotrakhoiphoquangthanngoakhanphienchieu",
+      "gold_base": "ngay275vksnddanangcovanbanguidangtrenphuongtienthongtindaichungloixinloiongdaisinhnam1938trutaito55akhoiphoquangthanhhoakhanhlienchieu",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "tgumgquovnoc7qvoinhabxonuclngoaidocbaocongcongotqcacnhaab0nuocnogaitacdhiejtaigrungsouc6qsaptolzeconhiuw8f4ukinetue0candelaythongtkntaicaccoqaunconbqutrnhonnua",
+      "gold_clean": "trung quốc mở cửa với nhà báo nước ngoài đọc báo công cộng ở tq các nhà báo nước ngoài tác chiến tại trung quốc tq sắp tới sẽ có nhiều điều kiện tiếp cận để lấy thông tin tại các cơ quan công quyền hơn nữa",
+      "restored": "trung quốc nó của với nhậ b có nước ngoại độc bào công côngôtt các nhà bảo nước ngoài tác chiếu tại trung sư úc tq sắp tôi sẽ có nhiuu 8 iều kiện thếo cần để lấy thông tin tại các cơ quan công qu ttn hơn nữa",
+      "pred_base": "thungquocnocuavoinhanaonuoongoaidocbaocongcongotacacnhabaonuocngoaitacdhieutaitrungsouctqsaptoisecongiuu8ieukientheocandelaythongtontaicaccoquancongqutrnhonnua",
+      "gold_base": "trungquocmocuavoinhabaonuocngoaidocbaocongcongotqcacnhabaonuocngoaitacchientaitrungquoctqsaptoiseconhieudieukientiepcandelaythongtintaicaccoquancongquyenhonnua",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "nam2006dukienchitieucutuyenla2560hocsinhhedubidhla2710hocsinh",
+      "gold_clean": "năm 2006 dự kiến chỉ tiêu cử tuyển là 2 560 học sinh hệ dự bị đh là 2 710 học sinh",
+      "restored": "năm 2006 dự kiến chỉ tiêu cử tuyển là 25 60 học sinh hệ dự bịch là 27 10 học sinh",
+      "pred_base": "nam2006dukienchitieucutuyenla2560hocsinhhedubidhla2710hocsinh",
+      "gold_base": "nam2006dukienchitieucutuyenla2560hocsinhhedubidhla2710hocsinh",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    }
+  ]
+}

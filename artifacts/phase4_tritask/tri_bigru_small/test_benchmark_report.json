@@ -1,0 +1,203 @@
+{
+  "model": "TriHeadBiGRUCharTagger",
+  "parameters": 114339,
+  "parameters_human": "114.3K",
+  "checkpoint_size_kb": 454.1,
+  "test_metrics": {
+    "count": 2000,
+    "exact_match": 0.007,
+    "corpus_cer": 0.140639,
+    "corpus_wer": 0.464511,
+    "correction_accuracy": 0.948857,
+    "typo_recovery_rate": 0.574288,
+    "diacritic_accuracy": 0.846031,
+    "boundary_precision": 0.950265,
+    "boundary_recall": 0.935613,
+    "boundary_f1": 0.942882,
+    "typos_evaluated": 16638,
+    "typos_restored": 9555,
+    "eval_loss": 0.80014,
+    "eval_loss_corr": 0.18116,
+    "eval_loss_diac": 0.53114,
+    "eval_loss_bnd": 0.08784
+  },
+  "sample_predictions": [
+    {
+      "source_noisy": "ailattbushthat",
+      "gold_clean": "ai là tt bush thật",
+      "restored": "ai làtt bush thất",
+      "pred_base": "ailattbushthat",
+      "gold_base": "ailattbushthat",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "canbocongchuctheoquydinhcuaphapluatvecanbocongchuc",
+      "gold_clean": "cán bộ công chức theo quy định của pháp luật về cán bộ công chức",
+      "restored": "cán bộ công chức theo quy định của pháp luật về cán bộ công chức",
+      "pred_base": "canbocongchuctheoquydinhcuaphapluatvecanbocongchuc",
+      "gold_base": "canbocongchuctheoquydinhcuaphapluatvecanbocongchuc",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": true
+    },
+    {
+      "source_noisy": "obihothayjinhhanhpuchtuithanhoiendlsetabdantbeotohigkanmathoo",
+      "gold_clean": "khi họ thấy mình hạnh phúc thì thành kiến đó sẽ tan dần theo thời gian mà thôi",
+      "restored": "ởbi hộ thay mình hành phct hưi thanh liên do sẽ tân dantheo thời gián mặt hợi",
+      "pred_base": "obihothayminhhanhpucthuithanhliendosetandantheothoigianmathoo",
+      "gold_base": "khihothayminhhanhphucthithanhkiendosetandantheothoigianmathoi",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "nvoairagiaphoitbepmoidhacungdatangthem40ksdtsj420usdtnasovoithabgtr79c",
+      "gold_clean": "ngoài ra giá phôi thép mới đây cũng đã tăng thêm 40 usd tấn 420 usd tấn so với tháng trước",
+      "restored": "ngoài ra gia p hồi thếp mới đha cũng đã tăng thêm 40 ksdtsm 4 20 usd thn so với tháng trước",
+      "pred_base": "ngoairagiaphoithepmoiduacungdatangthem40ksdtsm420usdtaasovoithangtruoc",
+      "gold_base": "ngoairagiaphoithepmoidaycungdatangthem40usdtan420usdtansovoithangtruoc",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "ahifongvabgiatrenkhix9dluptquadathayconhieuxiemdangmgovzymacacd8l6acbisinvskhoiluadeukhonynhajra",
+      "gold_clean": "hai công văn giả trên khi đọc lướt qua đã thấy có nhiều điểm đáng ngờ vậy mà các đối tác bị sơn và khôi lừa đều không nhận ra",
+      "restored": "hhi công vàn giả trên khi xốđ lupt qua đã t hày có nhiều điểm đãng mgo vậy mà các dựltácbịsin và khôi lưa đều không nhân ra",
+      "pred_base": "haicongvangiatrenkhixodluptquadathayconhieudiemdangmgovaymacacdultacbisinvakhoiluadeukhongnhanra",
+      "gold_base": "haicongvangiatrenkhidocluotquadathayconhieudiemdangngovaymacacdoitacbisonvakhoiluadeukhongnhanra",
+      "noise_tags": [
+        "char_swap",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "tatcanhunghanhdongbathieucuanhungduacondeuduocphongdaithanhtraophungsongchinhnghesihongngatrongvainguoimedaphachovonoidaucuabikichkhongloicungnhudalamdiudicondauratbangmottinhmediungot",
+      "gold_clean": "tất cả những hành động bất hiếu của những đứa con đều được phóng đại thành trào phúng song chính nghệ sĩ hồng nga trong vai người mẹ đã phả cho vở nỗi đau của bi kịch không lời cũng như đã làm dịu đi cơn đau rát bằng một tình mẹ dịu ngọt",
+      "restored": "tất cả những hành động bá t hiệu của nhưng đủa con đều được phòng đại thanh trao phùng sống chính nghệ sĩ hông ngà trong vài người mê đã phá cho vở nội đầu của bị kích không lời cũng như đã làm dịu đi côn đầu rất bằng một tình mẽ dịu ngột",
+      "pred_base": "tatcanhunghanhdongbathieucuanhungduacondeuduocphongdaithanhtraophungsongchinhnghesihongngatrongvainguoimedaphachovonoidaucuabikichkhongloicungnhudalamdiudicondauratbangmottinhmediungot",
+      "gold_base": "tatcanhunghanhdongbathieucuanhungduacondeuduocphongdaithanhtraophungsongchinhnghesihongngatrongvainguoimedaphachovonoidaucuabikichkhongloicungnhudalamdiudicondauratbangmottinhmediungot",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "contaonewzeaalndmythihibhdanghojvuongcogodvanhcaothanh",
+      "gold_clean": "còn táo new zealand mỹ thì hình dáng hơi vuông có góc cạnh cao thành",
+      "restored": "côn tao new zeaalnd mỹ thì hình đãng hơi vường có gọd vành cao thanh",
+      "pred_base": "contaonewzeaalndmythihinhdanghoivuongcogodvanhcaothanh",
+      "gold_base": "contaonewzealandmythihinhdanghoivuongcogoccanhcaothanh",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "nam19992000buithanhkhietsudungtucachphapnhancuacongtytanphuongdongtaodungcachopdongkinhtedemcongchungnangkhonggiamua120tandaucothuonghieuwhitehawkrbdpalmstearinhangcargillmy",
+      "gold_clean": "năm 1999 2000 bùi thanh khiết sử dụng tư cách pháp nhân của công ty tân phương đông tạo dựng các hợp đồng kinh tế đem công chứng nâng khống giá mua 120 tấn dầu cọ thương hiệu white hawk rbd palm stearin hãng cargill mỹ",
+      "restored": "năm 1999 2 000 búi thanh khiết sử dụng từ cách pháp nhận của công ty tăn phương đông tạo dùng các hợp đồng kinh tế đểm công chúng năng không gia mừa 120 tần đầu có thường hiệu whitthawkrbdpllmst earinhàng car giờl mỹ",
+      "pred_base": "nam19992000buithanhkhietsudungtucachphapnhancuacongtytanphuongdongtaodungcachopdongkinhtedemcongchungnangkhonggiamua120tandaucothuonghieuwhitehawkebdpllmstearinhangcargillmy",
+      "gold_base": "nam19992000buithanhkhietsudungtucachphapnhancuacongtytanphuongdongtaodungcachopdongkinhtedemcongchungnangkhonggiamua120tandaucothuonghieuwhitehawkrbdpalmstearinhangcargillmy",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "nengiuchodaucoluonsachsevimotchieccobancotheselambienmausonhoacmauphantrangdiemcuaban",
+      "gold_clean": "nên giữ cho đầu cọ luôn sạch sẽ vì một chiếc cọ bạn có thể sẽ làm biến màu son hoặc màu phấn trang điểm của bạn",
+      "restored": "nên giữ cho đầu có luơn sách sẽ vì một chiếc có bạn có thể sẽ làm biện mau sơn hoặc màu phản trang điểm của bạn",
+      "pred_base": "nengiuchodaucoluonsachsevimotchieccobancotheselambienmausonhoacmauphantrangdiemcuaban",
+      "gold_base": "nengiuchodaucoluonsachsevimotchieccobancotheselambienmausonhoacmauphantrangdiemcuaban",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "nhuvayanhcungdungquadaukhovidokhongphailanguoidanhchominh",
+      "gold_clean": "như vậy anh cũng đừng quá đau khổ vì đó không phải là người dành cho mình",
+      "restored": "như vậy anh cũng dùng qua đầu kho vì đó không phải là người danh cho mình",
+      "pred_base": "nhuvayanhcungdungquadaukhovidokhongphailanguoidanhchominh",
+      "gold_base": "nhuvayanhcungdungquadaukhovidokhongphailanguoidanhchominh",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "fanjsatbangnewcou5h3aleskhid9chohidthitinoaseitmranguonogcucxnh7mgtinnnqnkichdongbaklucnoiyrej",
+      "gold_clean": "cảnh sát bang new south wales khi đó cho biết họ tin là sẽ tìm ra nguồn gốc của những tin nhắn kích động bạo lực nói trên",
+      "restored": "cảnh sát bằng new cóo theales khi đi cho hiệt hi tinla sẽ ttm ra ng ườo ng cccc nhưng tìn n năn kích động bảo lực nổi trên",
+      "pred_base": "canhsatbangnewcoothealeskhidichohiethitinoasetimranguoongccccnhungtinnhankichdongbaolucnoitren",
+      "gold_base": "canhsatbangnewsouthwaleskhidochobiethotinlasetimranguongoccuanhungtinnhankichdongbaolucnoitren",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "doanchinhthuccongboquyetdinhcuabotruongconganveviecthanhtratoandiencacmathoatdongcuacongantinhnay",
+      "gold_clean": "đoàn chính thức công bố quyết định của bộ trưởng công an về việc thanh tra toàn diện các mặt hoạt động của công an tỉnh này",
+      "restored": "đoan chính thức công bố quyết định của bộ trường công an về việc thanh tra toan diện các mặt hoạt động của công an tình này",
+      "pred_base": "doanchinhthuccongboquyetdinhcuabotruongconganveviecthanhtratoandiencacmathoatdongcuacongantinhnay",
+      "gold_base": "doanchinhthuccongboquyetdinhcuabotruongconganveviecthanhtratoandiencacmathoatdongcuacongantinhnay",
+      "noise_tags": [
+        "canonical_compact"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "h9ehnaychungtpivanchuetujinhxoanhmuadibankainnuhgexrtongnuofvanhabkyoigufabhungnguoimhonthagxsmlichuacochircnaoxecunglajnhapdua",
+      "gold_clean": "hiện nay chúng tôi vẫn chủ yếu kinh doanh mua đi bán lại những xe trong nước và nhận ký gởi của những người muốn thay xe mới chưa có chiếc nào xe cũ ngoại nhập đâu",
+      "restored": "hiện này chúng tôi vẫn chuy tu mình xoanh mưa đi băn lài những đx trong nước và nhận khôi ti va những người mhôn thấy xa m li chưa có chiếc nao xe cũng lạm nhập đưa",
+      "pred_base": "hiennaychungtoivanchuetuminhxoanhmuadibanlainhungdetrongnuocvanhankhoitivanhungnguoimhonthayxamoichuacochiecnaoxecunglamnhapdua",
+      "gold_base": "hiennaychungtoivanchuyeukinhdoanhmuadibanlainhungxetrongnuocvanhankygoicuanhungnguoimuonthayxemoichuacochiecnaoxecungoainhapdau",
+      "noise_tags": [
+        "char_swap",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "mukeucongtyxangdauvnnilonang",
+      "gold_clean": "nhiều công ty xăng dầu vn bị lỗ nặng",
+      "restored": "muiều công ty xảng dầu vn ni lo năng",
+      "pred_base": "muieucongtyxangdauvnnilonang",
+      "gold_base": "nhieucongtyxangdauvnbilonang",
+      "noise_tags": [
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    },
+    {
+      "source_noisy": "trangth8y5inhsupuatroncuaanhsangcamausafdongtaykptloaihknhnghethiatmoithietmegheochutru0ngduaavotrangtrinoithatlsfrxhnthuytinhcuaduoxgioithi3yfzipnongtranhxgltinkso97funogkevnasyauanphknhuabtphfm",
+      "gold_clean": "tranh thủy tinh sự pha trộn của ánh sáng và màu sắc đông tây một loại hình nghệ thuật mới thiết kế theo chủ trương đưa vào trang trí nội thất là tranh thủy tinh vừa được giới thiệu tại phòng tranh artlink số 97 đường lê văn sỹ quận phú nhuận tp hcm",
+      "restored": "trang thuy tình sự lủa tron của anh sáng cả m au sát động tây mpt loại hình nghệ thuất mới thiệt mệ theo chứ trưởng đủa vào trang trì nội thất là tranh thủy tính của được giới thiệy cại phơng tranh chi tinmsố97 tường kê vnn sy quân phụ nhưận tphêm",
+      "pred_base": "trangthuytinhsuluatroncuaanhsangcamausatdongtaymotloaihinhnghethiatmoithietmetheochutruongduavaotrangtrinoithatlatranhthuytinhcuaduocgioithieycaiphongtranhcaitinmso97duongkevnnsuquanphinhuantphem",
+      "gold_base": "tranhthuytinhsuphatroncuaanhsangvamausacdongtaymotloaihinhnghethuatmoithietketheochutruongduavaotrangtrinoithatlatranhthuytinhvuaduocgioithieutaiphongtranhartlinkso97duonglevansyquanphunhuantphcm",
+      "noise_tags": [
+        "char_swap",
+        "diacritic_confuse",
+        "qwerty_neighbor"
+      ],
+      "exact": false
+    }
+  ]
+}

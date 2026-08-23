@@ -220,3 +220,110 @@ class MetricTotals:
             "boundary_recall": round(br, 6),
             "boundary_f1": round(bf1, 6),
         }
+
+
+@dataclass
+class TriMetricTotals:
+    """Accumulates metrics across 3 tasks: Correction, Diacritics, and Spacing."""
+    count: int = 0
+    exact: int = 0
+    cer_sum: float = 0.0
+    wer_sum: float = 0.0
+    char_distance: int = 0
+    char_total: int = 0
+    word_distance: int = 0
+    word_total: int = 0
+
+    # Task 1: Correction Head
+    corr_correct: int = 0
+    corr_total: int = 0
+    typos_introduced: int = 0
+    typos_fixed: int = 0
+
+    # Task 2: Diacritic Head
+    diac_correct: int = 0
+    diac_total: int = 0
+
+    # Task 3: Boundary Head
+    boundary_tp: int = 0
+    boundary_pred: int = 0
+    boundary_gold: int = 0
+
+    def update_tri(
+        self,
+        source: str,
+        pred_base: str,
+        gold_base: str,
+        pred_diac: str,
+        gold_diac: str,
+        pred_boundaries: list[int],
+        gold_boundaries: list[int],
+        final_prediction: str,
+        gold_sentence: str,
+    ) -> None:
+        self.count += 1
+        self.exact += int(final_prediction.strip() == gold_sentence.strip())
+
+        # CER & WER
+        c_dist = levenshtein(final_prediction, gold_sentence)
+        t_len = len(gold_sentence)
+        self.char_distance += c_dist
+        self.char_total += t_len
+        self.cer_sum += c_dist / t_len if t_len else (0.0 if not final_prediction else 1.0)
+
+        p_words = final_prediction.split()
+        g_words = gold_sentence.split()
+        w_dist = levenshtein_tokens(p_words, g_words)
+        self.word_distance += w_dist
+        self.word_total += len(g_words)
+        self.wer_sum += w_dist / len(g_words) if g_words else (0.0 if not p_words else 1.0)
+
+        # Correction Task (Base char level)
+        for s_ch, p_b, g_b in zip(source, pred_base, gold_base):
+            self.corr_total += 1
+            if p_b == g_b:
+                self.corr_correct += 1
+            if s_ch != g_b:
+                self.typos_introduced += 1
+                if p_b == g_b:
+                    self.typos_fixed += 1
+
+        # Diacritic Task (Accented char level)
+        for p_d, g_d in zip(pred_diac, gold_diac):
+            self.diac_total += 1
+            if p_d == g_d:
+                self.diac_correct += 1
+
+        # Boundary Task
+        for p_b, g_b in zip(pred_boundaries, gold_boundaries):
+            if p_b == 1 and g_b == 1:
+                self.boundary_tp += 1
+            if p_b == 1:
+                self.boundary_pred += 1
+            if g_b == 1:
+                self.boundary_gold += 1
+
+    def as_dict(self) -> dict[str, float | int]:
+        if self.count == 0:
+            return {}
+        bp = self.boundary_tp / self.boundary_pred if self.boundary_pred else 0.0
+        br = self.boundary_tp / self.boundary_gold if self.boundary_gold else 0.0
+        bf1 = 2 * bp * br / (bp + br) if (bp + br) else 0.0
+        corr_acc = self.corr_correct / self.corr_total if self.corr_total else 0.0
+        typo_rec = self.typos_fixed / self.typos_introduced if self.typos_introduced else 1.0
+        diac_acc = self.diac_correct / self.diac_total if self.diac_total else 0.0
+
+        return {
+            "count": self.count,
+            "exact_match": round(self.exact / self.count, 6),
+            "corpus_cer": round(self.char_distance / self.char_total, 6) if self.char_total else 0.0,
+            "corpus_wer": round(self.word_distance / self.word_total, 6) if self.word_total else 0.0,
+            "correction_accuracy": round(corr_acc, 6),
+            "typo_recovery_rate": round(typo_rec, 6),
+            "diacritic_accuracy": round(diac_acc, 6),
+            "boundary_precision": round(bp, 6),
+            "boundary_recall": round(br, 6),
+            "boundary_f1": round(bf1, 6),
+            "typos_evaluated": self.typos_introduced,
+            "typos_restored": self.typos_fixed,
+        }
