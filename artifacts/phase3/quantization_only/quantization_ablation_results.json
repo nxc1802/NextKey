@@ -1,0 +1,93 @@
+[
+  {
+    "label": "Student Baseline (No KD)",
+    "strategy": "none",
+    "format": "FP32",
+    "params": 53972,
+    "size_kb": 216.2,
+    "in_domain_cer": 0.069192,
+    "in_domain_wer": 0.284989,
+    "external_cer": 0.095465,
+    "diacritic_acc": 0.919037,
+    "boundary_f1": 0.97983,
+    "exact_match": 0.030723
+  },
+  {
+    "label": "Student PTQ Only (Quantization Only, No KD)",
+    "strategy": "ptq_only",
+    "format": "INT8",
+    "params": 53972,
+    "size_kb": 57.8,
+    "in_domain_cer": 0.069366,
+    "in_domain_wer": 0.286155,
+    "external_cer": 0.095783,
+    "diacritic_acc": 0.91888,
+    "boundary_f1": 0.979825,
+    "exact_match": 0.030611
+  },
+  {
+    "label": "Student Traditional KD (Distillation Only)",
+    "strategy": "traditional_kd",
+    "format": "FP32",
+    "params": 53972,
+    "size_kb": 216.7,
+    "in_domain_cer": 0.068709,
+    "in_domain_wer": 0.28292,
+    "external_cer": 0.09629,
+    "diacritic_acc": 0.919515,
+    "boundary_f1": 0.980107,
+    "exact_match": 0.031914
+  },
+  {
+    "label": "Student Traditional KD + PTQ",
+    "strategy": "traditional_kd_ptq",
+    "format": "INT8",
+    "params": 53972,
+    "size_kb": 58.1,
+    "in_domain_cer": 0.068987,
+    "in_domain_wer": 0.283985,
+    "external_cer": 0.096479,
+    "diacritic_acc": 0.919182,
+    "boundary_f1": 0.979993,
+    "exact_match": 0.031732
+  },
+  {
+    "label": "Teacher Baseline (Topo-A)",
+    "strategy": "teacher_baseline",
+    "format": "FP32",
+    "params": 289044,
+    "size_kb": 1134.5,
+    "in_domain_cer": 0.044406,
+    "in_domain_wer": 0.185457,
+    "external_cer": 0.073685,
+    "diacritic_acc": 0.947095,
+    "boundary_f1": 0.987067,
+    "exact_match": 0.102652
+  },
+  {
+    "label": "Teacher PTQ Only (Teacher Quantization Only)",
+    "strategy": "teacher_ptq_only",
+    "format": "INT8",
+    "params": 289044,
+    "size_kb": 287.2,
+    "in_domain_cer": 0.044721,
+    "in_domain_wer": 0.186662,
+    "external_cer": 0.074036,
+    "diacritic_acc": 0.946661,
+    "boundary_f1": 0.987064,
+    "exact_match": 0.10139
+  },
+  {
+    "label": "Student QKD SOTA (Joint QAT + KD)",
+    "strategy": "qkd_int8",
+    "format": "INT8",
+    "params": 53972,
+    "size_kb": 57.8,
+    "in_domain_cer": 0.069447,
+    "in_domain_wer": 0.285907,
+    "external_cer": 0.096738,
+    "diacritic_acc": 0.918632,
+    "boundary_f1": 0.980113,
+    "exact_match": 0.031059
+  }
+]
