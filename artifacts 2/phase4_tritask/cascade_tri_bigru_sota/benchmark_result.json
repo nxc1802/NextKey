@@ -1,0 +1,23 @@
+{
+  "preset_key": "cascade_tri_bigru_sota",
+  "display_name": "2. CascadeTriBiGRU SOTA (Hierarchical Conditioning)",
+  "parameters": 275217,
+  "parameters_human": "275.2K",
+  "checkpoint_size_kb": 1087.4,
+  "best_epoch": 25,
+  "train_duration_seconds": 30105.4,
+  "test_metrics": {
+    "count": 10000,
+    "exact_match": 0.0691,
+    "corpus_cer": 0.090178,
+    "corpus_wer": 0.292603,
+    "correction_accuracy": 0.959505,
+    "typo_recovery_rate": 0.659203,
+    "diacritic_accuracy": 0.90284,
+    "boundary_precision": 0.965531,
+    "boundary_recall": 0.954481,
+    "boundary_f1": 0.959974,
+    "typos_evaluated": 84452,
+    "typos_restored": 55671
+  }
+}

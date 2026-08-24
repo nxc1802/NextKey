@@ -161,7 +161,10 @@ def main():
     print(f"🚀 [NextKey Full Test Benchmark] Device: {device}")
 
     ckpt_path = Path(args.checkpoint)
-    vocab_path = Path(args.vocab)
+    vocab_path = Path(args.vocab) if args.vocab else (ckpt_path.parent / "vocab.json")
+    if not vocab_path.exists() and (ckpt_path.parent / "vocab.json").exists():
+        vocab_path = ckpt_path.parent / "vocab.json"
+
     if not ckpt_path.exists() or not vocab_path.exists():
         print(f"❌ Error: Cannot find checkpoint ({ckpt_path}) or vocab ({vocab_path})")
         sys.exit(1)

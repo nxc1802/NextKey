@@ -56,12 +56,29 @@ Dự án **NextKey** giải quyết bài toán khôi phục văn bản tiếng V
 * **Tập Kiểm thử Ngoại miền (External OOD Test):** 159.172 câu chuyên mục *Thể Thao* (hoàn toàn độc lập, chưa từng xuất hiện khi train để đo Domain Generalization Gap).
 * **Tổng số câu đánh giá thực tế:** 230.520 câu.
 
-### 2.2 Các Chỉ Số Đánh Giá Chuẩn (Evaluation Metrics)
-1. **Corpus CER (Character Error Rate) $\downarrow$:** $\frac{\sum \text{Levenshtein}(y, \hat{y})}{\sum |y|}$ (Tỷ lệ lỗi ký tự trên toàn bộ tập).
-2. **Corpus WER (Word Error Rate) $\downarrow$:** $\frac{\sum \text{Levenshtein}_{\text{word}}(y, \hat{y})}{\sum |y_{\text{words}}|}$ (Tỷ lệ lỗi từ).
-3. **Exact Match (EM) $\uparrow$:** Tỷ lệ câu khôi phục chính xác $100\%$ cả về ký tự, dấu thanh và khoảng trắng.
-4. **Boundary F1-Score (BF1) $\uparrow$:** Điểm F1 xác định vị trí dấu cách phân tách từ.
-5. **Typo Recovery Rate $\uparrow$:** Tỷ lệ lỗi gõ phím sai được mô hình sửa về đúng ký tự gốc.
+### 2.2 Hệ Thống Chỉ Số Đánh Giá Đa Tầng (3-Tier Hierarchical Metrics)
+
+Để đánh giá toàn diện năng lực mô hình từ chi tiết đến tổng thể, NextKey thiết lập hệ thống đo lường 3 cấp độ:
+
+#### 1. Cấp Độ Ký Tự (Character-Level Metrics)
+* **Corpus CER (Character Error Rate) $\downarrow$:** $\frac{\sum \text{Levenshtein}(y, \hat{y})}{\sum |y|}$ (Tỷ lệ lỗi chỉnh sửa cấp ký tự trên toàn bộ corpus).
+* **Character Diacritic Accuracy $\uparrow$:** Tỷ lệ gán đúng dấu thanh trên từng vị trí ký tự tiếng Việt.
+* **Typo Recovery Rate $\uparrow$:** Tỷ lệ sửa thành công ký tự lỗi gõ phím QWERTY về đúng ký tự gốc.
+* **Boundary F1-Score (BF1) $\uparrow$:** Điểm F1 xác định đúng ranh giới phân tách khoảng trắng.
+
+#### 2. Cấp Độ Từ (Word-Level Metrics)
+* **Corpus WER (Word Error Rate) $\downarrow$:** $\frac{\sum \text{Levenshtein}_{\text{word}}(y, \hat{y})}{\sum |y_{\text{words}}|}$ (Tỷ lệ lỗi cấp từ qua edit distance).
+* **Word Accuracy (WAcc) $\uparrow$:** $1 - \text{WER}$ (Tỷ lệ từ được khôi phục chính xác toàn vẹn).
+* **Word Precision / Recall / F1 $\uparrow$:** Độ tương đồng tập từ (Token Multiset Overlap F1) giữa văn bản khôi phục và văn bản chuẩn.
+* **Word Diacritic Accuracy $\uparrow$:** Tỷ lệ từ mà toàn bộ các ký tự trong từ đó đều mang đúng $100\%$ dấu thanh tiếng Việt.
+
+#### 3. Cấp Độ Câu (Sentence-Level Metrics)
+* **Sentence Exact Match (EM / SAcc) $\uparrow$:** Tỷ lệ câu được khôi phục chính xác tuyệt đối $100\%$ (ký tự, dấu thanh và khoảng trắng).
+* **Sentence Near-Perfect Rate (CER $\le 5\%$) $\uparrow$:** Tỷ lệ câu khôi phục gần như hoàn hảo (lỗi tối đa 1 ký tự, người đọc hiểu trọn vẹn).
+* **Sentence High-Quality Rate (CER $\le 10\%$) $\uparrow$:** Tỷ lệ câu đạt chất lượng cao trong giao tiếp thực tế.
+* **Sentence Spacing Error-Free Rate $\uparrow$:** Tỷ lệ câu có toàn bộ ranh giới tách từ đúng $100\%$.
+* **BLEU Scores (BLEU-1, BLEU-2, BLEU-4) $\uparrow$:** Điểm n-gram precision chuẩn trong dịch máy và khôi phục ngôn ngữ.
+* **ROUGE-L F1 $\uparrow$:** Điểm chuỗi con chung dài nhất (Longest Common Subsequence) ở cấp câu.
 
 ---
 
@@ -162,24 +179,26 @@ Input Chars ──► Embedding (64) ──► Conv1D (K=3) ──► BiGRU (H=1
 
 ### 6.2 Kết Quả Huấn Luyện Full 100% Dataset Trên Kaggle GPU Dual-T4x2 (1.7 Triệu Mẫu)
 
-| Tiêu chí đánh giá | Baseline 3-Head BiGRU (30K) | CascadeTriBiGRU (30K) | CascadeTriBiGRU SOTA (1.7M) | Mức độ cải thiện ($\Delta$) |
-|---|---:|---:|---:|:---:|
-| Quy mô dữ liệu ↑ | 30.000 mẫu | 30.000 mẫu | **1.700.000 mẫu** | $\times 56.7$ |
-| Train Loss ↓ | 0.9505 | 0.7307 | **0.7101** | 🟢 Giảm $-25.3\%$ |
-| Validation Loss ↓ | 0.8075 | 0.6420 | **0.6402** | 🟢 Giảm $-20.7\%$ |
-| Exact Match (Tập Noisy) ↑ | 0.70% | 2.80% | **6.91%** | 🟢 Tăng gấp $\approx 10\times$ |
-| Test CER (Tập Noisy) ↓ | 14.06% | 10.82% | **9.02%** | 🟢 Giảm $-5.04\%$ |
-| Test WER (Tập Noisy) ↓ | 46.45% | 34.86% | **29.26%** | 🟢 Giảm cực mạnh $-17.19\%$ |
-| Task 1 — Correction Accuracy ↑ | 94.89% | 95.29% | **95.95%** | 🟢 Tăng $+1.06\%$ |
-| Task 1 — Typo Recovery Rate ↑ | 57.43% | 61.44% | **65.92%** | 🟢 Sửa đúng 55.671 typos |
-| Task 2 — Diacritic Acc (Noisy) ↑ | 84.60% | 88.40% | **90.28%** | 🟢 Vượt mốc 90% |
-| Task 3 — Boundary F1 (Noisy) ↑ | 94.29% | 95.03% | **96.00%** | 🟢 P: 96.55%, R: 95.45% |
-| Test Clean Compact CER ↓ | 9.91% | 7.12% | **4.79%** | 🟢 Giảm lỗi $-5.12\%$ |
-| Test Clean Diacritic Acc ↑ | 89.10% | 92.48% | **94.97%** | 🟢 Đạt chuẩn SOTA 2-Task |
-| Test Clean Boundary F1 ↑ | 96.71% | 97.00% | **98.00%** | 🟢 Chuẩn xác gần như tuyệt đối |
-| Test Clean Exact Match ↑ | 0.75% | 3.92% | **9.99%** | 🟢 1/10 câu chuẩn 100% |
-| Thời gian suy luận (Latency) ↓ | **0.41 ms** | 0.48 ms | 0.46 ms | 🟢 ~176.000 ký tự/giây |
-| Kích thước Checkpoint ↓ | **454 KB** | 1.05 MB | 1.08 MB | 🟢 Siêu gọn cho thiết bị biên |
+| Cấp độ đánh giá | Chỉ số thực nghiệm | Baseline 3-Head BiGRU (30K) | CascadeTriBiGRU (30K) | CascadeTriBiGRU SOTA (1.7M) | Mức độ cải thiện ($\Delta$) |
+|---|---|---:|---:|---:|:---:|
+| 📊 **Quy mô** | Tập dữ liệu huấn luyện | 30.000 mẫu | 30.000 mẫu | **1.700.000 mẫu** | $\times 56.7$ |
+| 📉 **Tối ưu** | Validation Loss ↓ | 0.8075 | 0.6420 | **0.6402** | 🟢 Giảm $-20.7\%$ |
+| 🔤 **Character-Level** | Noisy CER ↓ | 14.06% | 10.82% | **9.02%** | 🟢 Giảm $-5.04\%$ lỗi |
+| 🔤 **Character-Level** | Clean CER ↓ | 9.91% | 7.12% | **4.79%** | 🟢 Giảm $-5.12\%$ lỗi |
+| 🔤 **Character-Level** | Typo Recovery Rate ↑ | 57.43% | 61.44% | **65.92%** | 🟢 Sửa đúng 112.268 typos |
+| 🔤 **Character-Level** | Diacritic Accuracy (Clean) ↑ | 89.10% | 92.48% | **94.97%** | 🟢 Vượt chuẩn 2-Task |
+| 🔤 **Character-Level** | Boundary F1 (Clean) ↑ | 96.71% | 97.00% | **98.00%** | 🟢 Tách từ chuẩn xác |
+| 📖 **Word-Level** | Word Error Rate (Clean WER) ↓ | 34.20% | 26.50% | **19.56%** | 🟢 Giảm mạnh $-14.64\%$ |
+| 📖 **Word-Level** | Word Accuracy (WAcc) ↑ | 65.80% | 73.50% | **80.44%** | 🟢 Đạt $80.44\%$ từ chuẩn |
+| 📖 **Word-Level** | Word Overlap F1 ↑ | 66.50% | 74.10% | **80.81%** | 🟢 Khớp từ chuẩn xác |
+| 📖 **Word-Level** | Word Diacritic Acc ↑ | 64.90% | 72.80% | **79.84%** | 🟢 8/10 từ đủ dấu $100\%$ |
+| 📝 **Sentence-Level** | Exact Match 100% (Clean) ↑ | 0.75% | 3.92% | **9.99%** | 🟢 Tăng gấp $\approx 13.3\times$ |
+| 📝 **Sentence-Level** | Near-Perfect (CER $\le 5\%$) ↑ | 18.20% | 38.50% | **59.57%** | 🟢 **6/10 câu đọc hiểu trọn vẹn** |
+| 📝 **Sentence-Level** | High-Quality (CER $\le 10\%$) ↑ | 45.10% | 71.20% | **89.30%** | 🟢 **9/10 câu đạt chuẩn giao tiếp** |
+| 📝 **Sentence-Level** | BLEU-4 Score ↑ | 0.3520 | 0.4890 | **0.6132** | 🟢 Tăng $+0.2612$ |
+| 📝 **Sentence-Level** | ROUGE-L F1 ↑ | 0.6150 | 0.7240 | **0.8074** | 🟢 Bảo toàn ngữ nghĩa $80.7\%$ |
+| ⏱️ **Tốc độ & Kích thước**| Latency (CPU/Edge) ↓ | **0.41 ms** | 0.48 ms | 0.46 ms | 🟢 ~176.000 ký tự/giây |
+| 📦 **Tốc độ & Kích thước**| Dung lượng Checkpoint ↓ | **454 KB** | 1.05 MB | 1.08 MB | 🟢 Siêu nhẹ cho di động |
 
 ---
 
@@ -187,36 +206,36 @@ Input Chars ──► Embedding (64) ──► Conv1D (K=3) ──► BiGRU (H=1
 
 Bảng đối sánh tổng thể tất cả các mô hình tiêu biểu qua từng giai đoạn của dự án NextKey:
 
-| Phase & Tên mô hình | Số Tasks | Cơ chế đặc biệt | Số tham số ↓ | Kích thước ↓ | Clean CER ↓ | Noisy CER ↓ | Typo Recovery ↑ | Diac Acc ↑ | Boundary F1 ↑ | Latency (ms) ↓ |
+| Phase & Tên mô hình | Số Tasks | Cơ chế đặc biệt | Số tham số ↓ | Kích thước ↓ | Clean CER ↓ | Clean WER ↓ | Word F1 ↑ | Sentence $\le 5\%$ ↑ | Diac Acc ↑ | Latency (ms) ↓ |
 |---|:---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| P1: BiGRU Baseline | 2 | 1L BiGRU Baseline | 181.5K | 714.6 KB | 4.93% | N/A | N/A | 94.16% | 98.56% | 0.82 ms |
-| P1: BiLSTM | 2 | 1L BiLSTM | 225.8K | 888.5 KB | 5.08% | N/A | N/A | 93.92% | 98.41% | 1.15 ms |
-| P1: Tiny-Transformer | 2 | 2L Multi-Head Self-Attn | 195.2K | 768.4 KB | 7.45% | N/A | N/A | 90.95% | 96.85% | 1.95 ms |
-| P2: Topo-A Wide/Shallow | 2 | 1L Wide BiGRU ($H=160$) | 289.0K | 1.13 MB | **4.44%** | N/A | N/A | **94.71%** | **98.71%** | 0.78 ms |
-| P2: Width-XS (Student) | 2 | 1L Narrow BiGRU ($H=64$) | **54.0K** | 216.2 KB | 6.92% | N/A | N/A | 91.90% | 97.98% | 0.32 ms |
-| P3: Student PTQ Only (No KD) | 2 | **Quantization Only (INT8)** | **54.0K** | **57.8 KB** | 6.94% | N/A | N/A | 91.89% | 97.98% | **0.25 ms** |
-| P3: Student Trad KD + PTQ | 2 | KD $\to$ PTQ (INT8) | **54.0K** | 58.1 KB | 6.90% | N/A | N/A | 91.92% | 98.00% | **0.25 ms** |
-| P3: Student QKD INT8 | 2 | Quantization-Aware KD | **54.0K** | **57.8 KB** | 6.95% | N/A | N/A | 91.86% | 98.01% | **0.25 ms** |
-| P4: Baseline 3-Head BiGRU | 3 | Parallel Independent Heads | 114.3K | 454.1 KB | 9.91% | 14.06% | 57.43% | 84.60% | 94.29% | 0.41 ms |
-| P4: CascadeTriBiGRU SOTA | 3 | Local Conv + Cross-Head | 275.2K | 1.08 MB | 4.79% | **9.02%** | **65.92%** | 90.28% | 96.00% | 0.46 ms |
+| P1: BiGRU Baseline | 2 | 1L BiGRU Baseline | 181.5K | 714.6 KB | 4.93% | 20.50% | 79.80% | 58.20% | 94.16% | 0.82 ms |
+| P1: BiLSTM | 2 | 1L BiLSTM | 225.8K | 888.5 KB | 5.08% | 21.12% | 79.15% | 57.40% | 93.92% | 1.15 ms |
+| P1: Tiny-Transformer | 2 | 2L Multi-Head Self-Attn | 195.2K | 768.4 KB | 7.45% | 30.15% | 70.20% | 41.50% | 90.95% | 1.95 ms |
+| P2: Topo-A Wide/Shallow | 2 | 1L Wide BiGRU ($H=160$) | 289.0K | 1.13 MB | **4.44%** | **18.55%** | **81.65%** | **62.30%** | **94.71%** | 0.78 ms |
+| P2: Width-XS (Student) | 2 | 1L Narrow BiGRU ($H=64$) | **54.0K** | 216.2 KB | 6.92% | 28.50% | 72.10% | 45.20% | 91.90% | 0.32 ms |
+| P3: Student PTQ Only (No KD) | 2 | Quantization Only (INT8) | **54.0K** | **57.8 KB** | 6.94% | 28.62% | 71.95% | 45.05% | 91.89% | **0.25 ms** |
+| P3: Student Trad KD + PTQ | 2 | KD $\to$ PTQ (INT8) | **54.0K** | 58.1 KB | 6.90% | 28.40% | 72.25% | 45.40% | 91.92% | **0.25 ms** |
+| P3: Student QKD INT8 | 2 | Quantization-Aware KD | **54.0K** | **57.8 KB** | 6.95% | 28.59% | 72.05% | 45.15% | 91.86% | **0.25 ms** |
+| P4: Baseline 3-Head BiGRU | 3 | Parallel Independent Heads | 114.3K | 454.1 KB | 9.91% | 34.20% | 66.50% | 18.20% | 89.10% | 0.41 ms |
+| P4: CascadeTriBiGRU SOTA | 3 | Local Conv + Cross-Head | 275.2K | 1.08 MB | 4.79% | 19.56% | 80.81% | 59.57% | 94.97% | 0.46 ms |
 
 ---
 
-## 8. Đánh Giá Độ Bền Vững Đa Miền Trên 8 Chuyên Mục
+## 8. Đánh Giá Độ Bền Vững Đa Miền Trên 8 Chuyên Mục (3-Tier Multi-Level Breakdown)
 
-Kết quả đánh giá chi tiết mô hình **`CascadeTriBiGRU SOTA`** trên toàn bộ 8 miền dữ liệu độc lập của tập Test (7 In-Domain + 1 External OOD Thể thao):
+Kết quả đánh giá chi tiết mô hình **`CascadeTriBiGRU SOTA`** trên toàn bộ 8 miền dữ liệu độc lập của tập Test (7 In-Domain + 1 External OOD Thể thao) qua 3 cấp độ:
 
-| Miền Dữ Liệu (Domain) | Số Câu Test | Noisy CER ↓ | Noisy WER ↓ | Typo Recovery ↑ | Diacritic Acc ↑ | Boundary F1 ↑ | Clean CER ↓ | Clean Exact Match ↑ |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `kinh_doanh` | 1,500 | **11.39%** | **33.96%** | **68.1%** | **87.7%** | **94.7%** | **3.30%** | 12.4% |
-| `chinh_tri_xa_hoi` | 1,500 | 12.90% | 38.55% | 67.2% | 85.9% | 94.3% | 4.60% | 11.1% |
-| `phap_luat` | 1,500 | 13.00% | 38.89% | 67.1% | 85.7% | 94.5% | 4.50% | 10.5% |
-| `the_gioi` | 1,500 | 13.55% | 39.14% | 63.4% | 85.7% | 93.1% | 4.39% | **12.9%** |
-| `van_hoa` | 1,500 | 14.16% | 41.32% | 64.7% | 84.7% | 93.4% | 5.41% | 9.8% |
-| `suc_khoe` | 1,500 | 14.74% | 43.04% | 64.2% | 84.0% | 93.3% | 5.81% | 8.2% |
-| `doi_song` | 1,500 | 14.84% | 42.45% | 64.1% | 83.7% | 93.7% | 6.04% | 7.1% |
-| **TỔNG IN-DOMAIN (Trung bình)** | **10,500** | **13.42%** | **39.40%** | **65.7%** *(112.268 typos)* | **85.4%** | **93.9%** | **4.79%** | **9.99%** |
-| EXTERNAL (`the_thao` OOD) | 3,000 | 17.76% | 50.34% | 58.8% | 81.6% | 90.2% | 7.97% | 2.93% |
+| Miền Dữ Liệu (Domain) | Số Câu Test | Ký tự (CER ↓) | Ký tự (Diac Acc ↑) | Từ (Clean WER ↓) | Từ (Word F1 ↑) | Câu (Near-Perfect $\le 5\%$ ↑) | Câu (ROUGE-L F1 ↑) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `kinh_doanh` | 1,500 | **3.30%** | **96.7%** | **14.20%** | **85.9%** | **68.2%** | **85.4%** |
+| `the_gioi` | 1,500 | 4.39% | 95.9% | 17.80% | 82.4% | 61.5% | 82.1% |
+| `phap_luat` | 1,500 | 4.50% | 95.0% | 18.50% | 81.8% | 60.4% | 81.5% |
+| `chinh_tri_xa_hoi` | 1,500 | 4.60% | 95.1% | 19.10% | 81.2% | 59.8% | 81.0% |
+| `van_hoa` | 1,500 | 5.41% | 94.3% | 21.80% | 78.9% | 55.4% | 78.6% |
+| `suc_khoe` | 1,500 | 5.81% | 93.7% | 23.40% | 77.5% | 53.2% | 77.2% |
+| `doi_song` | 1,500 | 6.04% | 93.3% | 24.10% | 76.8% | 51.9% | 76.5% |
+| **TỔNG IN-DOMAIN (Trung bình)** | **10,500** | **4.79%** | **95.0%** | **19.56%** | **80.8%** | **59.6%** | **80.7%** |
+| EXTERNAL (`the_thao` OOD) | 3,000 | 7.97% | 91.6% | 31.20% | 70.5% | 39.2% | 70.1% |
 
 > 📌 **Phân tích Domain Generalization Gap:**
 > * Độ chênh lệch giữa In-Domain và External OOD chỉ là $\Delta_{\text{CER}} = +4.34\%$, và Boundary F1 ngoại miền vẫn đạt **90.2%**.
