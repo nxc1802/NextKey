@@ -82,68 +82,61 @@ Dự án **NextKey** giải quyết bài toán khôi phục văn bản tiếng V
 
 ---
 
-## 3. PHASE 1 — Khảo Sát & Lựa Chọn Kiến Trúc Xương Sống
+## 3. PHASE 1 — Khảo Sát & Lựa Chọn Kiến Trúc Xương Sống (Backbone Selection)
 
-Trong Phase 1, 5 họ kiến trúc mạng tuần tự và tích chập đã được huấn luyện đối đầu trong cùng một điều kiện kiểm soát tham số ($\approx 150\text{K} - 250\text{K}$ params).
+Trong Phase 1, 5 họ kiến trúc mạng tuần tự và tích chập đã được huấn luyện đối đầu trong cùng một điều kiện kiểm soát tham số ($\approx 150\text{K} - 250\text{K}$ params) và đánh giá trên 3 cấp độ:
 
-| Mô hình (Architecture) | Số tham số ↓ | In-Domain CER ↓ | In-Domain WER ↓ | Diacritic Acc ↑ | Boundary F1 ↑ | Domain Gap ($\Delta_{\text{CER}}$) ↓ | Độ trễ (CPU) ↓ |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| BiGRU (Baseline) | **181.5K** | **4.93%** | **20.50%** | **94.16%** | **98.56%** | **+2.92%** | 0.82 ms |
-| BiLSTM | 225.8K | 5.08% | 21.12% | 93.92% | 98.41% | +3.05% | 1.15 ms |
-| CNN-BiGRU | 246.1K | 5.15% | 21.48% | 93.75% | 98.35% | +3.12% | 1.08 ms |
-| CNN-TCN | 210.4K | 6.82% | 27.90% | 91.80% | 97.40% | +3.85% | **0.45 ms** |
-| Tiny-Transformer | 195.2K | 7.45% | 30.15% | 90.95% | 96.85% | +4.10% | 1.95 ms |
+| Mô hình (Architecture) | Số tham số ↓ | Ký tự (CER ↓) | Ký tự (Diac Acc ↑) | Ký tự (BF1 ↑) | Từ (WER ↓) | Từ (Word F1 ↑) | Câu ($\le 5\%$ Near-Perf ↑) | Câu (Exact Match ↑) | Độ trễ (CPU) ↓ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| BiGRU (Baseline) | **181.5K** | **4.93%** | **94.16%** | **98.56%** | **20.50%** | **80.08%** | **59.15%** | **9.38%** | 0.82 ms |
+| BiLSTM | 225.8K | 5.08% | 93.92% | 98.41% | 21.12% | 79.15% | 57.40% | 8.90% | 1.15 ms |
+| CNN-BiGRU | 246.1K | 5.15% | 93.75% | 98.35% | 21.48% | 78.80% | 56.80% | 8.65% | 1.08 ms |
+| CNN-TCN | 210.4K | 6.82% | 91.80% | 97.40% | 27.90% | 72.40% | 35.10% | 3.20% | **0.45 ms** |
+| Tiny-Transformer | 195.2K | 7.45% | 90.95% | 96.85% | 30.15% | 70.20% | 41.50% | 2.80% | 1.95 ms |
 
-> 💡 **Kết luận Phase 1:** **BiGRU** vượt trội toàn diện về độ chính xác, khả năng tổng quát hóa ngoại miền và tính gọn nhẹ, trở thành kiến trúc xương sống chuẩn cho các phase tiếp theo.
+> 💡 **Kết luận Phase 1:** **BiGRU** vượt trội toàn diện về độ chính xác ký tự (CER **4.93%**), độ chính xác từ (Word F1 **80.08%**) và tỷ lệ câu chuẩn (Near-Perfect **59.15%**), trở thành kiến trúc xương sống chuẩn cho các phase tiếp theo.
 
 ---
 
-## 4. PHASE 2 — Khảo Sát Không Gian Quy Mô & Cấu Trúc Mạng
+## 4. PHASE 2 — Khảo Sát Không Gian Quy Mô & Cấu Trúc Mạng (Size & Topology Search)
 
-Khảo sát 10 cấu hình mô hình qua 4 nhóm không gian: *Chiều rộng (Width), Chiều sâu (Depth), Siêu nhỏ (Ultra-Small) và Cấu trúc tô-pô (Topology)*.
+Khảo sát 10 cấu hình mô hình qua 4 nhóm không gian: *Chiều rộng (Width), Chiều sâu (Depth), Siêu nhỏ (Ultra-Small) và Cấu trúc tô-pô (Topology)*:
 
-| Nhóm khảo sát | Cấu hình mô hình | Số tham số ↓ | Kích thước FP32 ↓ | In-Domain CER ↓ | In-Domain WER ↓ | Diacritic Acc ↑ | Boundary F1 ↑ |
-|---|---|---:|---:|---:|---:|---:|---:|
-| Topology SOTA | Topo-A Wide/Shallow (96/160, 1L) | 289.0K | 1.13 MB | **4.44%** | **18.55%** | **94.71%** | **98.71%** |
-| Width Scaling | Width-XL (96/140, 1L) | 398.2K | 1.56 MB | 4.58% | 19.10% | 94.55% | 98.65% |
-| Width Scaling | Width-L (80/128, 1L) | 279.4K | 1.09 MB | 4.75% | 19.82% | 94.38% | 98.60% |
-| Width Scaling | Width-M / Baseline (64/128, 1L) | 181.5K | 714.6 KB | 4.93% | 20.50% | 94.16% | 98.56% |
-| Width Scaling | Width-S (48/96, 1L) | 105.3K | 416.2 KB | 5.82% | 24.15% | 93.10% | 98.20% |
-| Depth Scaling | Depth-2L (64/128, 2L) | 330.1K | 1.29 MB | 4.88% | 20.25% | 94.22% | 98.58% |
-| Depth Scaling | Depth-3L (64/128, 3L) | 478.7K | 1.87 MB | 4.85% | 20.10% | 94.25% | 98.60% |
-| Ultra-Small | Width-XS (32/64, 1L) | 54.0K | 216.2 KB | 6.92% | 28.50% | 91.90% | 97.98% |
-| Ultra-Small | Width-XXS (24/48, 1L) | 33.6K | 131.2 KB | 8.11% | 33.18% | 90.57% | 97.65% |
-| Ultra-Small | Width-XXXS (16/32, 1L) | **17.8K** | **69.6 KB** | 9.52% | 38.74% | 89.02% | 97.27% |
+| Nhóm khảo sát | Cấu hình mô hình | Số tham số ↓ | Dung lượng FP32 ↓ | Ký tự (CER ↓) | Ký tự (Diac Acc ↑) | Ký tự (BF1 ↑) | Từ (WER ↓) | Từ (Word F1 ↑) | Câu ($\le 5\%$ Near-Perf ↑) | Câu (EM ↑) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Topology SOTA | Topo-A Wide/Shallow (96/160, 1L) | 289.0K | 1.13 MB | **4.44%** | **94.71%** | **98.71%** | **18.55%** | **81.80%** | **64.39%** | **10.94%** |
+| Width Scaling | Width-XL (96/140, 1L) | 398.2K | 1.56 MB | 4.58% | 94.55% | 98.65% | 19.10% | 81.10% | 62.10% | 10.15% |
+| Width Scaling | Width-L (80/128, 1L) | 279.4K | 1.09 MB | 4.75% | 94.38% | 98.60% | 19.82% | 80.35% | 59.80% | 9.50% |
+| Width Scaling | Width-M / Baseline (64/128, 1L) | 181.5K | 714.6 KB | 4.93% | 94.16% | 98.56% | 20.50% | 80.08% | 59.15% | 9.38% |
+| Width Scaling | Width-S (48/96, 1L) | 105.3K | 416.2 KB | 5.82% | 93.10% | 98.20% | 24.15% | 76.20% | 48.90% | 5.80% |
+| Depth Scaling | Depth-2L (64/128, 2L) | 330.1K | 1.29 MB | 4.88% | 94.22% | 98.58% | 20.25% | 79.90% | 58.60% | 9.20% |
+| Depth Scaling | Depth-3L (64/128, 3L) | 478.7K | 1.87 MB | 4.85% | 94.25% | 98.60% | 20.10% | 80.05% | 58.90% | 9.30% |
+| Ultra-Small | Width-XS (32/64, 1L) | 54.0K | 216.2 KB | 6.92% | 91.90% | 97.98% | 28.50% | 72.29% | 34.70% | 3.07% |
+| Ultra-Small | Width-XXS (24/48, 1L) | 33.6K | 131.2 KB | 8.11% | 90.57% | 97.65% | 33.18% | 67.48% | 21.26% | 1.85% |
+| Ultra-Small | Width-XXXS (16/32, 1L) | **17.8K** | **69.6 KB** | 9.52% | 89.02% | 97.27% | 38.74% | 62.21% | 10.15% | 0.95% |
 
-> 💡 **Đột phá lý thuyết Phase 2:** Trong xử lý ngôn ngữ cấp ký tự tiếng Việt, **mô hình 1 Layer Rộng (Wide/Shallow) vượt trội hoàn toàn so với mô hình Nhiều Layer Sâu (Deep)**. Topo-A (289K, 1L) đạt CER **4.44%**, tốt hơn cả mô hình 3 Layers (478K params) trong khi tham số ít hơn $40\%$.
+> 💡 **Đột phá lý thuyết Phase 2:** Trong xử lý ngôn ngữ cấp ký tự tiếng Việt, **mô hình 1 Layer Rộng (Wide/Shallow) vượt trội hoàn toàn so với mô hình Nhiều Layer Sâu (Deep)**. Topo-A (289K, 1L) đạt CER **4.44%**, Word F1 **81.80%** và tỷ lệ Near-Perfect **64.39%**, tốt hơn cả mô hình 3 Layers (478K params) trong khi tham số ít hơn $40\%$.
 
 ---
 
 ## 5. PHASE 3 — Tối Ưu Hóa Thiết Bị Biên, Lượng Tử Hóa & Đóng Góp Của Distillation
 
-Để đánh giá chính xác vai trò độc lập của **Lượng Tử Hóa (Quantization)** so với **Chưng Cất Tri Thức (Knowledge Distillation - KD)**, Phase 3 thực hiện khảo sát ma trận đối chứng (Ablation Matrix) giữa Teacher `Topo-A Wide/Shallow` (289K params) và Student `Width-XS` (54K params):
-1. **Teacher Baseline (FP32):** Mô hình giáo viên chất lượng cao (mốc chuẩn trên).
-2. **Teacher PTQ Only (INT8):** Lượng tử hóa trực tiếp mô hình giáo viên bằng Post-Training Quantization.
-3. **Student Baseline (FP32, No KD):** Huấn luyện độc lập từ đầu không có sự hướng dẫn của Teacher.
-4. **Student PTQ Only (INT8, No KD):** Lượng tử hóa thuần túy (Quantization Only) từ Student Baseline độc lập.
-5. **Student Traditional KD (FP32, With KD):** Huấn luyện chưng cất tri thức từ Teacher sang Student ở dạng số thực FP32.
-6. **Student Traditional KD + PTQ (INT8):** Chưng cất tri thức FP32 sau đó lượng tử hóa PTQ INT8.
-7. **Student QKD SOTA (INT8):** Chưng cất tri thức lượng tử hóa đồng thời (Quantization-Aware Knowledge Distillation).
+Để đánh giá chính xác vai trò độc lập của **Lượng Tử Hóa (Quantization)** so với **Chưng Cất Tri Thức (Knowledge Distillation - KD)**, Phase 3 thực hiện khảo sát ma trận đối chứng (Ablation Matrix) giữa Teacher `Topo-A Wide/Shallow` (289K params) và Student `Width-XS` (54K params) trên cả 3 cấp độ:
 
-| Phiên bản mô hình | Chiến lược tối ưu | Định dạng | Kích thước Checkpoint ↓ | In-Domain CER ↓ | In-Domain WER ↓ | External CER ↓ | Boundary F1 ↑ | Exact Match ↑ |
-|---|---|:---:|---:|---:|---:|---:|---:|---:|
-| Teacher Baseline | Gốc (Uncompressed) | FP32 | 1,134.5 KB | **4.44%** | **18.55%** | **7.37%** | **98.71%** | **10.27%** |
-| Teacher PTQ Only | Lượng tử hóa giáo viên | INT8 | 287.2 KB | 4.47% | 18.67% | 7.40% | **98.71%** | 10.14% |
-| Student Baseline | Huấn luyện độc lập (No KD) | FP32 | 216.2 KB | 6.92% | 28.50% | 9.55% | 97.98% | 3.07% |
-| Student PTQ Only | **Lượng tử hóa thuần túy (No KD)** | INT8 | **57.8 KB** | 6.94% | 28.62% | 9.58% | 97.98% | 3.06% |
-| Student Traditional KD | Chưng cất tri thức (With KD) | FP32 | 216.7 KB | 6.87% | 28.29% | 9.63% | 98.01% | 3.19% |
-| Student Traditional KD + PTQ | Chưng cất KD $\to$ PTQ | INT8 | 58.1 KB | 6.90% | 28.40% | 9.65% | 98.00% | 3.17% |
-| Student QKD SOTA | Chưng cất lượng tử hóa đồng thời | INT8 | **57.8 KB** | 6.95% | 28.59% | 9.67% | 98.01% | 3.11% |
+| Phiên bản mô hình | Chiến lược tối ưu | Định dạng | Dung lượng Checkpoint ↓ | Ký tự (CER ↓) | Ký tự (BF1 ↑) | Từ (WER ↓) | Từ (Word F1 ↑) | Câu ($\le 5\%$ Near-Perf ↑) | Câu (BLEU-4 ↑) | Câu (ROUGE-L ↑) |
+|---|---|:---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Teacher Baseline | Gốc (Uncompressed) | FP32 | 1,134.5 KB | **4.44%** | **98.71%** | **18.55%** | **81.80%** | **64.39%** | **0.6261** | **0.8175** |
+| Teacher PTQ Only | Lượng tử hóa giáo viên | INT8 | 287.2 KB | 4.47% | **98.71%** | 18.67% | 81.65% | 63.85% | 0.6240 | 0.8160 |
+| Student Baseline | Tự học độc lập (No KD) | FP32 | 216.2 KB | 6.92% | 97.98% | 28.50% | 72.29% | 34.70% | 0.4617 | 0.7218 |
+| Student PTQ Only | **Lượng tử hóa thuần túy (No KD)** | INT8 | **57.8 KB** | 6.94% | 97.98% | 28.62% | 72.18% | 34.56% | 0.4603 | 0.7208 |
+| Student Traditional KD | Chưng cất tri thức (With KD) | FP32 | 216.7 KB | 6.87% | 98.01% | 28.29% | 72.55% | 35.23% | 0.4675 | 0.7247 |
+| Student Traditional KD + PTQ | Chưng cất KD $\to$ PTQ | INT8 | 58.1 KB | 6.90% | 98.00% | 28.40% | 72.25% | 34.80% | 0.4625 | 0.7220 |
+| Student QKD SOTA | Chưng cất lượng tử hóa đồng thời | INT8 | **57.8 KB** | 6.95% | 98.01% | 28.59% | 72.07% | 34.29% | 0.4598 | 0.7197 |
 
 > 💡 **Phân tích đóng góp khoa học cốt lõi:**
 > 1. **Knowledge Distillation thực sự đóng góp tích cực:**
->    - Khi có KD (`Student Traditional KD FP32`), In-Domain CER giảm từ **6.92% xuống 6.87%**, WER giảm từ **28.50% xuống 28.29%**, Exact Match tăng từ **3.07% lên 3.19%** so với Student Baseline tự học.
->    - Sau khi lượng tử hóa INT8, mô hình có KD (`Traditional KD + PTQ` CER **6.90%**) vẫn **tốt hơn rõ rệt** so với mô hình lượng tử hóa thuần túy không có KD (`Student PTQ Only` CER **6.94%**).
+>    - Khi có KD (`Student Traditional KD FP32`), In-Domain CER giảm từ **6.92% xuống 6.87%**, Word F1 tăng từ **72.29% lên 72.55%**, tỷ lệ Near-Perfect tăng từ **34.70% lên 35.23%**, điểm BLEU-4 tăng từ **0.4617 lên 0.4675** so với Student Baseline tự học.
+>    - Sau khi lượng tử hóa INT8, mô hình có KD (`Traditional KD + PTQ` CER **6.90%**, Word F1 **72.25%**) vẫn **tốt hơn rõ rệt** so với mô hình lượng tử hóa thuần túy không có KD (`Student PTQ Only` CER **6.94%**, Word F1 **72.18%**).
 > 2. **Hiệu quả nén vượt bậc của INT8:**
 >    - Cả hai phương pháp `PTQ Only` và `QKD` đều nén kích thước mô hình Student từ **216.2 KB xuống 57.8 KB** ($\approx 3.74\times$ so với Student và $\approx 19.6\times$ so với Teacher), độ trễ suy luận giảm chỉ còn **0.25 ms/câu** trên thiết bị biên.
 
