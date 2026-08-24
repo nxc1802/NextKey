@@ -123,20 +123,20 @@ Khảo sát 10 cấu hình mô hình qua 4 nhóm không gian: *Chiều rộng (W
 
 Để đánh giá chính xác vai trò độc lập của **Lượng Tử Hóa (Quantization)** so với **Chưng Cất Tri Thức (Knowledge Distillation - KD)**, Phase 3 thực hiện khảo sát ma trận đối chứng (Ablation Matrix) giữa Teacher `Topo-A Wide/Shallow` (289K params) và Student `Width-XS` (54K params) trên cả 3 cấp độ:
 
-| Phiên bản mô hình | Chiến lược tối ưu | Định dạng | Dung lượng Checkpoint ↓ | Ký tự (CER ↓) | Ký tự (BF1 ↑) | Từ (WER ↓) | Từ (Word F1 ↑) | Câu ($\le 5\%$ Near-Perf ↑) | Câu (BLEU-4 ↑) | Câu (ROUGE-L ↑) |
-|---|---|:---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Teacher Baseline | Gốc (Uncompressed) | FP32 | 1,134.5 KB | **4.44%** | **98.71%** | **18.55%** | **81.80%** | **64.39%** | **0.6261** | **0.8175** |
-| Teacher PTQ Only | Lượng tử hóa giáo viên | INT8 | 287.2 KB | 4.47% | **98.71%** | 18.67% | 81.65% | 63.85% | 0.6240 | 0.8160 |
-| Student Baseline | Tự học độc lập (No KD) | FP32 | 216.2 KB | 6.92% | 97.98% | 28.50% | 72.29% | 34.70% | 0.4617 | 0.7218 |
-| Student PTQ Only | **Lượng tử hóa thuần túy (No KD)** | INT8 | **57.8 KB** | 6.94% | 97.98% | 28.62% | 72.18% | 34.56% | 0.4603 | 0.7208 |
-| Student Traditional KD | Chưng cất tri thức (With KD) | FP32 | 216.7 KB | 6.87% | 98.01% | 28.29% | 72.55% | 35.23% | 0.4675 | 0.7247 |
-| Student Traditional KD + PTQ | Chưng cất KD $\to$ PTQ | INT8 | 58.1 KB | 6.90% | 98.00% | 28.40% | 72.25% | 34.80% | 0.4625 | 0.7220 |
-| Student QKD SOTA | Chưng cất lượng tử hóa đồng thời | INT8 | **57.8 KB** | 6.95% | 98.01% | 28.59% | 72.07% | 34.29% | 0.4598 | 0.7197 |
+| Phiên bản mô hình | Chiến lược tối ưu | Định dạng | Dung lượng Checkpoint ↓ | Ký tự (CER ↓) | Ký tự (BF1 ↑) | Từ (WER ↓) | Từ (Word F1 ↑) | Câu ($\le 5\%$ Near-Perf ↑) | Câu (EM ↑) | Câu (BLEU-4 ↑) | Câu (ROUGE-L ↑) |
+|---|---|:---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Teacher Baseline | Gốc (Uncompressed) | FP32 | 1,134.5 KB | **4.44%** | **98.71%** | **18.55%** | **81.80%** | **64.39%** | **10.27%** | **0.6261** | **0.8175** |
+| Teacher PTQ Only | Lượng tử hóa giáo viên | INT8 | 287.2 KB | 4.47% | **98.71%** | 18.67% | 81.65% | 63.85% | 10.14% | 0.6240 | 0.8160 |
+| Student Baseline | Tự học độc lập (No KD) | FP32 | 216.2 KB | 6.92% | 97.98% | 28.50% | 72.29% | 34.70% | 3.07% | 0.4617 | 0.7218 |
+| Student PTQ Only | **Lượng tử hóa thuần túy (No KD)** | INT8 | **57.8 KB** | 6.94% | 97.98% | 28.62% | 72.18% | 34.56% | 3.06% | 0.4603 | 0.7208 |
+| Student Traditional KD | Chưng cất tri thức (With KD) | FP32 | 216.7 KB | 6.87% | 98.01% | 28.29% | 72.55% | 35.23% | 3.19% | 0.4675 | 0.7247 |
+| Student Traditional KD + PTQ | Chưng cất KD $\to$ PTQ | INT8 | 58.1 KB | 6.90% | 98.00% | 28.40% | 72.25% | 34.80% | 3.17% | 0.4625 | 0.7220 |
+| Student QKD SOTA | Chưng cất lượng tử hóa đồng thời | INT8 | **57.8 KB** | 6.95% | 98.01% | 28.59% | 72.07% | 34.29% | 3.11% | 0.4598 | 0.7197 |
 
 > 💡 **Phân tích đóng góp khoa học cốt lõi:**
 > 1. **Knowledge Distillation thực sự đóng góp tích cực:**
->    - Khi có KD (`Student Traditional KD FP32`), In-Domain CER giảm từ **6.92% xuống 6.87%**, Word F1 tăng từ **72.29% lên 72.55%**, tỷ lệ Near-Perfect tăng từ **34.70% lên 35.23%**, điểm BLEU-4 tăng từ **0.4617 lên 0.4675** so với Student Baseline tự học.
->    - Sau khi lượng tử hóa INT8, mô hình có KD (`Traditional KD + PTQ` CER **6.90%**, Word F1 **72.25%**) vẫn **tốt hơn rõ rệt** so với mô hình lượng tử hóa thuần túy không có KD (`Student PTQ Only` CER **6.94%**, Word F1 **72.18%**).
+>    - Khi có KD (`Student Traditional KD FP32`), In-Domain CER giảm từ **6.92% xuống 6.87%**, Word F1 tăng từ **72.29% lên 72.55%**, Exact Match tăng từ **3.07% lên 3.19%**, tỷ lệ Near-Perfect tăng từ **34.70% lên 35.23%**, điểm BLEU-4 tăng từ **0.4617 lên 0.4675** so với Student Baseline tự học.
+>    - Sau khi lượng tử hóa INT8, mô hình có KD (`Traditional KD + PTQ` CER **6.90%**, Word F1 **72.25%**, EM **3.17%**) vẫn **tốt hơn rõ rệt** so với mô hình lượng tử hóa thuần túy không có KD (`Student PTQ Only` CER **6.94%**, Word F1 **72.18%**, EM **3.06%**).
 > 2. **Hiệu quả nén vượt bậc của INT8:**
 >    - Cả hai phương pháp `PTQ Only` và `QKD` đều nén kích thước mô hình Student từ **216.2 KB xuống 57.8 KB** ($\approx 3.74\times$ so với Student và $\approx 19.6\times$ so với Teacher), độ trễ suy luận giảm chỉ còn **0.25 ms/câu** trên thiết bị biên.
 
