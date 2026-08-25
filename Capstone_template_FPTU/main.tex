@@ -1,0 +1,159 @@
+\documentclass[a4paper,12pt, final]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[english]{babel}
+\usepackage{xcolor}
+
+%\usepackage{etoolbox}  % Required to patch the acronym package layout
+\usepackage{acronym}
+
+
+\usepackage{algorithm}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage{times}
+\usepackage{longtable}
+\usepackage{makecell}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{multirow}
+\usepackage{appendix}
+\usepackage{tocloft}
+\usepackage{cite}
+\usepackage{rotating}
+\usepackage{datetime2}
+\usepackage[hidelinks]{hyperref}
+
+\cftchapnumwidth=3em
+
+\newcommand{\btext}[1]{{\color{blue}#1}}
+\newcommand{\rtext}[1]{{\color{red}#1}}
+
+
+% 1. Change the default display name to "References"
+
+% 2. Patch the bibliography environment to make it a numbered chapter
+\patchcmd{\thebibliography}
+  {\chapter*{\bibname}}                 % Find this (unnumbered chapter)
+  {\chapter{\bibname}\label{refs}}      % Replace with this (numbered chapter + label)
+  {}{}
+
+
+% Roman chapter numbers, no "Chapter" word
+% \titleformat{\chapter}[hang]
+%   {\normalfont\bfseries\Huge}
+%   {\thechapter} % Only the Roman numeral
+%   {1em}
+%   {} % Title will be centered 
+
+\titleformat{\chapter}[hang]{\bfseries\LARGE}{\thechapter}{1em}{}
+\titleformat{\section}[hang]{\bfseries\Large}{\thesection}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries\normalsize}{\thesubsection}{1em}{}
+\titlespacing{\chapter}{0pt}{0.8\baselineskip}{0.8\baselineskip}
+
+\usepackage{setspace}
+\setstretch{1.2}
+
+\captionsetup{justification=centering, font=small}
+
+\geometry{
+    a4paper,
+    left=3cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm
+}
+
+\setcounter{secnumdepth}{3}
+\renewcommand{\thechapter}{\Roman{chapter}.}
+\renewcommand{\thesection}{\arabic{section}.}
+\renewcommand{\thesubsection}{\thesection\arabic{subsection}.}
+\renewcommand{\thesubsubsection}{\thesubsection\arabic{subsubsection}.}
+
+%\captionsetup[table]{position=bottom}
+\numberwithin{equation}{section}
+
+%pagestyle
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{\thepage}
+\newcommand{\euro}{\EUR\xspace}
+
+\usepackage{tabularx}
+\usepackage{array}
+\renewcommand{\arraystretch}{1.2}
+
+
+
+\usepackage{xltabular}
+\usepackage{ltcaption}
+
+% ===== Multi-page WBS table =====
+\usepackage{xltabular}
+\usepackage{ltcaption}
+
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+\begin{document}
+\input{firstpage}
+% For Capstone projects only
+\newpage
+
+\input{Abstract.tex}
+\newpage
+
+\input{Acknowledgment.tex}
+\newpage
+
+\thispagestyle{empty}
+\newpage
+
+\vspace{2\baselineskip}
+
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+\input{Acronyms}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/Project_Introduction}
+% \input{chapters/New_Project_Introduction}
+\input{chapters/Project_Management_Plan}
+%\input{chapters/Existing_Systems}
+\input{chapters/Methodology}
+\input{chapters/Results_Discussion}
+\input{chapters/System_Design}
+\input{chapters/Conclusion}
+\input{chapters/Ethical_Declaration}
+\input{chapters/Appendices}
+
+\newpage
+\input{chapters/References} % this contains the instructions only
+
+% IEEE style is very common in electrical engineering, computer science, and related fields. 
+% It uses a numbered citation system within square brackets in the text, with a numerically ordered bibliography at the end.
+\renewcommand{\bibname}{References}
+\bibliographystyle{IEEEtran} 
+\bibliography{references}
+
+% \input{Appendix}
+
+\end{document}

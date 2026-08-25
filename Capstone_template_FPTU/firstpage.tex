@@ -1,0 +1,54 @@
+\begin{titlepage}
+\begin{center}
+\includegraphics[width=0.35\linewidth]{logos/logoFPTU.png}\\[1cm]
+\end{center}
+
+\begin{center}
+{\LARGE Faculty of Artificial Intelligence}\\[0.2cm]
+\vspace{1.5cm}
+{\Large Capstone Project Report }\\[0.6cm]
+
+% Title
+\rule{\linewidth}{0.5mm} \\[0.2cm]
+{ \LARGE \bfseries Personalized and Edge-Efficient Vietnamese Compact Writing Restoration with Keyboard-Aware Typo Correction
+ \\[0.2cm] }
+\rule{\linewidth}{0.5mm} \\[1.2cm]
+
+% Authors and supervisor
+\noindent
+
+\begin{center}            % keeps it centred on the page
+\renewcommand{\arraystretch}{1.3}  % extra row height for nicer spacing
+\begin{tabular}{|p{0.32\textwidth}|p{0.34\textwidth} p{0.28\textwidth}|}
+\hline
+\multicolumn{3}{|c|}{\Large \textbf{NextKey}}\\
+\hline
+\multirow{3}{=}{\hfill\textbf{Group Members}} 
+  & Student Name 1 & Student ID 1\\
+  & Student Name 2 & Student ID 2\\
+  & Student Name 3 & Student ID 3\\
+\hline
+\multirow{1}{=}{\hfill\textbf{Supervisor}}
+  & \multicolumn{2}{l|}{Title \& Supervisor Name}\\
+\hline
+\multirow{1}{=}{\hfill\textbf{Ext Supervisor}}
+  &  \multicolumn{2}{l|}{Title \& External Supervisor Name (Optional)}\\
+\hline
+\multirow{1}{=}{\hfill\textbf{Capstone Project Code}}
+  &  \multicolumn{2}{l|}{AIP491}\\
+\hline
+\end{tabular}
+\end{center}
+
+\vfill %
+
+% Create a custom format that only shows "Month Year"
+\DTMnewdatestyle{monthyear}{%
+  \renewcommand{\DTMdisplaydate}[4]{%
+    \DTMenglishmonthname{##2} ##1}%
+}
+
+% Bottom of the page
+{Da Nang, \DTMsetdatestyle{monthyear}\today}
+\end{center}
+\end{titlepage}
