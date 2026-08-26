@@ -1,12 +1,8 @@
+
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-Rapid digital communication on mobile devices has led to widespread adoption of compact, informal Vietnamese writing characterized by unaccented text, omitted inter-word whitespace, and keyboard-adjacent typing errors on virtual touchscreens. Traditional rule-based input method editors (\ac{IME}) and statistical models are incapable of rectifying such multi-faceted compound corruptions, while large language models are computationally prohibitive for client-side edge deployment.
-
-This capstone project presents \textbf{NextKey}, an edge-efficient artificial intelligence system engineered to simultaneously perform character typo correction, word boundary segmentation, and diacritic restoration in a single inference pass. We introduce the \textbf{JDWR v1} multi-domain dataset ($> 840,000$ sentences) and a realistic keyboard-adjacency noise engine simulating mobile \ac{QWERTY} typing behaviors. We propose \texttt{CascadeTriBiGRU}, a novel architecture incorporating local 1D convolutions, a shared bidirectional \ac{GRU} backbone, and hierarchical cross-head feature gating to condition diacritic assignment on corrected characters and word boundaries. 
-
-Extensive empirical evaluations across 4 research phases demonstrate that \texttt{CascadeTriBiGRU} achieves a State-of-the-Art clean Character Error Rate (\ac{CER}) of $4.79\%$, Word Accuracy of $80.44\%$, Typo Recovery Rate of $65.92\%$, and a Sentence Near-Perfect Rate ($\text{CER} \le 5\%$) of $59.57\%$ on the full held-out test suite. Through Knowledge Distillation and \ac{INT8} quantization, the model is compressed to under $60\text{ KB}$ with a sub-millisecond latency ($0.25\text{ ms}$ on \ac{CPU}), delivering a robust, privacy-preserving, offline-capable restoration engine for next-generation intelligent mobile keyboards.
+This capstone project, NextKey, addresses the cognitive and physical challenges of typing Vietnamese on mobile devices caused by traditional rule-based methods like Telex and VNI. We propose an intelligent, end-to-end sequence-to-sequence Deep Learning system that allows users to type continuous, unaccented, and unsegmented Latin characters (similar to Pinyin). The model jointly performs word segmentation and diacritic restoration to predict the fully formatted Vietnamese sentence in real time. To ensure seamless interaction and absolute data privacy, the architecture is heavily optimized using Knowledge Distillation and Quantization for offline, low-latency execution on edge devices. This novel input method aims to significantly improve typing ergonomics, maximize keystroke savings, and provide an accessible language scaffold for all users.
 
 \vspace{0.5cm}
-\noindent
-\textbf{Keywords:} Vietnamese Natural Language Processing, Compact Writing Restoration, Diacritic Restoration, Keyboard Typo Correction, Multi-Task Learning, CascadeTriBiGRU, Edge AI, Model Quantization, Knowledge Distillation.
+\textbf{Keywords:} Vietnamese Input Method, Diacritic Restoration, Word Segmentation, Sequence-to-Sequence Modeling, Edge Computing, Offline Inference.

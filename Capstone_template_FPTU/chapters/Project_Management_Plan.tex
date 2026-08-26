@@ -3,8 +3,6 @@
 \section{Team Work}
 
 \subsection{Team Structure and Roles}
-The NextKey project is conducted by a dedicated team of three Artificial Intelligence engineering undergraduates at FPT University. To balance theoretical exploration with robust software engineering, responsibilities are organized into specialized research and development tracks:
-
 \begin{table}[H]
 \centering
 \small
@@ -13,126 +11,100 @@ The NextKey project is conducted by a dedicated team of three Artificial Intelli
 \hline
 \textbf{Role} & \textbf{Assignee} & \textbf{Core Responsibilities} \\
 \hline
-\textbf{Lead AI Researcher \& Architecture Track} & Team Member 1 & 
-$\bullet$ Formulate mathematical problem objectives and loss functions. \newline
-$\bullet$ Design sequence modeling architectures and multi-task feature flows. \newline
-$\bullet$ Oversee baseline benchmarking and model-selection decision gates. \newline
-$\bullet$ Lead academic thesis drafting and theoretical error analysis. \\
+\textbf{Leader / AI Researcher} & Tran Dinh Gia \newline (SE181550) & 
+$\bullet$ Lead the project and manage the schedule. \newline
+$\bullet$ Formulate sequence modeling architectures and multi-task learning objectives. \newline
+$\bullet$ Oversee model training and hyperparameter tuning. \\
 \hline
-\textbf{Edge Systems \& Model Optimization Track} & Team Member 2 & 
-$\bullet$ Formulate Knowledge Distillation (\ac{KD}) loss formulations. \newline
-$\bullet$ Implement \ac{PTQ} and \ac{QKD} quantization pipelines. \newline
-$\bullet$ Benchmark \ac{CPU} latency, throughput, and memory consumption. \newline
-$\bullet$ Manage distributed training runs and GPU resource allocation. \\
+\textbf{Edge Systems \& Model Optimization} & Truong Nhat Quang \newline (DE180544) & 
+$\bullet$ Optimize decoding strategies (e.g., Beam Search). \newline
+$\bullet$ Implement Knowledge Distillation and model quantization. \newline
+$\bullet$ Benchmark inference latency and resource consumption on edge hardware. \\
 \hline
-\textbf{Data Engineering \& Software Track} & Team Member 3 & 
-$\bullet$ Curate the multi-domain JDWR v1 dataset ($847\text{K}$ sentences). \newline
-$\bullet$ Develop the 6-dimensional keyboard-adjacency synthetic noise generator. \newline
-$\bullet$ Implement FastAPI backend services and interactive Streamlit UI demo. \newline
-$\bullet$ Maintain \ac{WBS} schedule tracking and automated testing pipelines. \\
+\textbf{Data Engineering \& Backend Integration} & Nguyen Xuan Cuong \newline (DE180528) & 
+$\bullet$ Construct and preprocess the large-scale Vietnamese parallel corpus. \newline
+$\bullet$ Develop the data augmentation and synthetic noise generation pipelines. \newline
+$\bullet$ Develop the offline inference backend and system integration APIs. \\
 \hline
 \end{tabularx}
-\caption{Team Structure, Research Tracks, and Role Allocations}
+\caption{Team Structure, Roles, and Responsibilities}
 \label{tab:team_roles}
 \end{table}
 
 \subsection{Communication Plan}
-To ensure methodological alignment, rapid issue resolution, and steady milestone progression, the team adheres to a multi-tiered communication framework:
 \begin{itemize}
-    \item \textbf{Daily Standups (Asynchronous / 15 Minutes):} Conducted via dedicated Slack/Discord channels to track daily commitments, synchronize code changes, and identify technical blockers early.
-    \item \textbf{Weekly Advisor Consultation (1 Hour):} Formal weekly meetings with the Academic Supervisor to review experimental logs, evaluate empirical trade-offs, refine theoretical formulations, and validate subsequent sprint objectives.
-    \item \textbf{Version Control and Collaborative Engineering:} Centralized GitHub repository with branch protection rules. All code additions require structured pull requests, passing automated test suites, and peer review prior to integration.
-    \item \textbf{Shared Research Registry:} Systematized tracking of model configurations, random seeds, training checkpoints, evaluation logs, and hyperparameter matrices across all experimental phases.
+    \item \textbf{Daily Standups (Asynchronous):} Conducted via messaging platforms to track daily commitments and identify technical blockers.
+    \item \textbf{Weekly Supervisor Consultation:} Formal weekly meetings with Ass.Prof Nguyen Luong Vuong to review experimental results, validate model performance, and plan subsequent phases.
+    \item \textbf{Version Control:} Centralized GitHub repository for code collaboration, utilizing Pull Requests and peer reviews.
 \end{itemize}
 
 \section{Project Management Approach}
 
 \subsection{Work Breakdown Structure}
-The research and development lifecycle is organized into six structured Work Packages (WPs) spanning a 16-week timeline, following an empirical and iterative milestone-driven methodology:
-
 \begin{table}[H]
 \centering
 \small
 \renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|l|p{3.4cm}|X|c|c|}
+\begin{tabularx}{\textwidth}{|p{1.5cm}|p{3.8cm}|X|c|}
 \hline
-\textbf{WBS ID} & \textbf{Work Package / Milestone} & \textbf{Scope \& Key Deliverables} & \textbf{Timeline} & \textbf{Owner} \\
+\textbf{Phase} & \textbf{Milestone} & \textbf{Key Deliverables} & \textbf{Timeline} \\
 \hline
-\textbf{WP 1.0} & \textbf{Research Scoping \& Foundation} & Problem definition, research contract, taxonomy design, repository scaffold & Weeks 1--2 & All \\
+\textbf{Phase 1} & \textbf{Literature Review \& Data Pipeline} & Vietnamese text corpora collection, synthetic noise generation (diacritic stripping, space erasure), tokenization setup. & Weeks 1--4 \\
 \hline
-\textbf{WP 2.0} & \textbf{Data Pipeline \& Noise Engine} & JDWR v1 dataset curation, spatial QWERTY noise generator, validation protocol & Weeks 3--4 & M3 \\
+\textbf{Phase 2} & \textbf{Model Development \& Training} & Fine-tuning pretrained sequence-to-sequence model (T5-based), hyperparameter optimization, error analysis. & Weeks 5--9 \\
 \hline
-\textbf{WP 3.0} & \textbf{Baseline \& Backbone Search} & Implementation of rule heuristics, BiGRU, LSTM, CNN, TCN, and Transformer & Weeks 5--6 & M1 \\
+\textbf{Phase 3} & \textbf{Model Optimization \& Evaluation} & Decoding optimization, knowledge distillation, quantization, benchmarking BLEU, WER, and latency metrics. & Weeks 10--14 \\
 \hline
-\textbf{WP 4.0} & \textbf{Topological Scaling \& Search} & Width vs depth exploration, 1-layer wide paradigms, ultra-small student sizing & Weeks 7--8 & M1, M2 \\
+\textbf{Phase 4} & \textbf{Backend \& System Integration} & Development of offline inference backend, API design for keyboard interaction, functional testing. & Weeks 15--17 \\
 \hline
-\textbf{WP 5.0} & \textbf{Edge Distillation \& Quantization} & Knowledge Distillation, INT8 PTQ/QKD pipelines, CPU latency profiling & Weeks 9--10 & M2 \\
-\hline
-\textbf{WP 6.0} & \textbf{Multi-Task Conditioning} & Joint correction, boundary, and diacritic gating architectures & Weeks 11--12 & M1, M2 \\
-\hline
-\textbf{WP 7.0} & \textbf{System Integration \& Demo} & FastAPI REST backend, Streamlit interactive UI, client SDK prototype & Weeks 13--14 & M3 \\
-\hline
-\textbf{WP 8.0} & \textbf{Evaluation \& Final Thesis} & Cross-domain benchmark analysis, error taxonomy, final thesis, and defense slides & Weeks 15--16 & All \\
+\textbf{Phase 5} & \textbf{Validation \& Deployment} & Comprehensive user testing, Keystroke Savings evaluation, final documentation, and project defense preparation. & Weeks 18--20 \\
 \hline
 \end{tabularx}
-\caption{Work Breakdown Structure (WBS) and Research Project Timeline}
+\caption{Work Breakdown Structure and Project Timeline}
 \label{tab:wbs_table}
 \end{table}
 
 \subsection{Risk Management}
-A proactive Risk Register is established to identify potential methodological, operational, and computational challenges, along with concrete mitigation strategies:
-
 \begin{table}[H]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.0cm}|c|c|X|X|}
+\begin{tabularx}{\textwidth}{|p{2.5cm}|c|c|X|X|}
 \hline
-\textbf{Identified Risk} & \textbf{Sev.} & \textbf{Prob.} & \textbf{Potential Research Impact} & \textbf{Proactive Mitigation Strategy} \\
+\textbf{Identified Risk} & \textbf{Sev.} & \textbf{Prob.} & \textbf{Impact} & \textbf{Mitigation Strategy} \\
 \hline
-\textbf{Scope Creep} & High & Med & Delayed completion of core objectives due to over-extended feature exploration & Strictly enforce P0/P1 prioritization; defer complex user-specific adapter training to future work. \\
+\textbf{Domain Generalization Gap} & High & Med & High accuracy on training data but poor performance on noisy real-world typing. & Include synthetic typo noise (fat-finger errors) and non-standard words (teencode) during training. \\
 \hline
-\textbf{Synthetic-to-Real Domain Gap} & High & Med & High accuracy on synthetic test sets failing to generalize to authentic human typing & Benchmark against isolated external OOD domain (\textit{the\_thao}); calibrate noise probabilities using real user error patterns. \\
+\textbf{High Inference Latency} & High & Med & Model responds too slowly ($>50\text{ms}$), disrupting the typing experience. & Aggressively apply Knowledge Distillation and INT8 quantization; utilize lightweight Transformer variants. \\
 \hline
-\textbf{Quantization Degradation} & Med & Low & Severe drop in linguistic restoration fidelity after INT8 weight quantization & Integrate Knowledge Distillation prior to PTQ; establish strict CER parity thresholds between FP32 and INT8. \\
-\hline
-\textbf{Compute Resource Constraints} & High & Med & Training queue bottlenecks during large-scale corpus exploration & Implement memory-efficient data loaders; leverage distributed multi-GPU Kaggle cloud allocations. \\
-\hline
-\textbf{Keystroke Privacy Concerns} & High & Low & User hesitation and privacy risks associated with logging private input & Guarantee 100\% client-side, offline edge inference; enforce zero remote data transmission. \\
+\textbf{Compute Resource Limits} & Med & High & Slow training iterations due to large model sizes and extensive dataset. & Leverage distributed cloud GPUs and mixed-precision training (FP16). \\
 \hline
 \end{tabularx}
-\caption{Project Risk Register and Mitigation Framework}
+\caption{Risk Register and Mitigation Strategies}
 \label{tab:risk_register}
 \end{table}
 
-\subsection{Quality Management Plan}
-To ensure academic rigor, empirical reproducibility, and software reliability:
+\subsection{Quality Management}
 \begin{itemize}
-    \item \textbf{Strict Reproducibility Protocols:} All dataset generation splits, random shuffles, weight initializations, and training runs are seeded deterministically with seed \texttt{42}.
-    \item \textbf{Automated Testing Suite:} Continuous testing via \texttt{pytest} verifying data transformation schemas, tensor dimensionality alignment, loss backward flows, and inference pipelines.
-    \item \textbf{Standardized 3-Tier Metric Harness:} Candidate models are universally evaluated across Character-level (\ac{CER}, \ac{BF1}), Word-level (\ac{WER}, \ac{WAcc}), and Sentence-level (\ac{EM}, Near-Perfect $\le 5\%$, \ac{BLEU}-4, \ac{ROUGE}-L) metrics.
-    \item \textbf{Zero Test Contamination:} The 159,172 external \textit{the\_thao (Sports)} sentences remain completely isolated from training and hyperparameter tuning to ensure uncompromised out-of-distribution evaluation.
+    \item \textbf{Linguistic Accuracy Metrics:} Evaluate using Word Error Rate (WER), Character Error Rate (CER), Exact Match ratio, and BLEU Score.
+    \item \textbf{Performance Metrics:} Ensure inference latency remains under 50ms per keystroke event for seamless interaction.
+    \item \textbf{Ergonomic Metrics:} Measure Keystroke Savings (KS) to quantify the reduction in physical typing effort compared to standard Telex.
 \end{itemize}
 
-\subsection{Budget and Resource Allocation}
-The NextKey project operates under an open-source, resource-efficient model with zero capital expenditure:
+\subsection{Budget and Funding (Optional)}
 \begin{itemize}
-    \item \textbf{Computational Infrastructure:} Cloud-hosted dual Tesla T4 GPUs (via Kaggle and Google Colab academic allocations) combined with local Apple Silicon workstations for rapid prototyping.
-    \item \textbf{Software Stack:} Fully open-source ecosystem including PyTorch, Hugging Face Transformers, FastAPI, Streamlit, and Git.
-    \item \textbf{Total Direct Financial Budget:} \$0.00 USD.
+    \item \textbf{Infrastructure:} Utilizing free-tier or academic allocations on platforms like Kaggle, Google Colab, and local workstations.
+    \item \textbf{Total Budget:} \$0.00 USD.
 \end{itemize}
 
 \subsection{Change Management Process}
-To accommodate necessary technical adaptations without derailing the overall project schedule:
-\begin{enumerate}
-    \item \textbf{Gate 1 (Smoke Run Gate):} Any candidate neural architecture that fails to demonstrate training loss convergence within 1,000 steps or exhibits unacceptable latency is discarded early.
-    \item \textbf{Gate 2 (Objective Benchmark Gate):} Final architectural decisions must be strictly justified by quantitative metric improvements on shared validation splits rather than subjective preference.
-    \item \textbf{Kill Criteria for Extensions:} Secondary research extensions (e.g., dynamic online personalization) are postponed immediately if the primary multi-task restoration pipeline requires further stabilization.
-\end{enumerate}
-
-\subsection{Project Closure and Deliverables}
-Upon reaching the final project milestone:
 \begin{itemize}
-    \item \textbf{Artifact and Checkpoint Handover:} All quantized checkpoints, configuration manifests, vocabulary mappings, and evaluation JSON reports are archived with cryptographic SHA-256 checksums.
-    \item \textbf{Academic Documentation:} Complete, reproducible source code repositories, benchmark logs, and technical defense slides prepared for capstone examination.
+    \item \textbf{Architecture Pivot:} If a chosen model architecture fails to meet latency requirements by Phase 3, the team will pivot to a smaller predefined baseline (e.g., CNN-LSTM hybrid).
+    \item \textbf{Scope Adjustment:} Secondary features like personalized user dictionaries will be deprioritized if the core continuous typing engine requires extended development time.
+\end{itemize}
+
+\subsection{Closure and Evaluation}
+\begin{itemize}
+    \item \textbf{Deliverables Handover:} Source code, trained model weights, API documentation, and evaluation reports.
+    \item \textbf{Final Thesis:} A comprehensive academic report detailing the methodology, empirical results, and system architecture.
 \end{itemize}

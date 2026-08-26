@@ -4,122 +4,62 @@
 
 \subsection{Project Information}
 \begin{itemize}[leftmargin=1.5cm]
-    \item \textbf{Project Title:} NextKey: Personalized and Edge-Efficient Vietnamese Compact Writing Restoration with Keyboard-Aware Typo Correction
-    \item \textbf{Short Title:} NextKey: Vietnamese Compact Writing Restoration
+    \item \textbf{Project Title:} An Offline Intelligent Vietnamese Input Method Based on Deep Learning
     \item \textbf{Project Code:} AIP491 (Capstone Project in Artificial Intelligence)
     \item \textbf{Academic Institution:} Faculty of Artificial Intelligence, FPT University Da Nang Campus
     \item \textbf{Team Members:}
     \begin{itemize}
-        \item Member 1: AI / Deep Learning Research Specialist (Student ID: DE18xxxx)
-        \item Member 2: Edge Systems \& Model Optimization Engineer (Student ID: DE18xxxx)
-        \item Member 3: Data Engineering \& Full-Stack Lead (Student ID: DE18xxxx)
+        \item Leader: Tran Dinh Gia (Student ID: SE181550)
+        \item Member 1: Truong Nhat Quang (Student ID: DE180544)
+        \item Member 2: Nguyen Xuan Cuong (Student ID: DE180528)
     \end{itemize}
-    \item \textbf{Supervisor:} Academic Supervisor, Faculty of Artificial Intelligence
+    \item \textbf{Supervisor:} Ass.Prof Nguyen Luong Vuong
 \end{itemize}
 
 \subsection{Project Overview}
-In contemporary digital communication, text input on mobile touchscreens has become an indispensable aspect of daily productivity and social interaction. However, typing Vietnamese on compact virtual keyboards remains inherently challenging due to geometric constraints, complex tonal diacritics, and rapid typing habits. Consequently, users frequently adopt unaccented shorthand, omit inter-word whitespace, make keyboard-adjacent typing mistakes, leave residual \ac{IME} composition codes, and employ informal abbreviations.
-
-The \textbf{NextKey} project proposes an open, research-driven framework for end-to-end Vietnamese compact writing restoration. Rather than treating diacritic restoration, word segmentation, and typographical error correction as separate, disconnected tasks, NextKey formulates the problem as a unified sequence transformation task optimized for sub-millisecond edge execution.
-
-This document is structured as follows:
-\begin{enumerate}[label=\textbf{Chapter \Roman*.}]
-    \item \textbf{Project Introduction:} Establishes the research motivation, formal problem definition, critical assessment of existing systems, foundational research questions, objectives, significance, and operational scope.
-    \item \textbf{Project Management Plan:} Details the organizational structure, communication protocols, multi-stage \ac{WBS}, risk register, quality control framework, and change management procedures.
-    \item \textbf{Methodology \& Architecture Exploration:} Formulates the mathematical framework, realistic synthetic noise taxonomy, candidate neural model exploration spaces, multi-task conditioning strategies, and edge compression techniques.
-    \item \textbf{Results \& Empirical Discussion:} Reports systematic benchmark findings across architectural families, topological scaling regimes, edge quantization paradigms, and cross-domain generalization protocols.
-    \item \textbf{System Design \& Interactive Demonstration:} Outlines the modular backend service, client interfaces, and real-time input pipeline.
-    \item \textbf{Conclusion \& Ethical Considerations:} Synthesizes the core research findings, acknowledges limitations, and outlines future research trajectories.
-\end{enumerate}
+In the modern digital communication era, virtual keyboards act as the central interface connecting human thought with computer systems. For the Vietnamese language, traditional input methods like Telex and VNI require users to explicitly encode tone marks and diacritics. This project proposes an intelligent Vietnamese Input Method Editor (IME) that allows users to type a continuous sequence of Latin characters without accents or spaces (similar to the Pinyin input method for Chinese). Utilizing an end-to-end sequence-to-sequence architecture based on Deep Learning, the system automatically predicts the intended Vietnamese sentence with proper word boundaries and diacritics. The model is optimized for low-latency inference and designed to run entirely offline, preserving user privacy while providing a seamless typing experience.
 
 \section{Project Background}
 
 \subsection{Overview of the Field}
-Vietnamese is an Austroasiatic, tonal language that utilizes the Latin-based \textit{Quoc Ngu} writing system. The orthography incorporates a sophisticated system of diacritical marks: 6 tone registers (unaccented, acute, grave, hook above, tilde, and dot below) combined with phonetic vowel and consonant modifications. The omission of diacritics introduces pervasive lexical ambiguity; for instance, the unaccented syllable \textit{"ca"} may correspond to multiple distinct words such as \textit{"ca"} (song/case), \textit{"c\'a"} (fish), \textit{"c\`a"} (eggplant), or \textit{"c\textasciicaron{a}"} (all).
+Vietnamese is an isolating language with a complex syllable structure consisting of an onset, rhyme, and one of six tone marks. The omission of diacritics and spaces introduces pervasive lexical ambiguity. The current Vietnamese typing methods require users to memorize explicit mapping rules (e.g., using 's', 'f', 'r', 'x', 'j' for tones in Telex) or switch to number rows (in VNI). While accurate, these methods impose a significant cognitive load and physical keystroke overhead.
 
-In mobile computing, text entry primarily relies on rule-based composition standards such as Telex and VNI. Under time-constrained or casual typing scenarios, users frequently type phonetically without completing accent key combinations, concatenate words to minimize keystrokes, and touch adjacent virtual keys inadvertently on standard \ac{QWERTY} layouts. Resolving these compound noisy inputs requires a synthesis of \ac{NLP}, multi-task sequence modeling, and efficient on-device edge computing.
-
-\subsection{Existing Systems and Related Work}
-Contemporary literature and industrial solutions can be categorized into four primary paradigms:
+\subsection{Existing Systems}
+Existing systems range from traditional rule-based IMEs to advanced statistical models:
 \begin{enumerate}
-    \item \textbf{Rule-Based Input Method Editors (IMEs):} Standard software engines such as Unikey, OpenKey, and EVKey depend strictly on deterministic keystroke composition tables. They operate at the character-entry level without contextual awareness and cannot retroactively reconstruct unaccented or typo-corrupted sentences.
-    \item \textbf{Commercial Smart Keyboards:} Advanced mobile keyboards such as Google Gboard, Microsoft SwiftKey, and Laban Key incorporate local n-gram language models and statistical candidate prediction. However, their corrective mechanisms operate predominantly on sliding local windows and struggle when confronted with continuous, unsegmented, multi-error streams.
-    \item \textbf{Statistical and Classical Diacritic Restoration Models:} Traditional research efforts have utilized n-gram language models, Hidden Markov Models (HMM), and \ac{CRF} \cite{Pham2021}. These models universally presuppose that input text is already accurately tokenized into distinct words and completely devoid of spelling errors, rendering them fragile in realistic mobile environments.
-    \item \textbf{Pretrained Transformer and Large Language Models:} Recent approaches employ deep neural encoders and autoregressive decoders such as PhoBERT \cite{Nguyen2019}, ViT5, and multilingual text-to-text models (mT5, ByT5) \cite{Vaswani2017}. While these architectures demonstrate strong contextual representation, their immense parameter footprint ($> 100\text{M}$ parameters) and high inference latency ($> 300\text{ ms}$) prevent direct, offline execution on resource-constrained mobile client hardware.
+    \item \textbf{Traditional IMEs (Telex, VNI):} Rely on deterministic keystroke composition. They lack contextual awareness and require high keystroke counts.
+    \item \textbf{Statistical and N-gram Models:} Earlier attempts at diacritic restoration used Hidden Markov Models (HMM) and Phrase-based Statistical Machine Translation (SMT). These suffer from the "curse of dimensionality" and fail on unsegmented continuous text.
+    \item \textbf{Recurrent Neural Networks (RNN, LSTM, GRU):} While Bi-LSTM and Bi-GRU models achieved good accuracy, their sequential processing nature introduces high inference latency, making them unsuitable for real-time keyboard applications.
+    \item \textbf{Modern Transformer Models (BARTpho, T5):} Pretrained Large Language Models have achieved state-of-the-art results in NLP tasks. However, their massive size makes offline mobile deployment challenging without significant optimization.
 \end{enumerate}
 
 \subsection{Limitations of Existing Solutions}
-A critical review of the literature reveals three fundamental technological and methodological gaps:
 \begin{itemize}
-    \item \textbf{Fragmented Pipeline Assumption:} Existing systems isolate diacritic recovery, word boundary segmentation, and spell correction into sequential stages. Consequently, an error generated in an upstream module (e.g., erroneous word boundary detection) cascades uncontrollably into subsequent accentuation stages.
-    \item \textbf{Unrealistic Noise Modeling:} Most benchmark datasets are artificially generated by merely stripping diacritics from clean corpora. They fail to capture the compound noise distributions encountered in real-world mobile input, including geometric keyboard-neighbor typos, Telex composition residue, and abbreviation colloquialisms.
-    \item \textbf{Edge Execution and Privacy Infeasibility:} Cloud-reliant neural systems introduce network transmission latency, depend on continuous internet availability, and pose severe privacy vulnerabilities regarding the exfiltration of sensitive user keystroke data.
+    \item \textbf{High Cognitive Load and Physical Strain:} Traditional methods require excessive keystrokes (e.g., typing "tôi" requires 4 keys "tooi" in Telex) and explicit rule memorization.
+    \item \textbf{Fragmented Processing:} Many existing AI solutions separate word segmentation and diacritic restoration, causing compounding errors.
+    \item \textbf{Latency and Privacy Issues:} Cloud-based predictive models introduce network latency and pose severe privacy risks by transmitting user keystrokes to remote servers.
 \end{itemize}
 
 \section{Problem Statement}
-
-Let an observed, corrupted input character sequence of length $T$ be represented as:
-\begin{equation}
-    X = (x_1, x_2, \dots, x_T), \quad x_t \in \mathcal{V}_{\text{input}}
-\end{equation}
-where $X$ may concurrently exhibit:
-\begin{enumerate}
-    \item Complete absence of Vietnamese tonal markers and vowel/consonant modifications.
-    \item Partial or total omission of inter-word whitespace boundaries.
-    \item Typographical errors resulting from spatial key proximity on virtual \ac{QWERTY} keyboards (e.g., unintended substitution of adjacent keys).
-    \item Phonetic abbreviations and residual multi-stroke typing sequences (e.g., Telex keystroke artifacts).
-\end{enumerate}
-
-The overarching research goal of \textbf{NextKey} is to learn a robust, parameterized mapping function $f_\theta: \mathcal{X} \to \mathcal{Y}$ that accurately reconstructs the clean, canonical Vietnamese sentence:
-\begin{equation}
-    Y = (y_1, y_2, \dots, y_M), \quad y_m \in \mathcal{V}_{\text{output}}
-\end{equation}
-while satisfying strict operational boundaries for client-side edge deployment: peak inference latency $\tau < 1.0\text{ ms}$ on standard mobile \ac{CPU} architectures and an overall model storage footprint $\mathcal{M} < 2.0\text{ MB}$.
-
-\section{Research Questions}
-
-The theoretical and empirical investigation of NextKey is structured around six core research questions:
-\begin{itemize}
-    \item \textbf{RQ1 (Restoration Feasibility):} Can a unified machine learning system accurately restore standard Vietnamese text from compact input corrupted simultaneously by missing diacritics, merged spacing, abbreviations, and keyboard-adjacent typos?
-    \item \textbf{RQ2 (Architectural Suitability):} Which model family (recurrent sequence taggers, temporal convolutional networks, lightweight transformer encoders, or sequence-to-sequence decoders) offers the optimal Pareto trade-off between restoration quality and edge efficiency?
-    \item \textbf{RQ3 (Noise Modeling Impact):} Does the incorporation of keyboard-aware synthetic noise distributions significantly improve restoration robustness on human-written compact text compared to conventional accent-stripping noise models?
-    \item \textbf{RQ4 (Edge Compression Viability):} Can ultra-compact student models preserve high linguistic fidelity after Knowledge Distillation (\ac{KD}) and \ac{INT8} quantization?
-    \item \textbf{RQ5 (Candidate Generation Utility):} Does a multi-candidate (Top-$k$) generation and reranking mechanism enhance user-perceived utility in interactive typing scenarios?
-    \item \textbf{RQ6 (Privacy and Adaptation):} Can lightweight, on-device personalization mechanisms adapt to user-specific abbreviations while upholding strict privacy constraints?
-\end{itemize}
+Given a continuous sequence of unaccented Latin characters without whitespace (e.g., "toidihoc"), the system must jointly perform word segmentation and diacritic restoration to output the correct Vietnamese sentence (e.g., "tôi đi học" or "tối đi học"). This involves resolving massive homograph ambiguity and ambiguous word boundaries relying purely on global contextual dependency, while maintaining a strict inference latency (e.g., $<50\text{ ms}$) suitable for real-time edge devices without internet connectivity.
 
 \section{Project Objectives}
-
-To systematically address the research questions, the project defines the following specific, measurable, and achievable objectives:
-\begin{enumerate}
-    \item \textbf{Dataset and Taxonomy Formalization:} Construct the \textbf{JDWR v1} multi-domain dataset ($> 840,000$ sentences across 8 distinct news domains) and formalize a realistic 6-dimensional typing noise taxonomy modeling virtual \ac{QWERTY} keyboard geometry.
-    \item \textbf{Open Architectural Benchmarking:} Formulate an open model-selection protocol to systematically evaluate candidate model families (including recurrent \ac{BiGRU}/\ac{BiLSTM}, convolutional \ac{TCN}, and attention-based architectures) under identical data splits and evaluation constraints.
-    \item \textbf{Multi-Task Conditioning Exploration:} Investigate hierarchical multi-task neural architectures capable of jointly predicting character corrections, word segmentation boundaries, and diacritic tags without inter-task error propagation.
-    \item \textbf{Edge-First Optimization Framework:} Establish model compression and distillation pipelines to reduce memory footprint by $> 70\%$ and ensure sub-millisecond per-sentence inference on consumer-grade mobile \ac{CPU} hardware.
-    \item \textbf{Multi-Tier Evaluation and Delivery:} Implement a standardized 3-tier evaluation harness (spanning Character, Word, and Sentence-level metrics) and deliver reproducible demonstration interfaces (\ac{REST} \ac{API} and interactive web \ac{UI}).
-\end{enumerate}
+\begin{itemize}
+    \item \textbf{Dataset Construction:} Build a large-scale Vietnamese parallel corpus by converting standard text into unaccented, unsegmented sequences, including synthetic noise modeling for typo simulation.
+    \item \textbf{Model Development:} Fine-tune a sequence-to-sequence Deep Learning model (based on the T5/ByT5 architecture) to jointly learn word boundaries and diacritics.
+    \item \textbf{Inference Optimization:} Optimize the model for edge devices using techniques like Knowledge Distillation and Quantization to achieve low-latency offline execution.
+    \item \textbf{Deployment:} Deploy the trained model as a fully offline backend service integrated with a custom interactive keyboard interface.
+\end{itemize}
 
 \section{Significance of the Project}
-
 \begin{itemize}
-    \item \textbf{Theoretical and Scientific Significance:} NextKey advances the state of Vietnamese \ac{NLP} by shifting the academic paradigm from narrow, isolated diacritic restoration to realistic, compound-noise compact writing restoration. It provides empirical insights into architectural scaling behaviors, topological trade-offs, and multi-task feature gating under character-level language constraints.
-    \item \textbf{Practical and Technological Value:} The resulting ultra-compact models offer an immediately deployable, zero-latency inference engine suitable for integration into embedded mobile operating systems, virtual keyboards, and assistive accessibility tools.
-    \item \textbf{User Privacy and Societal Impact:} By enabling complete on-device execution without transmitting keystroke streams to remote cloud servers, NextKey provides absolute data sovereignty and privacy protection for millions of Vietnamese digital device users.
+    \item \textbf{Enhanced Accessibility:} Removes the steep learning curve of Vietnamese typing for foreigners, children, and the elderly by acting as a natural language scaffold.
+    \item \textbf{Improved Ergonomics:} Maximizes Keystroke Savings (estimated 20-40\% reduction), significantly increasing typing speed and reducing the risk of Repetitive Strain Injury (RSI).
+    \item \textbf{Absolute Privacy:} By executing entirely offline on the edge device, the system guarantees that sensitive user keystroke data is never exfiltrated to the cloud.
 \end{itemize}
 
 \section{Project Scope \& Limitations}
-
-\subsection{In-Scope}
 \begin{itemize}
-    \item Multi-domain Vietnamese linguistic data covering journalism, administration, everyday conversation, and general texts.
-    \item Joint modeling of missing diacritics, word boundary concatenation, and spatial keyboard-adjacent typographical errors.
-    \item Open empirical exploration across multiple neural sequence modeling families and compression techniques (\ac{KD}, \ac{PTQ}, \ac{QKD}).
-    \item Standalone evaluation harnesses, modular \ac{REST} \ac{API} endpoints, and web-based interactive demonstration prototypes.
-\end{itemize}
-
-\subsection{Out-of-Scope \& Limitations}
-\begin{itemize}
-    \item Acoustic speech-to-text processing or multimodal input modalities.
-    \item Low-level kernel driver development for specific proprietary mobile operating systems (the project provides standard SDK/API interfaces for core inference).
-    \item Highly specialized ancient historical scripts or rare ethnic minority dialectal forms beyond standard contemporary Vietnamese.
+    \item \textbf{In-Scope:} Developing the AI model, synthetic data pipeline, model optimization for edge inference, and a backend API demonstrating the continuous typing capabilities.
+    \item \textbf{Out-of-Scope:} OS-level low-level driver development for iOS/Android native integration, voice recognition, and handling of highly specialized ancient Vietnamese scripts.
 \end{itemize}

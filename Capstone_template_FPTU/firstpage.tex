@@ -1,44 +1,71 @@
+%\backgroundsetup{
+%scale=1,
+%color=black,
+%opacity=1,
+%angle=0,
+%contents={%
+%  \includegraphics[width=\paperwidth, height=\paperheight]{logos/background.png}
+%  }%
+%}
+
+
+
+
+
+
 \begin{titlepage}
+%\BgThispage
+%\begin{textblock}{3}[0.5,0.5](0.5,0.5)
 \begin{center}
 \includegraphics[width=0.35\linewidth]{logos/logoFPTU.png}\\[1cm]
 \end{center}
+%  \end{textblock}
+  
+%\begin{textblock}{4}[0.5,0.5](9.7,0.15)
+%	\includegraphics[width=\linewidth]{images/bgd.jpg}\\[2cm]
+%  \end{textblock}
+
+%\vspace{1cm}
 
 \begin{center}
+%{\Huge \textbf{FPT UNIVERSITY}}\\[0.5cm]
 {\LARGE Faculty of Artificial Intelligence}\\[0.2cm]
-\vspace{1.5cm}
+\vspace{2cm}
 {\Large Capstone Project Report }\\[0.6cm]
 
 % Title
-\rule{\linewidth}{0.5mm} \\[0.2cm]
-{ \LARGE \bfseries Personalized and Edge-Efficient Vietnamese Compact Writing Restoration with Keyboard-Aware Typo Correction
- \\[0.2cm] }
-\rule{\linewidth}{0.5mm} \\[1.2cm]
+\rule{\linewidth}{0.5mm} \\[0.1cm]
+{ \huge \bfseries An Offline Intelligent Vietnamese Input Method Based on Deep Learning
+ \\[0.1cm] }
+\rule{\linewidth}{0.5mm} \\[1.5cm]
 
 % Authors and supervisor
 \noindent
 
 \begin{center}            % keeps it centred on the page
 \renewcommand{\arraystretch}{1.3}  % extra row height for nicer spacing
-\begin{tabular}{|p{0.32\textwidth}|p{0.34\textwidth} p{0.28\textwidth}|}
+\begin{tabular}{|p{0.32\textwidth}|p{0.32\textwidth} p{0.3\textwidth}|}
 \hline
-\multicolumn{3}{|c|}{\Large \textbf{NextKey}}\\
+\multicolumn{3}{|c|}{\Large NextKey}\\
 \hline
 \multirow{3}{=}{\hfill\textbf{Group Members}} 
-  & Student Name 1 & Student ID 1\\
-  & Student Name 2 & Student ID 2\\
-  & Student Name 3 & Student ID 3\\
+  & Tran Dinh Gia & SE181550\\
+  & Truong Nhat Quang & DE180544 \\
+  & Nguyen Xuan Cuong & DE180528 \\
 \hline
 \multirow{1}{=}{\hfill\textbf{Supervisor}}
-  & \multicolumn{2}{l|}{Title \& Supervisor Name}\\
+  & \multicolumn{2}{l|}{Ass.Prof Nguyen Luong Vuong}\\
 \hline
 \multirow{1}{=}{\hfill\textbf{Ext Supervisor}}
-  &  \multicolumn{2}{l|}{Title \& External Supervisor Name (Optional)}\\
+  &  \multicolumn{2}{l|}{-}\\
 \hline
-\multirow{1}{=}{\hfill\textbf{Capstone Project Code}}
+\multirow{1}{=}{\hfill\textbf{Capstone Project code}}
   &  \multicolumn{2}{l|}{AIP491}\\
 \hline
 \end{tabular}
 \end{center}
+
+%\vspace{2cm}
 
 \vfill %
 
@@ -47,6 +74,7 @@
   \renewcommand{\DTMdisplaydate}[4]{%
     \DTMenglishmonthname{##2} ##1}%
 }
+
 
 % Bottom of the page
 {Da Nang, \DTMsetdatestyle{monthyear}\today}
