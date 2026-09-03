@@ -261,38 +261,40 @@
   \end{table}
 \end{frame}
 
-\begin{frame}{Mathematical Problem Formulation}{Formal Definition of Multi-Task Sequence Transformation}
-  \begin{block}{Sequence Transformation Formulation}
-    {\small Given noisy unaccented $X = (x_1, \dots, x_T) \in \mathcal{V}_{\text{input}}^T$, find clean target $Y = (y_1, \dots, y_M) \in \mathcal{V}_{\text{output}}^M$:}
-    \vspace{-0.1cm}
-    \begin{equation*}
-      \hat{Y} = \arg\max_{Y} P(Y \mid X; \theta) = \arg\max_{Y} \prod_{t=1}^{M} P(y_t \mid y_{<t}, X; \theta)
-    \end{equation*}
+\begin{frame}{Problem Formulation: Multi-Noise Transformation}{Joint Restoration of Compound Typing Errors}
+  \begin{block}{Input-Output Transformation Task}
+    \centering
+    \textbf{Raw User Input ($X$):} \texttt{"toidihocbakk"} $\quad\xrightarrow{\quad\text{\textbf{NextKey Engine}}\quad}\quad$ \textbf{Target Output ($Y$):} \textbf{"toi di hoc bai"}
   \end{block}
-  \vspace{-0.1cm}
+  \vspace{0.1cm}
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
-      \begin{block}{Compound Noise Taxonomy ($\mathcal{T}$)}
-        \begin{itemize}\setlength{\itemsep}{1pt}\footnotesize
-          \item \textbf{Diacritic Stripping:} Removal of all 6 tones.
-          \item \textbf{Whitespace Erasure:} Word merging.
-          \item \textbf{QWERTY Spatial Typos:} Neighbor keys.
-          \item \textbf{Residual IME Codes:} Incomplete Telex.
+      \begin{block}{Compound Noise Dimensions}
+        \begin{itemize}\setlength{\itemsep}{2pt}\footnotesize
+          \item \textbf{1. Diacritic Erasure:}\\
+            Absence of all 6 tones \& 3 vowel marks.
+          \item \textbf{2. Boundary Erasure:}\\
+            Continuous typing without spaces.
+          \item \textbf{3. QWERTY Spatial Typos:}\\
+            Adjacent fat-finger key errors ($k \to i$).
+          \item \textbf{4. Residual IME Codes:}\\
+            Incomplete Telex codes (\texttt{"ddang"}).
         \end{itemize}
       \end{block}
     \end{column}
 
     \begin{column}{0.48\textwidth}
-      \begin{block}{Multi-Task Objective}
-        \vspace{-0.1cm}
+      \begin{exampleblock}{Joint Multi-Task Objective}
         \begin{equation*}
           \mathcal{L}_{\text{total}} = \lambda_{\text{diac}} \mathcal{L}_{\text{diac}} + \lambda_{\text{seg}} \mathcal{L}_{\text{seg}} + \lambda_{\text{typo}} \mathcal{L}_{\text{typo}}
         \end{equation*}
-        \vspace{-0.1cm}
-        \begin{itemize}\setlength{\itemsep}{1pt}\footnotesize
-          \item Joint cross-entropy optimization for diacritics, boundaries, and typos.
+        \begin{itemize}\setlength{\itemsep}{3pt}\footnotesize
+          \item \textbf{$\mathcal{L}_{\text{diac}}$:} Diacritic tone restoration loss.
+          \item \textbf{$\mathcal{L}_{\text{seg}}$:} Word boundary segmentation loss.
+          \item \textbf{$\mathcal{L}_{\text{typo}}$:} Spatial typo correction loss.
+          \item \textbf{Single-Pass:} Resolves all 3 tasks jointly.
         \end{itemize}
-      \end{block}
+      \end{exampleblock}
     \end{column}
   \end{columns}
 \end{frame}
