@@ -353,27 +353,72 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Project Scope \& Deliverables}{Clear Operational Boundaries}
+\begin{frame}{Project Scope \& Architectural Exploration}{Operational Boundaries and Modeling Dimensions}
   \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \begin{exampleblock}{In-Scope Deliverables}
-        \begin{itemize}\setlength{\itemsep}{3pt}\footnotesize
-          \item End-to-end deep neural sequence restoration models.
-          \item Keyboard-aware synthetic noise generator pipeline.
-          \item Quantized ONNX/C++ edge inference API.
-          \item Interactive proof-of-concept web application.
+    \begin{column}{0.50\textwidth}
+      \begin{exampleblock}{In-Scope Research \& Development}
+        \begin{itemize}\setlength{\itemsep}{2pt}\scriptsize
+          \item \textbf{Backbone Exploration:} Benchmark candidate architectures: GRU, BiGRU, Multi-layer RNNs, and Compact Transformers.
+          \item \textbf{Width \& Depth Ablation:} Systematic scaling across:
+            \begin{itemize}\setlength{\itemsep}{1pt}\scriptsize
+              \item \textit{Width (Hidden Dims):} $d \in \{64, 128, 256\}$, embedding sizes.
+              \item \textit{Depth (Layers):} $L \in \{1, 2, 4\}$ layers for speed-accuracy Pareto.
+            \end{itemize}
+          \item \textbf{Compression Pipeline:} Knowledge Distillation (KD) \& INT8 Quantization (PTQ) to achieve $<2\text{ MB}$ size.
+          \item \textbf{Interactive Software:} ONNX/C++ edge runtime \& interactive web demonstration interface.
         \end{itemize}
       \end{exampleblock}
     \end{column}
 
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.46\textwidth}
       \begin{alertblock}{Out-of-Scope Boundaries}
-        \begin{itemize}\setlength{\itemsep}{3pt}\footnotesize
-          \item Low-level OS kernel keyboard drivers (iOS/Android virtual keyboard system integration).
-          \item Voice recognition \& multimodal speech input.
-          \item Historical scripts (H\'an-N\^om) or minority dialects.
+        \begin{itemize}\setlength{\itemsep}{3pt}\scriptsize
+          \item \textbf{Low-Level OS Keyboard Drivers:} Kernel-level virtual keyboard implementation for iOS (Swift) / Android (Kotlin) is deferred; focus is on inference engine \& API SDK.
+          \item \textbf{Multimodal \& Voice Input:} Speech-to-text and acoustic modeling are excluded.
+          \item \textbf{Ancient \& Minority Scripts:} H\'an-N\^om or ethnic dialect orthographies are out of scope.
         \end{itemize}
       \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Discussion: Proposed Typing Shorthand Adaptation}{Exploratory Shorthand for Consonant Clusters}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{Concept: Single-Key Phonetic Mapping}
+        {\scriptsize Multi-character consonants in Vietnamese (\texttt{kh}, \texttt{ng}, \texttt{ngh}, \texttt{ch}, \texttt{th}, \texttt{nh}, \texttt{ph}) require 2--3 taps each. We propose an optional shorthand encoding:}
+        \vspace{0.08cm}
+        \begin{center}
+          \scriptsize\renewcommand{\arraystretch}{1.1}
+          \begin{tabular}{c c c c}
+            \toprule
+            \textbf{Standard} & \textbf{Shorthand} & \textbf{Standard} & \textbf{Shorthand} \\
+            \midrule
+            \texttt{"kh"} $\to$ \textbf{\texttt{k}} & \texttt{"khong"} $\to$ \texttt{kong} &
+            \texttt{"ch"} $\to$ \textbf{\texttt{j}} & \texttt{"chao"} $\to$ \texttt{jao} \\
+            \texttt{"ng/ngh"} $\to$ \textbf{\texttt{g}} & \texttt{"ngu"} $\to$ \texttt{gu} &
+            \texttt{"th"} $\to$ \textbf{\texttt{w}} & \texttt{"thoi"} $\to$ \texttt{woi} \\
+            \bottomrule
+          \end{tabular}
+        \end{center}
+      \end{block}
+      \vspace{0.05cm}
+      \begin{alertblock}{Status: Open Discussion Proposal}
+        {\tiny $\ast$ \textbf{Note:} This is an exploratory proposal for committee discussion and is \textbf{not yet finalized} as a mandatory project requirement.}
+      \end{alertblock}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \begin{exampleblock}{Dual Expected Benefits}
+        \begin{itemize}\setlength{\itemsep}{3pt}\scriptsize
+          \item \textbf{1. Maximize Typing Speed (KS):}\\
+            Collapses 2--3 keystrokes into a single tap, pushing Keystroke Savings (KS) beyond \textbf{45\%}.
+          \item \textbf{2. Facilitate AI Disambiguation:}\\
+            Eliminates multi-character consonant boundary confusion for the neural model (e.g., distinguishing \texttt{n-g-h-a} vs. \texttt{n-g-h-a-n-g}).
+          \item \textbf{3. User Customization:}\\
+            Can be toggled as an optional power-user typing mode.
+        \end{itemize}
+      \end{exampleblock}
     \end{column}
   \end{columns}
 \end{frame}
