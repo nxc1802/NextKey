@@ -1,0 +1,475 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+
+% -----------------------------------------------------------------------------
+% PACKAGES & ENCODING
+% -----------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsfonts,bm}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+
+% -----------------------------------------------------------------------------
+% BEAMER THEME & ACADEMIC COLOR SCHEME
+% -----------------------------------------------------------------------------
+\usetheme{Madrid}
+\useinnertheme{rectangles}
+
+% Academic Navy & Slate Palette
+\definecolor{NavyBlue}{RGB}{15, 44, 89}      % Primary Academic Blue (#0F2C59)
+\definecolor{SlateBlue}{RGB}{49, 130, 206}   % Secondary (#3182CE)
+\definecolor{DarkSlate}{RGB}{30, 41, 59}     % Text/Dark (#1E293B)
+\definecolor{LightGray}{RGB}{241, 245, 249}  % Block Background (#F1F5F9)
+\definecolor{AlertRed}{RGB}{185, 28, 28}     % Alert (#B91C1C)
+\definecolor{ExampleGreen}{RGB}{21, 128, 61} % Example (#15803D)
+
+\setbeamercolor{palette primary}{bg=NavyBlue,fg=white}
+\setbeamercolor{palette secondary}{bg=NavyBlue!85,fg=white}
+\setbeamercolor{palette tertiary}{bg=NavyBlue!70,fg=white}
+\setbeamercolor{palette quaternary}{bg=NavyBlue,fg=white}
+
+\setbeamercolor{structure}{fg=NavyBlue}
+\setbeamercolor{titlelike}{parent=palette primary}
+\setbeamercolor{frametitle}{bg=NavyBlue,fg=white}
+\setbeamercolor{frametitle right}{bg=NavyBlue}
+
+\setbeamercolor{normal text}{fg=DarkSlate,bg=white}
+\setbeamercolor{item}{fg=NavyBlue}
+\setbeamercolor{subitem}{fg=SlateBlue}
+
+% Clean Block Styling
+\setbeamercolor{block title}{bg=NavyBlue,fg=white}
+\setbeamercolor{block body}{bg=LightGray,fg=DarkSlate}
+
+\setbeamercolor{block title alerted}{bg=AlertRed,fg=white}
+\setbeamercolor{block body alerted}{bg=AlertRed!10,fg=DarkSlate}
+
+\setbeamercolor{block title example}{bg=ExampleGreen,fg=white}
+\setbeamercolor{block body example}{bg=ExampleGreen!10,fg=DarkSlate}
+
+% Clean Font Configuration
+\setbeamerfont{title}{size=\large,series=\bfseries}
+\setbeamerfont{subtitle}{size=\small,series=\normalfont}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{institute}{size=\footnotesize}
+\setbeamerfont{date}{size=\scriptsize}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\footnotesize,series=\normalfont}
+
+% Remove Navigation Symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Clean Slide Numbering in Footline
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% -----------------------------------------------------------------------------
+% METADATA
+% -----------------------------------------------------------------------------
+\title[NextKey: Offline Vietnamese Input Method]{An Offline Intelligent Vietnamese Input Method\\Based on Deep Learning}
+\subtitle{Capstone Project Report 1 $\cdot$ AIP491}
+\author[Tran, Truong, Nguyen]{
+  \textbf{Tran Dinh Gia} (SE181550 - Leader)\quad
+  \textbf{Truong Nhat Quang} (DE180544)\quad
+  \textbf{Nguyen Xuan Cuong} (DE180528)
+}
+\institute[FPT University Da Nang]{
+  \textbf{Supervisor:} Assoc. Prof. Nguyen Luong Vuong\\[0.1cm]
+  Department of Artificial Intelligence $\cdot$ FPT University Da Nang
+}
+\date[September 2026]{September 2026}
+
+% -----------------------------------------------------------------------------
+% DOCUMENT CONTENT
+% -----------------------------------------------------------------------------
+\begin{document}
+
+% =============================================================================
+% SLIDE 1: TITLE PAGE
+% =============================================================================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% =============================================================================
+% SLIDE 2: OUTLINE
+% =============================================================================
+\begin{frame}{Table of Contents}
+  \tableofcontents
+\end{frame}
+
+% =============================================================================
+% SECTION 1: PROJECT INTRODUCTION
+% =============================================================================
+\section{Project Introduction \& Research Background}
+
+\begin{frame}{Motivation \& Problem Context}{Limitations of Traditional Input Methods (IMEs)}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{The Input Bottleneck in Vietnamese}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+          \item Requires Latin base glyphs + \textbf{6 tonal marks} + \textbf{3 vowel modifications}.
+          \item Rule-based systems (Telex/VNI) enforce rigid keystrokes:
+            \begin{itemize}\setlength{\itemsep}{2pt}
+              \item High keystroke overhead \& cognitive friction.
+              \item Tone corruption in English (\textit{"case" $\to$ "cae"}).
+              \item Zero tolerance for mobile virtual keyboard typos.
+            \end{itemize}
+        \end{itemize}
+      \end{block}
+      \vspace{0.1cm}
+      \begin{alertblock}{Core Research Proposition}
+        Continuous unaccented Latin typing with joint boundary segmentation and diacritic restoration.
+      \end{alertblock}
+    \end{column}
+
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Ergonomic Efficiency}
+        \textbf{Keystroke Savings (KS):}
+        \begin{equation*}
+          \text{KS} = \left(1 - \frac{|X_{\text{continuous}}|}{|X_{\text{Telex}}|}\right) \times 100\%
+        \end{equation*}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+          \item \textbf{20\%--40\% reduction} in screen taps.
+          \item Eliminates explicit spacebar \& accent keys.
+          \item Lowers thumb fatigue \& RSI risk.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Proposed Paradigm: NextKey Continuous Input}{Comparison of Input Method Paradigms}
+  \begin{table}[H]
+    \centering
+    \footnotesize
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabularx}{\textwidth}{l X p{3.2cm} c}
+      \toprule
+      \textbf{Typing Paradigm} & \textbf{User Input Keystrokes} & \textbf{Restored Output} & \textbf{Keystrokes} \\
+      \midrule
+      \textbf{Standard Telex} & \texttt{t-o-o-i-space-d-d-i-space-h-o-c-j} & toi di hoc & 13 taps \\
+      \textbf{Standard VNI} & \texttt{t-o-6-i-space-d-9-i-space-h-o-c-5} & toi di hoc & 13 taps \\
+      \textbf{NextKey (Proposed)} & \texttt{t-o-i-d-i-h-o-c} & \textbf{toi di hoc} & \textbf{8 taps (38.5\% KS)} \\
+      \textbf{NextKey (With Typos)} & \texttt{t-o-i-d-i-h-o-c-b-a-k-k} & \textbf{toi di hoc bai} & \textbf{12 taps ($k \to i$)} \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Core Advantages}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}
+          \item Continuous typing flow without manual space insertion.
+          \item Seamless multilingual typing (no English tone pollution).
+          \item Robust against adjacent-key fat-finger errors.
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Deployment Constraints}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}
+          \item \textbf{Inference Latency:} $< 50\text{ ms}$ per event (fluid 60fps).
+          \item \textbf{Memory Footprint:} $< 2\text{ MB}$ INT8 model size.
+          \item \textbf{Privacy Guarantee:} 100\% offline client execution.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Literature Review \& Baseline Systems}{Assessment of Existing Architectural Approaches}
+  \begin{table}[H]
+    \centering
+    \scriptsize
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{p{2.6cm} p{2.6cm} p{3.8cm} p{4.2cm}}
+      \toprule
+      \textbf{Model Family} & \textbf{Representative} & \textbf{Strengths} & \textbf{Critical Gaps / Limitations} \\
+      \midrule
+      \textbf{Rule-Based IMEs} & Unikey, EVKey & Deterministic, zero RAM, instant speed. & Rigid; zero typo tolerance; requires explicit mode toggling for English terms. \\
+      \addlinespace
+      \textbf{Statistical N-Grams} & HMM, Kneser-Ney & Fast inference; effective for local context. & Exponential state space; fails on unsegmented continuous sequences. \\
+      \addlinespace
+      \textbf{Recurrent Networks} & Bi-LSTM + CRF & Captures sequential character context. & Slow autoregressive decoding; historically decoupled diacritics from typos. \\
+      \addlinespace
+      \textbf{Pretrained LLMs} & PhoBERT, ViT5, ByT5 & SOTA semantic representation. & Large footprint ($>100\text{M}$); high latency ($>300\text{ms}$); infeasible for edge. \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Mathematical Problem Formulation}{Formal Definition of Multi-Task Sequence Transformation}
+  \begin{block}{Sequence Transformation Formulation}
+    {\small Given noisy unaccented $X = (x_1, \dots, x_T) \in \mathcal{V}_{\text{input}}^T$, find clean target $Y = (y_1, \dots, y_M) \in \mathcal{V}_{\text{output}}^M$:}
+    \vspace{-0.1cm}
+    \begin{equation*}
+      \hat{Y} = \arg\max_{Y} P(Y \mid X; \theta) = \arg\max_{Y} \prod_{t=1}^{M} P(y_t \mid y_{<t}, X; \theta)
+    \end{equation*}
+  \end{block}
+  \vspace{-0.1cm}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Compound Noise Taxonomy ($\mathcal{T}$)}
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{Diacritic Stripping:} Removal of all 6 tones.
+          \item \textbf{Whitespace Erasure:} Word merging.
+          \item \textbf{QWERTY Spatial Typos:} Neighbor keys.
+          \item \textbf{Residual IME Codes:} Incomplete Telex.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Multi-Task Objective}
+        \vspace{-0.1cm}
+        \begin{equation*}
+          \mathcal{L}_{\text{total}} = \lambda_{\text{diac}} \mathcal{L}_{\text{diac}} + \lambda_{\text{seg}} \mathcal{L}_{\text{seg}} + \lambda_{\text{typo}} \mathcal{L}_{\text{typo}}
+        \end{equation*}
+        \vspace{-0.1cm}
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item Joint cross-entropy optimization for diacritics, boundaries, and typos.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Core Research Questions (RQ1 -- RQ6)}{Foundational Scientific Inquiries Driving NextKey}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Modeling \& Noise Inquiries}
+        \begin{itemize}\setlength{\itemsep}{4pt}
+          \item \textbf{RQ1 (Restoration Feasibility):}\\
+            Can a compact network restore text from compound noise (accents, spaces, typos)?
+          \item \textbf{RQ2 (Architecture Pareto Trade-off):}\\
+            How do non-autoregressive taggers compare against Seq2Seq decoders in speed vs. accuracy?
+          \item \textbf{RQ3 (Noise Calibration):}\\
+            Does QWERTY spatial noise modeling improve real-world out-of-domain generalization?
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Edge Optimization \& UX Inquiries}
+        \begin{itemize}\setlength{\itemsep}{4pt}
+          \item \textbf{RQ4 (Quantization \& Distillation):}\\
+            Can KD + INT8 quantization achieve $>95\%$ teacher parity with $<50\text{ms}$ latency?
+          \item \textbf{RQ5 (Candidate Selection Utility):}\\
+            Does Top-$k$ candidate generation improve practical typing Keystroke Savings (KS)?
+          \item \textbf{RQ6 (Privacy-Preserving Edge):}\\
+            Can on-device adaptation learn user vocabulary with zero remote server logging?
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Project Objectives (S.M.A.R.T.)}{Target Research \& Engineering Milestones}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Data \& Modeling Objectives}
+        \begin{itemize}\setlength{\itemsep}{4pt}
+          \item \textbf{Corpus Curation:} Build multi-domain parallel dataset ($>840\text{K}$ sentences, JDWR v1) across 8 distinct genres.
+          \item \textbf{Noise Engine:} Implement 6-dimensional QWERTY spatial and colloquial noise generator.
+          \item \textbf{Multi-Task Learning:} Train candidate models for joint diacritic, spacing, and typo restoration.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Edge Optimization \& User Targets}
+        \begin{itemize}\setlength{\itemsep}{4pt}
+          \item \textbf{Model Compression:} Distill and quantize model to INT8 ($<2\text{ MB}$, $<50\text{ ms}$ on CPU).
+          \item \textbf{Ergonomic Savings:} Validate $20\%$--$40\%$ Keystroke Savings (KS) over standard Telex.
+          \item \textbf{Zero Leakage:} Guarantee 100\% offline client execution with zero network telemetry.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Project Scope \& Deliverables}{Clear Operational Boundaries}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{In-Scope Deliverables}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+          \item End-to-end deep neural sequence restoration models.
+          \item Keyboard-aware synthetic noise generator pipeline.
+          \item Quantized ONNX/C++ edge inference API.
+          \item Interactive proof-of-concept web application.
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Out-of-Scope Boundaries}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+          \item Low-level OS kernel keyboard drivers (iOS/Android virtual keyboard system integration).
+          \item Voice recognition \& multimodal speech input.
+          \item Historical scripts (H\'an-N\^om) or minority dialects.
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================================
+% SECTION 2: PROJECT MANAGEMENT PLAN
+% =============================================================================
+\section{Project Management Plan \& Roadmap}
+
+\begin{frame}{Team Structure \& Research Tracks}{Clearly Partitioned Roles and Responsibilities}
+  \begin{table}[H]
+    \centering
+    \footnotesize
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabularx}{\textwidth}{p{3.8cm} p{3.0cm} X}
+      \toprule
+      \textbf{Role \& Track} & \textbf{Assignee} & \textbf{Core Research \& Engineering Responsibilities} \\
+      \midrule
+      \textbf{Project Lead \& AI Researcher} & 
+      \textbf{Tran Dinh Gia}\newline{\scriptsize (SE181550)} & 
+      $\bullet$ Project coordination, sprint reviews, milestone tracking.\newline
+      $\bullet$ Sequence modeling mathematical formulation \& loss design.\newline
+      $\bullet$ Architecture exploration and training supervision. \\
+      \midrule
+      \textbf{Data Engineering \& Preprocessing} & 
+      \textbf{Truong Nhat Quang}\newline{\scriptsize (DE180544)} & 
+      $\bullet$ Multi-domain corpus collection ($>840\text{K}$) and cleaning.\newline
+      $\bullet$ Synthetic QWERTY spatial noise \& abbreviation pipeline.\newline
+      $\bullet$ In-domain and Out-of-Domain evaluation dataset curation. \\
+      \midrule
+      \textbf{Edge Systems \& Deployment Lead} & 
+      \textbf{Nguyen Xuan Cuong}\newline{\scriptsize (DE180528)} & 
+      $\bullet$ Knowledge Distillation (KD) \& INT8 quantization engines.\newline
+      $\bullet$ Edge hardware profiling and latency benchmarking ($<50\text{ms}$).\newline
+      $\bullet$ Offline inference backend API and interactive web interface. \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Work Breakdown Structure (WBS) \& Timeline}{20-Week Five-Phase Execution Plan}
+  \begin{table}[H]
+    \centering
+    \scriptsize
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{c p{3.0cm} X c c}
+      \toprule
+      \textbf{Phase} & \textbf{Phase Name} & \textbf{Key Work Packages \& Deliverables} & \textbf{Duration} & \textbf{Lead} \\
+      \midrule
+      \textbf{Phase 1} & \textbf{Data \& Literature Foundation} & Parallel corpus collection ($>840\text{K}$ sentences), synthetic typo \& spacing noise engine, tokenization vocabulary schema. & Weeks 1--4 & Quang \\
+      \addlinespace
+      \textbf{Phase 2} & \textbf{Model Development \& Baselines} & Candidate architecture training (BiGRU, T5, Transformer taggers), multi-task loss tuning, validation error analysis. & Weeks 5--9 & Gia \\
+      \addlinespace
+      \textbf{Phase 3} & \textbf{Optimization \& Quantization} & Knowledge Distillation (KD) to compact Student, INT8 Post-Training Quantization (PTQ), WER/BLEU \& latency benchmarking. & Weeks 10--14 & Cuong \\
+      \addlinespace
+      \textbf{Phase 4} & \textbf{Backend \& Integration} & Offline C++/ONNX inference engine, REST/WebSocket keyboard API, stress testing, interactive demo prototype. & Weeks 15--17 & Cuong \\
+      \addlinespace
+      \textbf{Phase 5} & \textbf{Validation, Thesis \& Defense} & Human user testing, Keystroke Savings (KS) validation, comprehensive capstone report, and defense presentation. & Weeks 18--20 & All \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Risk Management Framework}{Risk Register and Proactive Mitigation Matrix}
+  \begin{table}[H]
+    \centering
+    \footnotesize
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabularx}{\textwidth}{p{3.2cm} c c X}
+      \toprule
+      \textbf{Identified Risk} & \textbf{Severity} & \textbf{Prob.} & \textbf{Proactive Mitigation Strategy} \\
+      \midrule
+      \textbf{Domain Generalization Gap} & High & Med & Incorporate realistic synthetic noise (QWERTY typos, chat slang, abbreviations); benchmark against isolated OOD domain (\textit{the\_thao}). \\
+      \midrule
+      \textbf{High Inference Latency} & High & Med & Apply Knowledge Distillation and INT8 quantization; prioritize non-autoregressive sequence taggers over heavy autoregressive decoders. \\
+      \midrule
+      \textbf{Compute Resource Limits} & Med & High & Leverage distributed dual GPU cloud allocations (Kaggle Dual T4, Google Colab); utilize mixed-precision training (FP16). \\
+      \midrule
+      \textbf{Keystroke Privacy Concerns} & High & Low & Enforce 100\% client-side offline execution; strictly zero remote data transmission or telemetry logging. \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Quality Assurance, Evaluation \& Decision Gates}{Rigorous Multi-Tier Validation Methodology}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Hierarchical 3-Tier Metric Harness}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}
+          \item \textbf{Character-Level:} CER, Typo Recovery, Boundary F1.
+          \item \textbf{Word-Level:} WER, Word Accuracy, Token F1.
+          \item \textbf{Sentence-Level:} Exact Match (EM), Near-Perfect ($\le 5\%$), BLEU-4, ROUGE-L.
+          \item \textbf{Ergonomic Metric:} Keystroke Savings (KS).
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Scientific Decision Gates}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}
+          \item \textbf{Seed Protocol:} Fixed global seed \texttt{42} across all splits.
+          \item \textbf{Gate 1 (Smoke Run Gate):} Reject architectures failing loss convergence within 1,000 steps.
+          \item \textbf{Gate 2 (Objective Benchmark Gate):} Decisions strictly justified by quantitative metric gains on validation sets.
+          \item \textbf{Budget Constraint:} \$0.00 capital expenditure.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================================
+% CONCLUSION / SUMMARY SLIDE
+% =============================================================================
+\begin{frame}{Summary of Expected Deliverables \& Key Indicators}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Key Performance Targets}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+          \item \textbf{Inference Latency:} $< 50\text{ ms}$ per sentence on CPU.
+          \item \textbf{Keystroke Savings:} $20\%$--$40\%$ reduction vs. Telex.
+          \item \textbf{Model Size:} $< 2\text{ MB}$ footprint via INT8 quantization.
+          \item \textbf{Restoration Fidelity:} SOTA BLEU-4 \& Word Accuracy.
+          \item \textbf{Security:} 100\% offline client-side edge inference.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Tangible Capstone Deliverables}
+        \begin{itemize}\setlength{\itemsep}{3pt}
+          \item Open-source reproducible codebase \& dataset pipeline.
+          \item Quantized model weights \& ONNX/C++ runtime.
+          \item Interactive web demo \& comprehensive thesis report.
+        \end{itemize}
+      \end{exampleblock}
+      \vspace{0.3cm}
+      \begin{center}
+        {\large\textbf{Thank You for Your Attention!}}\\[0.15cm]
+        {\small Questions \& Discussion Welcome}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}
