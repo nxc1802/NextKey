@@ -130,7 +130,7 @@
       \begin{exampleblock}{Three Core Technical Pillars}
         \begin{itemize}\setlength{\itemsep}{1.5pt}\footnotesize
           \item \textbf{Continuous Unaccented Input:}\\
-            Type text without spaces or tone marks (e.g., \texttt{"toidihoc"} $\to$ \textbf{"toi di hoc"}).
+            Type text without spaces or tone marks (e.g., \texttt{"toidihoc"} $\to$ \textbf{"T\^oi \dj i h\d{o}c"}).
           \item \textbf{End-to-End Deep Learning:}\\
             Jointly predicts word boundaries and restores diacritics in a single real-time forward pass.
           \item \textbf{100\% Edge-Based Execution:}\\
@@ -210,10 +210,10 @@
       \toprule
       \textbf{Typing Paradigm} & \textbf{User Input Keystrokes} & \textbf{Restored Output} & \textbf{Keystrokes} \\
       \midrule
-      \textbf{Standard Telex} & \texttt{t-o-o-i-space-d-d-i-space-h-o-c-j} & toi di hoc & 13 taps \\
-      \textbf{Standard VNI} & \texttt{t-o-6-i-space-d-9-i-space-h-o-c-5} & toi di hoc & 13 taps \\
-      \textbf{NextKey (Proposed)} & \texttt{t-o-i-d-i-h-o-c} & \textbf{toi di hoc} & \textbf{8 taps (38.5\% KS)} \\
-      \textbf{NextKey (With Typos)} & \texttt{t-o-i-d-i-h-o-c-b-a-k-k} & \textbf{toi di hoc bai} & \textbf{12 taps ($k \to i$)} \\
+      \textbf{Standard Telex} & \texttt{t-o-o-i-space-d-d-i-space-h-o-c-j} & T\^oi \dj i h\d{o}c & 13 taps \\
+      \textbf{Standard VNI} & \texttt{t-o-6-i-space-d-9-i-space-h-o-c-5} & T\^oi \dj i h\d{o}c & 13 taps \\
+      \textbf{NextKey (Proposed)} & \texttt{t-o-i-d-i-h-o-c} & \textbf{T\^oi \dj i h\d{o}c} & \textbf{8 taps (38.5\% KS)} \\
+      \textbf{NextKey (With Typos)} & \texttt{t-o-i-d-i-h-o-c-b-a-k-k} & \textbf{T\^oi \dj i h\d{o}c b\`ai} & \textbf{12 taps ($k \to i$)} \\
       \bottomrule
     \end{tabularx}
   \end{table}
@@ -263,8 +263,8 @@
 
 \begin{frame}{Problem Formulation: Multi-Noise Transformation}{Joint Restoration of Compound Typing Errors}
   \begin{block}{Input-Output Transformation Task}
-    \centering
-    \textbf{Raw User Input ($X$):} \texttt{"toidihocbakk"} $\quad\xrightarrow{\quad\text{\textbf{NextKey Engine}}\quad}\quad$ \textbf{Target Output ($Y$):} \textbf{"toi di hoc bai"}
+    \centering\small
+    \textbf{Input ($X$):} \texttt{"toidihocbakk"} $\quad\xrightarrow{\quad\text{\textbf{NextKey Engine}}\quad}\quad$ \textbf{Target ($Y$):} \textbf{"T\^oi \dj i h\d{o}c b\`ai"}
   \end{block}
   \vspace{0.1cm}
   \begin{columns}[T]
