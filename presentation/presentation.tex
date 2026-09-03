@@ -121,43 +121,87 @@
 % =============================================================================
 \section{Project Introduction \& Research Background}
 
-\begin{frame}{Motivation \& Problem Context}{Limitations of Traditional Input Methods (IMEs)}
+\begin{frame}{NextKey Overview}{Redefining Vietnamese Mobile Typing}
   \begin{columns}[T]
     \begin{column}{0.54\textwidth}
-      \begin{block}{The Input Bottleneck in Vietnamese}
-        \begin{itemize}\setlength{\itemsep}{3pt}
-          \item Requires Latin base glyphs + \textbf{6 tonal marks} + \textbf{3 vowel modifications}.
-          \item Rule-based systems (Telex/VNI) enforce rigid keystrokes:
-            \begin{itemize}\setlength{\itemsep}{2pt}
-              \item High keystroke overhead \& cognitive friction.
-              \item Tone corruption in English (\textit{"case" $\to$ "cae"}).
-              \item Zero tolerance for mobile virtual keyboard typos.
-            \end{itemize}
-        \end{itemize}
+      \begin{block}{The Continuous Latin Input Paradigm}
+        {\footnotesize Traditional IMEs (Telex/VNI) require typing explicit tone marks and accents. NextKey introduces a continuous Latin input paradigm (similar to Chinese Pinyin).}
       \end{block}
-      \vspace{0.1cm}
-      \begin{alertblock}{Core Research Proposition}
-        Continuous unaccented Latin typing with joint boundary segmentation and diacritic restoration.
-      \end{alertblock}
+      \begin{exampleblock}{Three Core Technical Pillars}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}\footnotesize
+          \item \textbf{Continuous Unaccented Input:}\\
+            Type text without spaces or tone marks (e.g., \texttt{"toidihoc"} $\to$ \textbf{"toi di hoc"}).
+          \item \textbf{End-to-End Deep Learning:}\\
+            Jointly predicts word boundaries and restores diacritics in a single real-time forward pass.
+          \item \textbf{100\% Edge-Based Execution:}\\
+            Fully offline execution with latency $< 50\text{ ms}$ and absolute user data privacy.
+        \end{itemize}
+      \end{exampleblock}
     \end{column}
 
     \begin{column}{0.42\textwidth}
       \begin{block}{Ergonomic Efficiency}
-        \textbf{Keystroke Savings (KS):}
+        \textbf{\footnotesize Keystroke Savings (KS):}
+        \vspace{-0.1cm}
         \begin{equation*}
           \text{KS} = \left(1 - \frac{|X_{\text{continuous}}|}{|X_{\text{Telex}}|}\right) \times 100\%
         \end{equation*}
-        \begin{itemize}\setlength{\itemsep}{3pt}
+        \vspace{-0.1cm}
+        \begin{itemize}\setlength{\itemsep}{2pt}\footnotesize
           \item \textbf{20\%--40\% reduction} in screen taps.
-          \item Eliminates explicit spacebar \& accent keys.
-          \item Lowers thumb fatigue \& RSI risk.
+          \item Eliminates explicit spacebar \& tone keys.
+          \item Lowers thumb strain \& RSI injury risks.
         \end{itemize}
       \end{block}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Proposed Paradigm: NextKey Continuous Input}{Comparison of Input Method Paradigms}
+\begin{frame}{Project Motivation \& Societal Value}{Three Foundational Pillars of Impact}
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \begin{block}{1. Language Inclusion}
+        \textbf{\footnotesize Language Scaffold for All:}
+        \begin{itemize}\setlength{\itemsep}{2.5pt}\scriptsize
+          \item \textbf{Children \& Students:}\\
+            Type thoughts freely without getting stuck on complex spelling rules.
+          \item \textbf{Elderly Users:}\\
+            Eliminate cognitive strain of memorizing tone key combinations on small screens.
+          \item \textbf{Foreign Learners:}\\
+            Express Vietnamese naturally without diacritical barriers.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.32\textwidth}
+      \begin{block}{2. Ergonomics \& Speed}
+        \textbf{\footnotesize Maximize Efficiency:}
+        \begin{itemize}\setlength{\itemsep}{2.5pt}\scriptsize
+          \item \textbf{20\%--40\% KS Savings:}\\
+            Significantly reduces physical typing effort.
+          \item \textbf{Continuous Flow:}\\
+            Eliminates manual spacebar and accent key presses.
+          \item \textbf{Health Impact:}\\
+            Reduces thumb fatigue and Repetitive Strain Injury (RSI) risks.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.32\textwidth}
+      \begin{block}{3. Seamless Multilingual}
+        \textbf{\footnotesize Zero "D\'inh D\^au" Errors:}
+        \begin{itemize}\setlength{\itemsep}{2.5pt}\scriptsize
+          \item \textbf{No English Corruption:}\\
+            Prevents unwanted accents in words like \textit{"case" $\to$ "cae"}, \textit{"deadline"}, or \textit{"meeting"}.
+          \item \textbf{Zero Layout Switching:}\\
+            Seamlessly type mixed Vietnamese-English sentences without toggling input modes.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Input Method Paradigms \& Keystroke Comparison}{Quantitative Example of Continuous vs. Traditional Typing}
   \begin{table}[H]
     \centering
     \footnotesize
@@ -177,7 +221,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{exampleblock}{Core Advantages}
-        \begin{itemize}\setlength{\itemsep}{1.5pt}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}\footnotesize
           \item Continuous typing flow without manual space insertion.
           \item Seamless multilingual typing (no English tone pollution).
           \item Robust against adjacent-key fat-finger errors.
@@ -186,10 +230,10 @@
     \end{column}
     \begin{column}{0.48\textwidth}
       \begin{block}{Deployment Constraints}
-        \begin{itemize}\setlength{\itemsep}{1.5pt}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}\footnotesize
           \item \textbf{Inference Latency:} $< 50\text{ ms}$ per event (fluid 60fps).
-          \item \textbf{Memory Footprint:} $< 2\text{ MB}$ INT8 model size.
-          \item \textbf{Privacy Guarantee:} 100\% offline client execution.
+          \item \textbf{Memory Footprint:} $< 2\text{ MB}$ INT8 compressed model.
+          \item \textbf{Privacy Guarantee:} 100\% offline client-side execution.
         \end{itemize}
       \end{block}
     \end{column}
@@ -229,7 +273,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{block}{Compound Noise Taxonomy ($\mathcal{T}$)}
-        \begin{itemize}\setlength{\itemsep}{1pt}
+        \begin{itemize}\setlength{\itemsep}{1pt}\footnotesize
           \item \textbf{Diacritic Stripping:} Removal of all 6 tones.
           \item \textbf{Whitespace Erasure:} Word merging.
           \item \textbf{QWERTY Spatial Typos:} Neighbor keys.
@@ -245,7 +289,7 @@
           \mathcal{L}_{\text{total}} = \lambda_{\text{diac}} \mathcal{L}_{\text{diac}} + \lambda_{\text{seg}} \mathcal{L}_{\text{seg}} + \lambda_{\text{typo}} \mathcal{L}_{\text{typo}}
         \end{equation*}
         \vspace{-0.1cm}
-        \begin{itemize}\setlength{\itemsep}{1pt}
+        \begin{itemize}\setlength{\itemsep}{1pt}\footnotesize
           \item Joint cross-entropy optimization for diacritics, boundaries, and typos.
         \end{itemize}
       \end{block}
@@ -257,7 +301,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{block}{Modeling \& Noise Inquiries}
-        \begin{itemize}\setlength{\itemsep}{4pt}
+        \begin{itemize}\setlength{\itemsep}{4pt}\footnotesize
           \item \textbf{RQ1 (Restoration Feasibility):}\\
             Can a compact network restore text from compound noise (accents, spaces, typos)?
           \item \textbf{RQ2 (Architecture Pareto Trade-off):}\\
@@ -270,7 +314,7 @@
 
     \begin{column}{0.48\textwidth}
       \begin{block}{Edge Optimization \& UX Inquiries}
-        \begin{itemize}\setlength{\itemsep}{4pt}
+        \begin{itemize}\setlength{\itemsep}{4pt}\footnotesize
           \item \textbf{RQ4 (Quantization \& Distillation):}\\
             Can KD + INT8 quantization achieve $>95\%$ teacher parity with $<50\text{ms}$ latency?
           \item \textbf{RQ5 (Candidate Selection Utility):}\\
@@ -287,7 +331,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{block}{Data \& Modeling Objectives}
-        \begin{itemize}\setlength{\itemsep}{4pt}
+        \begin{itemize}\setlength{\itemsep}{4pt}\footnotesize
           \item \textbf{Corpus Curation:} Build multi-domain parallel dataset ($>840\text{K}$ sentences, JDWR v1) across 8 distinct genres.
           \item \textbf{Noise Engine:} Implement 6-dimensional QWERTY spatial and colloquial noise generator.
           \item \textbf{Multi-Task Learning:} Train candidate models for joint diacritic, spacing, and typo restoration.
@@ -297,7 +341,7 @@
 
     \begin{column}{0.48\textwidth}
       \begin{block}{Edge Optimization \& User Targets}
-        \begin{itemize}\setlength{\itemsep}{4pt}
+        \begin{itemize}\setlength{\itemsep}{4pt}\footnotesize
           \item \textbf{Model Compression:} Distill and quantize model to INT8 ($<2\text{ MB}$, $<50\text{ ms}$ on CPU).
           \item \textbf{Ergonomic Savings:} Validate $20\%$--$40\%$ Keystroke Savings (KS) over standard Telex.
           \item \textbf{Zero Leakage:} Guarantee 100\% offline client execution with zero network telemetry.
@@ -311,7 +355,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{exampleblock}{In-Scope Deliverables}
-        \begin{itemize}\setlength{\itemsep}{3pt}
+        \begin{itemize}\setlength{\itemsep}{3pt}\footnotesize
           \item End-to-end deep neural sequence restoration models.
           \item Keyboard-aware synthetic noise generator pipeline.
           \item Quantized ONNX/C++ edge inference API.
@@ -322,7 +366,7 @@
 
     \begin{column}{0.48\textwidth}
       \begin{alertblock}{Out-of-Scope Boundaries}
-        \begin{itemize}\setlength{\itemsep}{3pt}
+        \begin{itemize}\setlength{\itemsep}{3pt}\footnotesize
           \item Low-level OS kernel keyboard drivers (iOS/Android virtual keyboard system integration).
           \item Voice recognition \& multimodal speech input.
           \item Historical scripts (H\'an-N\^om) or minority dialects.
@@ -354,7 +398,7 @@
       \midrule
       \textbf{Data Engineering \& Preprocessing} & 
       \textbf{Truong Nhat Quang}\newline{\scriptsize (DE180544)} & 
-      $\bullet$ Multi-domain corpus collection ($>840\text{K}$) and cleaning.\newline
+      $\bullet$ Multi-domain parallel corpus collection ($>840\text{K}$) and cleaning.\newline
       $\bullet$ Synthetic QWERTY spatial noise \& abbreviation pipeline.\newline
       $\bullet$ In-domain and Out-of-Domain evaluation dataset curation. \\
       \midrule
@@ -416,7 +460,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{block}{Hierarchical 3-Tier Metric Harness}
-        \begin{itemize}\setlength{\itemsep}{1.5pt}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}\footnotesize
           \item \textbf{Character-Level:} CER, Typo Recovery, Boundary F1.
           \item \textbf{Word-Level:} WER, Word Accuracy, Token F1.
           \item \textbf{Sentence-Level:} Exact Match (EM), Near-Perfect ($\le 5\%$), BLEU-4, ROUGE-L.
@@ -427,7 +471,7 @@
 
     \begin{column}{0.48\textwidth}
       \begin{block}{Scientific Decision Gates}
-        \begin{itemize}\setlength{\itemsep}{1.5pt}
+        \begin{itemize}\setlength{\itemsep}{1.5pt}\footnotesize
           \item \textbf{Seed Protocol:} Fixed global seed \texttt{42} across all splits.
           \item \textbf{Gate 1 (Smoke Run Gate):} Reject architectures failing loss convergence within 1,000 steps.
           \item \textbf{Gate 2 (Objective Benchmark Gate):} Decisions strictly justified by quantitative metric gains on validation sets.
@@ -445,7 +489,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
       \begin{block}{Key Performance Targets}
-        \begin{itemize}\setlength{\itemsep}{3pt}
+        \begin{itemize}\setlength{\itemsep}{3pt}\footnotesize
           \item \textbf{Inference Latency:} $< 50\text{ ms}$ per sentence on CPU.
           \item \textbf{Keystroke Savings:} $20\%$--$40\%$ reduction vs. Telex.
           \item \textbf{Model Size:} $< 2\text{ MB}$ footprint via INT8 quantization.
@@ -457,7 +501,7 @@
 
     \begin{column}{0.48\textwidth}
       \begin{exampleblock}{Tangible Capstone Deliverables}
-        \begin{itemize}\setlength{\itemsep}{3pt}
+        \begin{itemize}\setlength{\itemsep}{3pt}\footnotesize
           \item Open-source reproducible codebase \& dataset pipeline.
           \item Quantized model weights \& ONNX/C++ runtime.
           \item Interactive web demo \& comprehensive thesis report.
